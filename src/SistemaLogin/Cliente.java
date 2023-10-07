@@ -1,116 +1,55 @@
-package src.SistemaLogin;
+package SistemaLogin;
 
-import src.Reservas&Alquiler.Reserva;
+import Inventario.Vehiculo;
+import Reservas.Reserva;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
 public class Cliente extends Persona {
 
-    /**
-     * Default constructor
-     */
-    public Cliente() {
-    }
-
-    /**
-     * 
-     */
     private int nivelDeAcceso = 0;
-
-    /**
-     * 
-     */
     private int idReserva = -1;
+    private DatosClienteLicencia datosClienteLicencia;
+    private DatosClienteTarjeta datosClienteTarjeta;
 
-    /**
-     * @param String username 
-     * @param String password 
-     * @param String nombres 
-     * @param String apellidos 
-     * @param String celular 
-     * @param int numeroLicencia 
-     * @param String paisExpedicion 
-     * @param String fechaVencimiento 
-     * @param BufferedImage imagenLicencia 
-     * @param int numeroTarjeta 
-     * @param String fechaVencimiento 
-     * @param String titular 
-     * @param String marcaInternacional 
-     * @param int ccv 
-     * @return
-     */
-    private void registrarCliente(void String username, void String password, void String nombres, void String apellidos, void String celular, void int numeroLicencia, void String paisExpedicion, void String fechaVencimiento, void BufferedImage imagenLicencia, void int numeroTarjeta, void String fechaVencimiento, void String titular, void String marcaInternacional, void int ccv) {
-        // TODO implement here
-        return null;
+    public Cliente(String nombres, String apellidos, String celular, DatosClienteLicencia datosClienteLicencia, DatosClienteTarjeta datosClienteTarjeta) {
+        this.datosClienteLicencia = datosClienteLicencia;
+        this.datosClienteTarjeta = datosClienteTarjeta;
+        super.nombres = nombres;
+        super.apellidos = apellidos;
+        super.celular = celular;
+        super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    /**
-     * @param String nombreCategoria 
-     * @param String sedeRecoger 
-     * @param String fechaRecoger 
-     * @param String horaRecoger 
-     * @param String sedeEntregar 
-     * @param String fechaEntregar 
-     * @param String horaRangoEntregar 
-     * @return
-     */
-    private void reservarVehiculo(void String nombreCategoria, void String sedeRecoger, void String fechaRecoger, void String horaRecoger, void String sedeEntregar, void String fechaEntregar, void String horaRangoEntregar) {
+    private void registerClient(String username, String password, String nombres, String apellidos, String celular, int numeroLicencia, String paisExpedicion, String fechaVencimiento, BufferedImage imagenLicencia, int numeroTarjeta, String fechaVencimientoTarjeta, String titular, String marcaInternacional, int ccv) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @param Boolean alterarReserva 
-     * @param Boolean otrosConductores 
-     * @return
-     */
-    private void alquilarVehiculo(void Boolean alterarReserva, void Boolean otrosConductores) {
+    private void reservarVehiculo(String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @param int idReserva 
-     * @param String nuevaSedeEntregar 
-     * @param String nuevaFechaEntregar 
-     * @param String nuevaHoraRangoEntregar 
-     * @return
-     */
-    private void alterarReserva(void int idReserva, void String nuevaSedeEntregar, void String nuevaFechaEntregar, void String nuevaHoraRangoEntregar) {
+    private void alquilarVehiculo(Boolean alterarReserva, Boolean otrosConductores) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @param String fechaRecoger 
-     * @param String fechaEntregar 
-     * @param Vehiculo vehiculo 
-     * @return
-     */
-    private int calcularValorAlquiler(void String fechaRecoger, void String fechaEntregar, void Vehiculo vehiculo) {
+    private void alterarReserva(int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar) {
+        // TODO implement here
+    }
+
+    private int calcularValorAlquiler(String fechaRecoger, String fechaEntregar, Vehiculo vehiculo) {
         // TODO implement here
         return 0;
     }
 
-    /**
-     * @return
-     */
     private Reserva getReserva() {
         // TODO implement here
         return null;
     }
 
-    /**
-     * @param int id 
-     * @return
-     */
-    private void setReserva(void int id) {
+    private void setReserva(int id) {
         // TODO implement here
-        return null;
     }
-
 }

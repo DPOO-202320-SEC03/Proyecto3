@@ -1,98 +1,45 @@
-package src.SistemaLogin;
+package SistemaLogin;
 
 import java.io.*;
 import java.util.*;
+import java.awt.image.BufferedImage;
 
-/**
- * 
- */
 public class Empleado extends Persona {
 
-    /**
-     * Default constructor
-     */
-    public Empleado() {
-    }
-
-    /**
-     * 
-     */
     private int nivelDeAcceso = 1;
-
-    /**
-     * 
-     */
     private String nombreSede;
 
-    /**
-     * @param String usernameClienteAlquiler 
-     * @param String fechaDevolucion 
-     * @param String sedeDevolucion 
-     * @return
-     */
-    private void alquilarVehiculo(void String usernameClienteAlquiler, void String fechaDevolucion, void String sedeDevolucion) {
-        // TODO implement here
-        return null;
+    public Empleado(String nombreSede, String nombres, String apellidos, String celular) {
+        this.nombreSede = nombreSede;
+        super.nombres = nombres;
+        super.apellidos = apellidos;
+        super.celular = celular;
+        super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    /**
-     * @param String usernameClienteAlquiler 
-     * @param int numeroLicencia 
-     * @param String paisExpedicion 
-     * @param String fechaVencimiento 
-     * @param BufferedImage imagenLicencia 
-     * @return
-     */
-    private void otrosConductoresAgregarLicencia(void String usernameClienteAlquiler, void int numeroLicencia, void String paisExpedicion, void String fechaVencimiento, void BufferedImage imagenLicencia) {
+    private void alquilarVehiculo(String usernameClienteAlquiler, String fechaDevolucion, String sedeDevolucion) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @param String usernameClienteAlquiler 
-     * @param Boolean necesitaMantenimiento 
-     * @return
-     */
-    private void recibirVehiculo(void String usernameClienteAlquiler, void Boolean necesitaMantenimiento) {
+    private void otrosConductoresAgregarLicencia(String usernameClienteAlquiler, int numeroLicencia, String paisExpedicion, String fechaVencimiento, BufferedImage imagenLicencia) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @param String fechaEstimadaRegreso 
-     * @param String fechaRecibido 
-     * @param String descripcionMantenimiento 
-     * @return
-     */
-    private void necesitaMantenimiento(void String fechaEstimadaRegreso, void String fechaRecibido, void String descripcionMantenimiento) {
+    private void recibirVehiculo(String usernameClienteAlquiler, Boolean necesitaMantenimiento) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @param String placa 
-     * @return
-     */
-    private void vehiculoListoParaAlquiler(void String placa) {
+    private void necesitaMantenimiento(String fechaEstimadaRegreso, String fechaRecibido, String descripcionMantenimiento) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @return
-     */
+    private void vehiculoListoParaAlquiler(String placa) {
+        // TODO implement here
+    }
+
     private String getSede() {
         // TODO implement here
         return "";
-    }
-
-    /**
-     * @param String sede 
-     * @return
-     */
-    private void setSede(void String sede) {
-        // TODO implement here
-        return null;
     }
 
 }

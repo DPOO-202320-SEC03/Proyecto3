@@ -1,88 +1,55 @@
-package src.Inventario;
+package Inventario;
 
 import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
 public class Categoria {
 
-    /**
-     * Default constructor
-     */
-    public Categoria() {
+    private String nombreCategoria;
+    private int rangoCategoria;
+    private int vehiculosDisponibles;
+    private HashMap<String, Vehiculo> hashVehiculos;
+    private HashMap<String, Integer> hashTarifaPorTemporada;
+
+    public Categoria(String nombreCategoria, int rangoCategoria, int vehiculosDisponibles) {
+        this.nombreCategoria = nombreCategoria;
+        this.rangoCategoria = rangoCategoria;
+        this.vehiculosDisponibles = vehiculosDisponibles;
+        this.hashVehiculos = new HashMap<String, Vehiculo>();
+        this.hashTarifaPorTemporada = new HashMap<String, Integer>();
     }
 
-    /**
-     * 
-     */
-    private String nombreCategoria;
-
-    /**
-     * 
-     */
-    private int rangoCategoria;
-
-    /**
-     * 
-     */
-    private int tarifaDiaria;
-
-    /**
-     * 
-     */
-    private int vehiculosDisponibles;
-
-    /**
-     * @return
-     */
     private String getNombreCategoria() {
         // TODO implement here
         return "";
     }
 
-    /**
-     * @param String nombre 
-     * @return
-     */
-    private void setNombreCategoria(void String nombre) {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
-     */
     private int getRangoCategoria() {
         // TODO implement here
         return 0;
     }
 
-    /**
-     * @param int rango 
-     * @return
-     */
-    private void setRangoCategoria(void int rango) {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
-     */
     private int getVehiculosDisponibles() {
         // TODO implement here
         return 0;
     }
 
-    /**
-     * @param int disponibles 
-     * @return
-     */
-    private void setVehiculosDisponibles(void int disponibles) {
+    private HashMap<String, Vehiculo> getHashVehiculos() {
         // TODO implement here
         return null;
+    }
+
+    private void updateHashVehiculos(HashMap<String, Vehiculo> hashVehiculos) {
+        // TODO implement here
+    }
+
+    private HashMap<String, Integer> getHashTarifaPorTemporada() {
+        // TODO implement here
+        return null;
+    }
+
+    private void updateHashTarifaPorTemporada(HashMap<String, Integer> hashTarifaPorTemporada) {
+        // TODO implement here
     }
 
 }

@@ -1,66 +1,31 @@
-package src.SistemaLogin;
+package SistemaLogin;
 
 import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
 public class AdministradorLocal extends Persona {
 
-    /**
-     * Default constructor
-     */
-    public AdministradorLocal() {
-    }
-
-    /**
-     * 
-     */
     private int nivelDeAcceso = 2;
-
-    /**
-     * 
-     */
     private String nombreSede;
 
-    /**
-     * @param String username 
-     * @param String password 
-     * @param String nombres 
-     * @param String apellidos 
-     * @param String celular 
-     * @return
-     */
-    private void crearEmpleado(void String username, void String password, void String nombres, void String apellidos, void String celular) {
-        // TODO implement here
-        return null;
+    public AdministradorLocal(String nombreSede, String nombres, String apellidos, String celular) {
+        this.nombreSede = nombreSede;
+        super.nombres = nombres;
+        super.apellidos = apellidos;
+        super.celular = celular;
+        super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    /**
-     * @param String usernameEmpleado 
-     * @return
-     */
-    private void eliminarEmpleado(void String usernameEmpleado) {
+    private void crearEmpleado(String username, String password, String nombres, String apellidos, String celular) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @return
-     */
+    private void eliminarEmpleado(String usernameEmpleado) {
+        // TODO implement here
+    }
+
     private String getSede() {
-        // TODO implement here
-        return "";
-    }
-
-    /**
-     * @param String sede 
-     * @return
-     */
-    private void setSede(void String sede) {
-        // TODO implement here
-        return null;
+        return nombreSede;
     }
 
 }

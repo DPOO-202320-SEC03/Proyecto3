@@ -1,75 +1,27 @@
-package src.SistemaLogin;
+package SistemaLogin;
 
-import java.io.*;
-import java.util.*;
-
-/**
- * 
- */
 public class Usuario {
 
-    /**
-     * Default constructor
-     */
-    public Usuario() {
-    }
-
-    /**
-     * 
-     */
     private String username;
-
-    /**
-     * 
-     */
     private String password;
+    private Persona persona;
 
-    /**
-     * @return
-     */
-    private int getNivelDeAcceso() {
-        // TODO implement here
-        return 0;
+    public Usuario(String username, String password, Persona persona) {
+        this.username = username;
+        this.password = password;
+        this.persona = persona;
     }
 
-    /**
-     * @return
-     */
-    private ArrayList<String> getInfoUsuario() {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
-     */
     private String getUsername() {
         // TODO implement here
         return "";
     }
 
-    /**
-     * @param String username 
-     * @return
-     */
-    private void setUsername(void String username) {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
-     */
     private String getPassword() {
         // TODO implement here
         return "";
     }
-
-    /**
-     * @param String password 
-     * @return
-     */
-    private void setPassword(void String password) {
+    private Persona getPersona() {
         // TODO implement here
         return null;
     }

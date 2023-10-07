@@ -1,72 +1,49 @@
-package src;
-
-import src.Inventario.Catalogo;
-
 import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
+import SistemaLogin.Usuario;
+import Inventario.Catalogo;
+import Inventario.Sede;
+import Reservas.Reserva;
+
+
 public class AppReservas {
 
-    /**
-     * Default constructor
-     */
-    public AppReservas() {
+    private HashMap<String, Usuario> hashUsuarios;
+    private HashMap<String, Sede> hashSedes;
+    private HashMap<String, Reserva> hashReservas;
+
+    public static void main(String[] args) {
+        // TODO implement here
+        System.out.println("Hello world!");
     }
 
-    /**
-     * @return
-     */
     private Catalogo iniciarCatalogo() {
         // TODO implement here
         return null;
     }
 
-    /**
-     * @param String filePathUsuarios 
-     * @return
-     */
-    private HashMap<String Usuario> iniciarUsuarios(void String filePathUsuarios) {
+    private HashMap<String, Usuario> iniciarUsuarios(String filePathUsuarios) {
         // TODO implement here
         return null;
     }
 
-    /**
-     * @param String filePathSedes 
-     * @return
-     */
-    private HashMap<String Sede> iniciarSedes(void String filePathSedes) {
+    private HashMap<String, Sede> iniciarSedes(String filePathSedes) {
         // TODO implement here
         return null;
     }
 
-    /**
-     * @param String filePathReservas 
-     * @return
-     */
-    private HashMap<String Reserva> iniciarReservas(void String filePathReservas) {
+    private HashMap<String, Reserva> iniciarReservas(String filePathReservas) {
         // TODO implement here
         return null;
     }
 
-    /**
-     * @param String username 
-     * @param String password 
-     * @return
-     */
-    private void login(void String username, void String password) {
+    private void login(String username, String password) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @return
-     */
     private void cerrarApp() {
         // TODO implement here
-        return null;
+    }
     }
 
-}

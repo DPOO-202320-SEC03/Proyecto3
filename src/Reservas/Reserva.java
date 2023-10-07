@@ -1,52 +1,31 @@
-package src.Reservas&Alquiler;
+package Reservas;
 
 import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
 public class Reserva {
 
-    /**
-     * Default constructor
-     */
+    public static int totalDeReservas = 0;
+    private int idReserva;
+
     public Reserva() {
+        this.idReserva = totalDeReservas++;
     }
 
-    /**
-     * 
-     */
-    public static int idReserva = 0;
-
-    /**
-     * @return
-     */
     private String getRangoEnAlquiler() {
         // TODO implement here
         return "";
     }
 
-    /**
-     * @return
-     */
     private int getIdReserva() {
         // TODO implement here
         return 0;
     }
 
-    /**
-     * @param int id 
-     * @return
-     */
-    private void setIdReserva(void int id) {
+    private void setIdReserva(int id) {
         // TODO implement here
-        return null;
     }
 
-    /**
-     * @return
-     */
     private String getResumen() {
         // TODO implement here
         return "";

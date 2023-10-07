@@ -1,37 +1,22 @@
-package src.SistemaLogin;
+package SistemaLogin;
 
-import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
 public class Persona {
 
-    /**
-     * Default constructor
-     */
-    public Persona() {
+    protected int nivelDeAcceso;
+    protected String nombres;
+    protected String apellidos;
+    protected String celular;
+
+    private int getNivelDeAcceso() {
+        // TODO implement here
+        return 0;
     }
 
-    /**
-     * 
-     */
-    private int nivelDeAcceso;
-
-    /**
-     * 
-     */
-    private String nombres;
-
-    /**
-     * 
-     */
-    private String apellidos;
-
-    /**
-     * 
-     */
-    private String celular;
+    private ArrayList<String> getInfoUsuario() {
+        // TODO implement here
+        return null;
+    }
 
 }
