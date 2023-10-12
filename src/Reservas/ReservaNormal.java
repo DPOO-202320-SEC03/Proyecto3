@@ -12,10 +12,11 @@ public class ReservaNormal extends Reserva {
     private String sedeEntregar;
     private String fechaEntregar;
     private String horaRangoEntregar;
-    private Boolean otrosConductores;
+    private String usuarioConductorPrincipal;
+    private int otrosConductores;
     private ArrayList<String> nombresSeguros;
 
-    public ReservaNormal(String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, Boolean otrosConductores, ArrayList<String> nombresSeguros) {
+    public ReservaNormal(String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros) {
         this.categoriaVehiculo = categoriaVehiculo;
         this.sedeRecoger = sedeRecoger;
         this.fechaRecoger = fechaRecoger;
@@ -23,11 +24,12 @@ public class ReservaNormal extends Reserva {
         this.sedeEntregar = sedeEntregar;
         this.fechaEntregar = fechaEntregar;
         this.horaRangoEntregar = horaRangoEntregar;
+        this.usuarioConductorPrincipal = usuarioConductorPrincipal;
         this.otrosConductores = otrosConductores;
         this.nombresSeguros = nombresSeguros;
     }
 
-    private void editarReserva(String sedeEntregar, String fechaEntregar, String horaRangoEntregar, Boolean otrosConductores) {
+    private void editarReserva(String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
         this.sedeEntregar = sedeEntregar;
         this.fechaEntregar = fechaEntregar;
         this.horaRangoEntregar = horaRangoEntregar;

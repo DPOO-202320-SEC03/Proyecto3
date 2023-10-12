@@ -11,20 +11,17 @@ public class Cliente extends Persona {
 
     private int nivelDeAcceso = 0;
     private int idReserva = -1;
-    private DatosClienteLicencia datosClienteLicencia;
+    private ArrayList<DatosClienteLicencia> datosClienteLicencia;
     private DatosClienteTarjeta datosClienteTarjeta;
 
     public Cliente(String nombres, String apellidos, String celular, DatosClienteLicencia datosClienteLicencia, DatosClienteTarjeta datosClienteTarjeta) {
-        this.datosClienteLicencia = datosClienteLicencia;
+        this.datosClienteLicencia = new ArrayList<DatosClienteLicencia>();
+        this.datosClienteLicencia.add(datosClienteLicencia);
         this.datosClienteTarjeta = datosClienteTarjeta;
         super.nombres = nombres;
         super.apellidos = apellidos;
         super.celular = celular;
         super.nivelDeAcceso = nivelDeAcceso;
-    }
-
-    private void registerClient(String username, String password, String nombres, String apellidos, String celular, int numeroLicencia, String paisExpedicion, String fechaVencimiento, BufferedImage imagenLicencia, int numeroTarjeta, String fechaVencimientoTarjeta, String titular, String marcaInternacional, int ccv) {
-        // TODO implement here
     }
 
     private void reservarVehiculo(String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
