@@ -3,19 +3,34 @@ package Inventario;
 import java.io.*;
 import java.util.*;
 
+import Reservas.TarifasGlobales;
+
 public class Catalogo {
 
+    private TarifasGlobales tarifasGlobales;
     private  HashMap<String, Categoria> hashCategorias;
     private HashMap<String,Seguro> hashSeguros;
 
-    public Catalogo(HashMap<String, Categoria> hashCategorias, HashMap<String, Seguro> hashSeguros) {
+    private void setTarifasGlobales(TarifasGlobales tarifasGlobales) {
+        this.tarifasGlobales = tarifasGlobales;
+    }
+
+    private TarifasGlobales getTarifasGlobales() {
+        // TODO implement here
+        return null;
+    }
+
+    private void setHashCategorias(HashMap<String, Categoria> hashCategorias) {
         this.hashCategorias = hashCategorias;
-        this.hashSeguros = hashSeguros;
     }
 
     private HashMap<String, Categoria> getHashCategorias() {
         // TODO implement here
         return null;
+    }
+
+    private void setHashSeguros(HashMap<String, Seguro> hashSeguros) {
+        this.hashSeguros = hashSeguros;
     }
 
     private HashMap<String, Seguro> getHashSeguros() {

@@ -8,13 +8,11 @@ public class Sede {
     private String nombreSede;
     private String ubicacion;
     private String horariosDeAtencion;
-    private Catalogo catalogo;
 
     public Sede(String nombreSede, String ubicacion, String horariosDeAtencion, Catalogo catalogo) {
         this.nombreSede = nombreSede;
         this.ubicacion = ubicacion;
         this.horariosDeAtencion = horariosDeAtencion;
-        this.catalogo = catalogo;
     }
     
     private ArrayList<String> getInfoSede() {
@@ -22,7 +20,7 @@ public class Sede {
         return null;
     }
 
-    private Catalogo getCatalogoSede() {
+    private Catalogo getVehiculosPorSede() {
         // TODO implement here
         return null;
     }
