@@ -2,10 +2,10 @@ package Inventario;
 
 import java.io.*;
 import java.util.*;
-
+import java.io.Serializable;
 import Reservas.TarifasGlobales;
 
-public class Catalogo {
+public class Catalogo implements Serializable {
 
     private TarifasGlobales tarifasGlobales;
     private  HashMap<String, Categoria> hashCategorias;

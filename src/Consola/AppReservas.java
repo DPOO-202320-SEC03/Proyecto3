@@ -41,17 +41,15 @@ public class AppReservas {
                 iniciarUsuarios(archivoUsuarios);
                 iniciarSedes(archivoSedes);
                 iniciarReservas(archivoReservas);
-                System.out.println("Data cargada correctamente.");
             } else {
                 this.catalogo = new Catalogo();
                 this.hashUsuarios = new HashMap<String, Usuario>();
                 this.hashSedes = new HashMap<String, Sede>();
                 this.hashReservas = new HashMap<String, Reserva>();
                 crearAdministrador();
-                System.out.println("Data creada correctamente.");
             }
         } catch (Exception e) {
-            System.out.println("Error al tratar de cargar la data.");
+            System.out.println("Error al cargar la información!!!");
             e.printStackTrace();
         }
     }
@@ -68,9 +66,8 @@ public class AppReservas {
             guardarUsuarios(archivoUsuarios);
             guardarSedes(archivoReservas);
             guardarReservas(archivoSedes);
-            System.out.println("Data guardada correctamente.");
         } catch (Exception e) {
-            System.out.println("Error al tratar de guardar la data.");
+            System.out.println("Error al guardar la información!!!");
             e.printStackTrace();
         }
     }
@@ -89,10 +86,10 @@ public class AppReservas {
                 } else if (opcion_seleccionada == 3) {
                     continuar = false;
                 } else {
-                    System.out.println("Debe seleccionar uno de los números de las opciones. ");
+                    System.out.println("Debe seleccionar uno de los números de las opciones!!!");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Debe seleccionar uno de los números de las opciones. ");
+                System.out.println("Debe seleccionar uno de los números de las opciones!!!");
             }
         }
         guardarInformacion();
@@ -113,7 +110,8 @@ public class AppReservas {
     private void iniciarUsuarios(File fileUsuarios) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileUsuarios));
-            this.hashUsuarios = (HashMap<String, Usuario>) ois.readObject();
+            HashMap<String, Usuario> hashUsuarios = (HashMap<String, Usuario>) ois.readObject();
+            this.hashUsuarios = hashUsuarios;
             ois.close();
         } catch (IOException e) {
             e.printStackTrace();

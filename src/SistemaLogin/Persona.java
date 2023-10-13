@@ -1,8 +1,9 @@
 package SistemaLogin;
 
 import java.util.*;
+import java.io.Serializable;
 
-public class Persona {
+public class Persona implements Serializable {
 
     protected int nivelDeAcceso;
     protected String nombres;
