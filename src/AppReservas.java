@@ -5,6 +5,7 @@ import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Sede;
 import Reservas.Reserva;
+import Reservas.TarifasGlobales;
 
 
 public class AppReservas {
@@ -12,6 +13,7 @@ public class AppReservas {
     private HashMap<String, Usuario> hashUsuarios;
     private HashMap<String, Sede> hashSedes;
     private HashMap<String, Reserva> hashReservas;
+    private TarifasGlobales tarifasGlobales;
 
     public static void main(String[] args) {
         // TODO implement here

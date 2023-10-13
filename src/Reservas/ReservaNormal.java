@@ -13,7 +13,7 @@ public class ReservaNormal extends Reserva {
     private String fechaEntregar;
     private String horaRangoEntregar;
     private String usuarioConductorPrincipal;
-    private int otrosConductores;
+    private int otrosConductores = 0;
     private ArrayList<String> nombresSeguros;
 
     public ReservaNormal(String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros) {
