@@ -6,7 +6,6 @@ import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Sede;
 import Reservas.Reserva;
-import Reservas.TarifasGlobales;
 
 public class AppReservas {
 
@@ -54,9 +53,29 @@ public class AppReservas {
         }
     }
 
+    private void guardarInformacion() {
+        try {
+            String workingDir = System.getProperty("user.dir");
+            String filePath = workingDir + File.separator + "data" + File.separator;
+            File archivoCatalogo = new File(filePath+"catalogo");
+            File archivoUsuarios = new File(filePath+"usuarios");
+            File archivoSedes = new File(filePath+"sedes");
+            File archivoReservas = new File(filePath+"reservas");
+            guardarCatalogo(archivoCatalogo);
+            guardarUsuarios(archivoUsuarios);
+            guardarSedes(archivoReservas);
+            guardarReservas(archivoSedes);
+            System.out.println("Data guardada correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al tratar de guardar la data.");
+            e.printStackTrace();
+        }
+    }
+
     private void iniciarApp() {
         cargarInformacion();
         mostrarMenuUsuario();
+        guardarInformacion();
     }
 
     private void iniciarCatalogo(File fileCatalogo) {
@@ -106,6 +125,47 @@ public class AppReservas {
             e.printStackTrace();
         }
     }
+
+    private void guardarCatalogo(File fileCatalogo) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileCatalogo));
+            oos.writeObject(this.catalogo);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void guardarUsuarios(File fileUsuarios) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileUsuarios));
+            oos.writeObject(this.hashUsuarios);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void guardarSedes(File fileSedes) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileSedes));
+            oos.writeObject(this.hashSedes);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void guardarReservas(File fileReservas) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileReservas));
+            oos.writeObject(this.hashReservas);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void login(String username, String password) {
         // TODO implement here
