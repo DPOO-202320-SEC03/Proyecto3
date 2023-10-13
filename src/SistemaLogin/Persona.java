@@ -9,14 +9,16 @@ public class Persona {
     protected String apellidos;
     protected String celular;
 
-    private int getNivelDeAcceso() {
-        // TODO implement here
-        return 0;
+    public int getNivelDeAcceso() {
+        return this.nivelDeAcceso;
     }
 
-    private ArrayList<String> getInfoUsuario() {
-        // TODO implement here
-        return null;
+    public ArrayList<String> getInfoUsuario() {
+        ArrayList<String> info = new ArrayList<String>();
+        info.add(nombres);
+        info.add(apellidos);
+        info.add(celular);
+        return info;
     }
 
 }

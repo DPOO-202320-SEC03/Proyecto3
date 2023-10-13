@@ -12,18 +12,15 @@ public class Usuario {
         this.persona = persona;
     }
 
-    private String getUsername() {
-        // TODO implement here
-        return "";
+    public String getUsername() {
+        return this.username;
     }
 
-    private String getPassword() {
-        // TODO implement here
-        return "";
+    public String getPassword() {
+        return this.password;
     }
-    private Persona getPersona() {
-        // TODO implement here
-        return null;
+    public Persona getPersona() {
+        return this.persona;
     }
 
 }

@@ -2,6 +2,8 @@ package Consola;
 import java.io.*;
 import java.util.*;
 
+import SistemaLogin.Administrador;
+import SistemaLogin.Persona;
 import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Sede;
@@ -45,6 +47,7 @@ public class AppReservas {
                 this.hashUsuarios = new HashMap<String, Usuario>();
                 this.hashSedes = new HashMap<String, Sede>();
                 this.hashReservas = new HashMap<String, Reserva>();
+                crearAdministrador();
                 System.out.println("Data creada correctamente.");
             }
         } catch (Exception e) {
@@ -74,7 +77,24 @@ public class AppReservas {
 
     private void iniciarApp() {
         cargarInformacion();
-        mostrarMenuUsuario();
+        boolean continuar = true;
+		while (continuar) {
+			try {
+				mostrarMenuUsuario();
+                int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                if (opcion_seleccionada == 1) {
+                    iniciarSesion();
+                } else if (opcion_seleccionada == 2) {
+                    regustrarse();
+                } else if (opcion_seleccionada == 3) {
+                    continuar = false;
+                } else {
+                    System.out.println("Debe seleccionar uno de los números de las opciones. ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Debe seleccionar uno de los números de las opciones. ");
+            }
+        }
         guardarInformacion();
     }
 
@@ -166,15 +186,52 @@ public class AppReservas {
         }
     }
 
+    private void crearAdministrador() {
+        Administrador admin = new Administrador("Nombre", "Apellido", "1234567890");
+        Usuario adminPersona = new Usuario("ADMIN", "ADMIN", admin);
+        hashUsuarios.put(adminPersona.getUsername(), adminPersona);
+    }
 
-    private void login(String username, String password) {
+    private void iniciarSesion() {
+        String username = input("Por favor ingrese su usuario");
+        String password = input("Por favor ingrese su contraseña");
+        int nivelDeAcceso;
+        try {
+            Usuario usuario = this.hashUsuarios.get(username);
+            if (usuario.getPassword().equals(password)) {
+                Persona persona = usuario.getPersona();
+                System.out.println("\nBienvenido " + persona.getInfoUsuario().get(0) + "\n");
+                nivelDeAcceso = persona.getNivelDeAcceso();
+                iniciarAppUsuario(nivelDeAcceso, persona);
+            } else {
+                System.out.println("Contraseña incorrecta.");
+            }
+        } catch (Exception e) {
+            System.out.println("Usuario no encontrado.");
+        }
+    }
+
+    private void regustrarse() {
         // TODO implement here
     }
 
-    private void cerrarApp() {
+    private void iniciarAppUsuario(int nivelDeAcceso, Persona persona) {
         // TODO implement here
+        System.out.println("TEST");
     }
 
+    private String input(String mensaje) {
+		try {
+			System.out.print(mensaje + ": ");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			return reader.readLine();
+		}
+		catch (IOException e) {
+			System.out.println("Error leyendo de la consola.");
+			e.printStackTrace();
+		}
+		return null;
+	}
 
     }
 
