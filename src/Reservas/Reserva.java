@@ -12,11 +12,6 @@ public class Reserva {
         this.idReserva = totalDeReservas++;
     }
 
-    private String getRangoEnAlquiler() {
-        // TODO implement here
-        return "";
-    }
-
     private int getIdReserva() {
         // TODO implement here
         return 0;

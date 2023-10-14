@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 
 import SistemaLogin.Administrador;
+import SistemaLogin.Cliente;
 import SistemaLogin.Persona;
 import SistemaLogin.Usuario;
 import Inventario.Catalogo;
@@ -21,13 +22,6 @@ public class AppReservas {
         app.iniciarApp();
     }
 
-    public void mostrarMenuUsuario() {
-        System.out.println("Bienvenido a la aplicación de reservas de vehículos");
-        System.out.println("1. Iniciar sesión");
-        System.out.println("2. Registrarse");
-        System.out.println("3. Salir");
-    }
-
     private void cargarInformacion() {
         try {
             String workingDir = System.getProperty("user.dir");
@@ -37,10 +31,25 @@ public class AppReservas {
             File archivoSedes = new File(filePath+"sedes");
             File archivoReservas = new File(filePath+"reservas");
             if (archivoCatalogo.exists() && archivoUsuarios.exists() && archivoSedes.exists() && archivoReservas.exists()) {
-                iniciarCatalogo(archivoCatalogo);
-                iniciarUsuarios(archivoUsuarios);
-                iniciarSedes(archivoSedes);
-                iniciarReservas(archivoReservas);
+                // Inicia el catalogo
+                try {
+                    ObjectInputStream oisC = new ObjectInputStream(new FileInputStream(archivoCatalogo));
+                    this.catalogo = (Catalogo) oisC.readObject();
+                    oisC.close();
+                    ObjectInputStream oisU = new ObjectInputStream(new FileInputStream(archivoUsuarios));
+                    this.hashUsuarios = (HashMap<String, Usuario>) oisU.readObject();
+                    oisU.close();
+                    ObjectInputStream oisS = new ObjectInputStream(new FileInputStream(archivoSedes));
+                    this.hashSedes = (HashMap<String, Sede>) oisS.readObject();
+                    oisS.close();
+                    ObjectInputStream oisR = new ObjectInputStream(new FileInputStream(archivoReservas));
+                    this.hashReservas = (HashMap<String, Reserva>) oisR.readObject();
+                    oisR.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             } else {
                 this.catalogo = new Catalogo();
                 this.hashUsuarios = new HashMap<String, Usuario>();
@@ -68,78 +77,6 @@ public class AppReservas {
             guardarReservas(archivoSedes);
         } catch (Exception e) {
             System.out.println("Error al guardar la información!!!");
-            e.printStackTrace();
-        }
-    }
-
-    private void iniciarApp() {
-        cargarInformacion();
-        boolean continuar = true;
-		while (continuar) {
-			try {
-				mostrarMenuUsuario();
-                int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
-                if (opcion_seleccionada == 1) {
-                    iniciarSesion();
-                } else if (opcion_seleccionada == 2) {
-                    regustrarse();
-                } else if (opcion_seleccionada == 3) {
-                    continuar = false;
-                } else {
-                    System.out.println("Debe seleccionar uno de los números de las opciones!!!");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Debe seleccionar uno de los números de las opciones!!!");
-            }
-        }
-        guardarInformacion();
-    }
-
-    private void iniciarCatalogo(File fileCatalogo) {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileCatalogo));
-            this.catalogo = (Catalogo) ois.readObject();
-            ois.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void iniciarUsuarios(File fileUsuarios) {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileUsuarios));
-            HashMap<String, Usuario> hashUsuarios = (HashMap<String, Usuario>) ois.readObject();
-            this.hashUsuarios = hashUsuarios;
-            ois.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void iniciarSedes(File fileSedes) {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileSedes));
-            this.hashSedes = (HashMap<String, Sede>) ois.readObject();
-            ois.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void iniciarReservas(File fileReservas) {
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileReservas));
-            this.hashReservas = (HashMap<String, Reserva>) ois.readObject();
-            ois.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -190,6 +127,36 @@ public class AppReservas {
         hashUsuarios.put(adminPersona.getUsername(), adminPersona);
     }
 
+    public void mostrarMenuUsuario() {
+        System.out.println("Bienvenido a la aplicación de reservas de vehículos");
+        System.out.println("1. Iniciar sesión");
+        System.out.println("2. Registrarse");
+        System.out.println("3. Salir");
+    }
+
+    private void iniciarApp() {
+        cargarInformacion();
+        boolean continuar = true;
+		while (continuar) {
+			try {
+				mostrarMenuUsuario();
+                int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                if (opcion_seleccionada == 1) {
+                    iniciarSesion();
+                } else if (opcion_seleccionada == 2) {
+                    registrarse();
+                } else if (opcion_seleccionada == 3) {
+                    continuar = false;
+                } else {
+                    System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+            }
+        }
+        guardarInformacion();
+    }
+    
     private void iniciarSesion() {
         String username = input("Por favor ingrese su usuario");
         String password = input("Por favor ingrese su contraseña");
@@ -202,15 +169,18 @@ public class AppReservas {
                 nivelDeAcceso = persona.getNivelDeAcceso();
                 iniciarAppUsuario(nivelDeAcceso, persona);
             } else {
-                System.out.println("Contraseña incorrecta.");
+                System.out.println("Contraseña incorrecta!!!");
             }
         } catch (Exception e) {
-            System.out.println("Usuario no encontrado.");
+            System.out.println("Usuario no encontrado!!!");
         }
     }
 
-    private void regustrarse() {
+    private void registrarse() {
         // TODO implement here
+
+        Cliente cliente = new Cliente(null, null, null, null, null);
+        
     }
 
     private void iniciarAppUsuario(int nivelDeAcceso, Persona persona) {

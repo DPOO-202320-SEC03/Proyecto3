@@ -4,11 +4,6 @@ public class TarifasGlobales {
     
     int tarifaConductorExtra;
     int tarifaEntregaOtraSede;
-
-    public TarifasGlobales(int tarifaConductorExtra, int tarifaEntregaOtraSede) {
-        this.tarifaConductorExtra = tarifaConductorExtra;
-        this.tarifaEntregaOtraSede = tarifaEntregaOtraSede;
-    }
     
     private int getTarifaExtra() {
         return tarifaConductorExtra;
@@ -16,5 +11,13 @@ public class TarifasGlobales {
 
     private int getTarifaSede() {
         return tarifaEntregaOtraSede;
+    }
+
+    private void setTarifaExtra(int tarifaConductorExtra) {
+        this.tarifaConductorExtra = tarifaConductorExtra;
+    }
+
+    private void setTarifaEntregaOtraSede(int tarifaEntregaOtraSede) {
+        this.tarifaEntregaOtraSede = tarifaEntregaOtraSede;
     }
 }
