@@ -2,6 +2,7 @@ package SistemaLogin;
 
 import Inventario.Categoria;
 import Inventario.Sede;
+import Inventario.Seguro;
 import Inventario.Vehiculo;
 
 import java.io.*;
@@ -21,6 +22,8 @@ public class Administrador extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
+    // Funciones para vehiculos
+
     public Vehiculo crearVehiculo(String placa, String marca, String modelo, String color, String tipoDeTransmision, String tipoDeDireccion) {
         // TODO implement here
         return null;
@@ -39,10 +42,18 @@ public class Administrador extends Usuario {
         return "";
     }
 
+    public void trasladarVehiculo(String placa, String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
+        // TODO implement here
+    }
+
+    // Funcion para sedes
+
     public Sede crearSede(String nombreSede, String ubicacion, String horariosDeAtencion) {
         Sede sede = new Sede(nombreSede, ubicacion, horariosDeAtencion);
         return sede;
     }
+
+    // Funciones para usuarios
 
     public AdministradorLocal crearAdministradorLocal(String username, String password, String nombreSede, String nombres, String apellidos, String celular, String correo) {
         AdministradorLocal adminLocal = new AdministradorLocal(username, password, nombreSede, nombres, apellidos, celular, correo);
@@ -54,15 +65,26 @@ public class Administrador extends Usuario {
         return hashUsuarios;
     }
 
-    public void crearSeguro(int tarifaExtraDiaria, String nombreSeguro, String descripcionSeguro) {
-        // TODO implement here
+    // Funciones para seguros
+
+    public Seguro crearSeguro(int tarifaExtraDiaria, String nombreSeguro, String descripcionSeguro) {
+        Seguro seguro = new Seguro(tarifaExtraDiaria, nombreSeguro, descripcionSeguro);
+        return seguro;
     }
 
-    public void trasladarVehiculo(String placa, String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
-        // TODO implement here
-    }
+    // Funciones para categorias
 
     public Categoria crearCategoria(String nombreCategoria, int rangoCategoria) {
         return new Categoria(nombreCategoria, rangoCategoria);
+    }
+
+    public HashMap<String, Categoria> crearTarifasPorTemporadaCategoria(HashMap<String, Categoria> hashCategorias, String nombreCategoria, int tarifaTemporadaAlta, int tarifaTemporadaBaja) {
+        Categoria categoria = hashCategorias.get(nombreCategoria);
+        HashMap<String, Integer> hashTarifaPorTemporada = categoria.getHashTarifaPorTemporada();
+        hashTarifaPorTemporada.put("alta", tarifaTemporadaAlta);
+        hashTarifaPorTemporada.put("baja", tarifaTemporadaBaja);
+        categoria.updateHashTarifaPorTemporada(hashTarifaPorTemporada);
+        hashCategorias.put(categoria.getNombreCategoria(), categoria);
+        return hashCategorias;
     }
 }

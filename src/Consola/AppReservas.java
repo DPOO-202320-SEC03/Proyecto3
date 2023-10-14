@@ -8,6 +8,7 @@ import SistemaLogin.Cliente;
 import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
 import SistemaLogin.Usuario;
+import Inventario.Seguro;
 import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Sede;
@@ -209,7 +210,9 @@ public class AppReservas {
                 System.out.println("3. Crear sede");
                 System.out.println("→  Operaciones relacionadas con categorias:");
                 System.out.println("4. Crear categoria");
-                System.out.println("5. Agregar tarifas por temporada a categoria");
+                System.out.println("5. Crear o actualizar tarifas por temporada a categoria");
+                System.out.println("→  Operaciones relacionadas con seguros:");
+                System.out.println("6. Crear seguro");
                 System.out.println("100. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
@@ -247,14 +250,16 @@ public class AppReservas {
                     int tarifaTemporadaAlta = Integer.parseInt(input("Ingrese la tarifa para temporada alta"));
                     int tarifaTemporadaBaja = Integer.parseInt(input("Ingrese la tarifa para temporada baja"));
                     HashMap<String, Categoria> hashCategorias = this.catalogo.getHashCategorias();
-                    Categoria categoria = hashCategorias.get(nombreCategoria);
-                    HashMap<String, Integer> hashTarifaPorTemporada = categoria.getHashTarifaPorTemporada();
-                    hashTarifaPorTemporada.put("alta", tarifaTemporadaAlta);
-                    hashTarifaPorTemporada.put("baja", tarifaTemporadaBaja);
-                    categoria.updateHashTarifaPorTemporada(hashTarifaPorTemporada);
-                    hashCategorias.put(categoria.getNombreCategoria(), categoria);
-                    this.catalogo.setHashCategorias(hashCategorias);
+                    HashMap<String, Categoria> hashCategoriasActualizado = admin.crearTarifasPorTemporadaCategoria(hashCategorias, nombreCategoria, tarifaTemporadaAlta, tarifaTemporadaBaja);
+                    this.catalogo.setHashCategorias(hashCategoriasActualizado);
                     System.out.println("Tarifas por temporada creadas y guardadas exitosamente!!!");
+                } else if (opcion_seleccionada == 6) {
+                    int tarifaExtraDiaria = Integer.parseInt(input("Ingrese la tarifa extra diaria del seguro"));
+                    String nombreSeguro = input("Ingrese el nombre del seguro");
+                    String descripcionSeguro = input("Ingrese la descripción del seguro");
+                    Seguro seguro = admin.crearSeguro(tarifaExtraDiaria, nombreSeguro, descripcionSeguro);
+                    this.catalogo.getHashSeguros().put(seguro.getNombreSeguro(), seguro);
+                    System.out.println("Seguro creado y guardado exitosamente!!!");
                 } else if (opcion_seleccionada == 100) {
                     continuar = false;
                 } else {

@@ -15,19 +15,16 @@ public class Seguro {
         this.descripcionSeguro = descripcionSeguro;
     }
 
-    private int getTarifaExtra() {
-        // TODO implement here
-        return 0;
+    public int getTarifaExtra() {
+        return this.tarifaExtraDiaria;
     }
 
-    private String getNombreSeguro() {
-        // TODO implement here
-        return "";
+    public String getNombreSeguro() {
+        return this.nombreSeguro;
     }
 
-    private String getDescripcionSeguro() {
-        // TODO implement here
-        return "";
+    public String getDescripcionSeguro() {
+        return this.descripcionSeguro;
     }
 
 }
