@@ -17,6 +17,7 @@ public class ReservaNormal extends Reserva {
     private ArrayList<String> nombresSeguros;
 
     public ReservaNormal(String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros) {
+        super.idReserva = ++Reserva.totalDeReservas;
         this.categoriaVehiculo = categoriaVehiculo;
         this.sedeRecoger = sedeRecoger;
         this.fechaRecoger = fechaRecoger;
@@ -29,31 +30,31 @@ public class ReservaNormal extends Reserva {
         this.nombresSeguros = nombresSeguros;
     }
 
-    private void editarReserva(String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
+    public void editarReserva(String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
         this.sedeEntregar = sedeEntregar;
         this.fechaEntregar = fechaEntregar;
         this.horaRangoEntregar = horaRangoEntregar;
         this.otrosConductores = otrosConductores;
     }
 
-    private int getValorProyectadoAlquiler() {
+    public int getValorProyectadoAlquiler() {
         // TODO implement here
         return 0;
     }
 
-    private int getValorAlquilerCompleto() {
+    public int getValorAlquilerCompleto() {
         // TODO implement here
         return 0;
     }
-    private String getResumen() {
-        // TODO implement here
+    public String getResumen() {
     	
     	String seguros = "";
     	
-    	for (String nomseguro:nombresSeguros) 
+    	for (String nomseguro : nombresSeguros) 
     	{
-    		seguros += "/n" + nomseguro;
+    		seguros += nomseguro + "/n" ;
     	}
+
         return "Categoria Vehiculo: " + categoriaVehiculo
         		+"/nSede Recoger: " + sedeRecoger
         		+"/nFecha Recoger: " + fechaRecoger

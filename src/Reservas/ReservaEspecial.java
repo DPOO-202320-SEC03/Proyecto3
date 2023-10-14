@@ -1,8 +1,5 @@
 package Reservas;
 
-import java.io.*;
-import java.util.*;
-
 public class ReservaEspecial extends Reserva {
 
     private String sedeOrigen;
@@ -10,22 +7,26 @@ public class ReservaEspecial extends Reserva {
     private String fechaRecoger;
     private String horaRecoger;
     private String fechaEntrega;
+    private String placa;
 
-    public ReservaEspecial(String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
+    public ReservaEspecial(String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega, String placa) {
+        super.idReserva = ++Reserva.totalDeReservas;
         this.sedeOrigen = sedeOrigen;
         this.sedeDestino = sedeDestino;
         this.fechaRecoger = fechaRecoger;
         this.horaRecoger = horaRecoger;
         this.fechaEntrega = fechaEntrega;
+        this.placa = placa;
     }
     
-    private String getResumen() {
+    public String getResumen() {
     	
-        return "Sede Origen: " + sedeOrigen
-        		+"Sede Destino: " + sedeDestino
-        		+"Fecha Recoger: " + fechaRecoger
-        		+"Hora Recoger: " + horaRecoger
-        		+"Fecha Entrega: " + fechaEntrega;
+        return "Sede origen: " + sedeOrigen
+        		+"\nSede destino: " + sedeDestino
+        		+"\nFecha recoger: " + fechaRecoger
+        		+"\nHora recoger: " + horaRecoger
+        		+"\nFecha entrega: " + fechaEntrega
+                +"\nPlaca del vehículo: " + placa;
     }
     
 }

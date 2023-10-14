@@ -225,7 +225,7 @@ public class AppReservas {
                 System.out.println("10. Eliminar vehículo");
                 System.out.println("11. Obtener estado del vehículo");
                 System.out.println("12. Trasladar vehículo");
-                System.out.println("100. Salir");
+                System.out.println("13. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
@@ -319,9 +319,10 @@ public class AppReservas {
                     String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato DD/MM/YYYY)");
                     String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
                     String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato DD/MM/YYYY)");
-                    admin.trasladarVehiculo(catalogo, placa, nombreSede, fechaRecoger, horaRecoger, fechaEntregar);
+                    String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, nombreSede, fechaRecoger, horaRecoger, fechaEntregar);
+                    System.out.println(detallesTraslado);
                     System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
-                } else if (opcion_seleccionada == 100) {
+                } else if (opcion_seleccionada == 13) {
                     continuar = false;
                 } else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");

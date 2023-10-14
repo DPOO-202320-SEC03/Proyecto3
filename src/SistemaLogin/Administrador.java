@@ -6,6 +6,8 @@ import Inventario.Categoria;
 import Inventario.Sede;
 import Inventario.Seguro;
 import Inventario.Vehiculo;
+import Reservas.Reserva;
+import Reservas.ReservaEspecial;
 
 import java.util.*;
 
@@ -75,8 +77,19 @@ public class Administrador extends Usuario {
         return estadoVehiculo;
     }
 
-    public void trasladarVehiculo(Catalogo catalogo, String placa, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
-        // TODO implement here
+    public String trasladarVehiculo(Catalogo catalogo, HashMap<String, Reserva> hashReservas, String placa, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
+        String detallesTraslado = "";
+        for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                String sedeOrigen = categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion();
+                ReservaEspecial reservaTraslado = new ReservaEspecial(sedeOrigen, sedeDestino, fechaRecoger, horaRecoger, fechaEntrega, placa);
+                categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(sedeDestino);
+                categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaRecoger, "Vehiculo trasladado a " + sedeDestino);
+                hashReservas.put(String.valueOf(reservaTraslado.getIdReserva()), reservaTraslado);
+                detallesTraslado = reservaTraslado.getResumen();
+            }
+        }
+        return detallesTraslado;
     }
 
     // Funcion para sedes
