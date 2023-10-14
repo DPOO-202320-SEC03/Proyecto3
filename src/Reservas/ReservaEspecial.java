@@ -21,7 +21,8 @@ public class ReservaEspecial extends Reserva {
     
     public String getResumen() {
     	
-        return "Sede origen: " + sedeOrigen
+        return "ID Reserva: " + super.idReserva 
+                +"\nSede origen: " + sedeOrigen
         		+"\nSede destino: " + sedeDestino
         		+"\nFecha recoger: " + fechaRecoger
         		+"\nHora recoger: " + horaRecoger

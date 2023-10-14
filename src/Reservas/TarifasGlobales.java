@@ -1,6 +1,8 @@
 package Reservas;
 
-public class TarifasGlobales {
+import java.io.Serializable;
+
+public class TarifasGlobales implements Serializable {
     
     int tarifaConductorExtra;
     int tarifaEntregaOtraSede;

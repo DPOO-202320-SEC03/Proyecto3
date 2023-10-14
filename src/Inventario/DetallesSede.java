@@ -1,6 +1,8 @@
 package Inventario;
 
-public class DetallesSede {
+import java.io.Serializable;
+
+public class DetallesSede implements Serializable {
     
     private String sedeUbicacion;
     private Boolean disponibleParaAlquilar;

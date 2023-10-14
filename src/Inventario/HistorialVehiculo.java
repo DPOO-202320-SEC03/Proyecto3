@@ -1,8 +1,9 @@
 package Inventario;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class HistorialVehiculo {
+public class HistorialVehiculo implements Serializable {
 
     private HashMap<String, String> logEventos;
 

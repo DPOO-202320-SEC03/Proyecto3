@@ -1,10 +1,9 @@
 package SistemaLogin;
 
-import java.io.*;
-import java.util.*;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class DatosClienteLicencia {
+public class DatosClienteLicencia implements Serializable {
 
     private int numeroLicencia;
     private String paisExpedicion;
@@ -20,5 +19,13 @@ public class DatosClienteLicencia {
 
     public BufferedImage getImagenLicencia() {
         return this.imagenLicencia;
+    }
+
+    public String getResumenLicencia() {
+        String estadoLicencia = "";
+        estadoLicencia += "Numero de licencia: " + this.numeroLicencia + "\n";
+        estadoLicencia += "Pais de expedicion: " + this.paisExpedicion + "\n";
+        estadoLicencia += "Fecha de vencimiento: " + this.fechaVencimiento + "\n";
+        return estadoLicencia;
     }
 }

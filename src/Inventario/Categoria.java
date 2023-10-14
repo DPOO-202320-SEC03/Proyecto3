@@ -1,8 +1,9 @@
 package Inventario;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Categoria {
+public class Categoria implements Serializable {
 
     private String nombreCategoria;
     private int rangoCategoria;

@@ -55,7 +55,8 @@ public class ReservaNormal extends Reserva {
     		seguros += nomseguro + "/n" ;
     	}
 
-        return "Categoria Vehiculo: " + categoriaVehiculo
+        return "ID Reserva: " + super.idReserva 
+                +"\nCategoria Vehiculo: " + categoriaVehiculo
         		+"/nSede Recoger: " + sedeRecoger
         		+"/nFecha Recoger: " + fechaRecoger
         		+"/nHora Recoger: " + horaRecoger

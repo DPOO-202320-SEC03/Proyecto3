@@ -1,8 +1,9 @@
 package Inventario;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class CaracteristicasBasicas {
+public class CaracteristicasBasicas implements Serializable {
 
     private String placa;
     private String marca;

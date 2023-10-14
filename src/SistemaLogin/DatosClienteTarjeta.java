@@ -1,9 +1,8 @@
 package SistemaLogin;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
 
-public class DatosClienteTarjeta {
+public class DatosClienteTarjeta implements Serializable {
 
     private int numeroTarjeta;
     private String fechaVencimiento;
@@ -20,13 +19,23 @@ public class DatosClienteTarjeta {
         this.cvv = cvv;
     }
 
-    public Boolean getEstadoTarjeta() {
-        // TODO implement here
-        return false;
+    public String getResumenTarjeta() {
+        String estadoTarjeta = "";
+        estadoTarjeta += "Numero de tarjeta: " + this.numeroTarjeta + "\n";
+        estadoTarjeta += "Fecha de vencimiento: " + this.fechaVencimiento + "\n";
+        estadoTarjeta += "Titular: " + this.titular + "\n";
+        estadoTarjeta += "Marca internacional: " + this.marcaInternacional + "\n";
+        estadoTarjeta += "CVV: " + this.cvv + "\n";
+        estadoTarjeta += "Estado de la tarjeta: " + this.tarjetaBloqueada + "\n";
+        return estadoTarjeta;
     }
 
-    public void bloquearTarjeta() {
-        // TODO implement here
+    public Boolean getEstadoTarjeta() {
+        return this.tarjetaBloqueada;
+    }
+
+    public void setEstadoTarjeta(Boolean estado) {
+        this.tarjetaBloqueada = estado;
     }
 
 }

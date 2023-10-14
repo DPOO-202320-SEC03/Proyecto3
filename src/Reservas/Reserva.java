@@ -1,6 +1,8 @@
 package Reservas;
 
-public class Reserva {
+import java.io.Serializable;
+
+public class Reserva implements Serializable {
 
     public static int totalDeReservas = 0;
     protected int idReserva;

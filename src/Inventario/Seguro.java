@@ -1,6 +1,8 @@
 package Inventario;
 
-public class Seguro {
+import java.io.Serializable;
+
+public class Seguro implements Serializable {
 
     private int tarifaExtraDiaria;
     private String nombreSeguro;

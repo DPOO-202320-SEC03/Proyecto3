@@ -8,13 +8,11 @@ import SistemaLogin.Cliente;
 import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
 import SistemaLogin.Usuario;
-import Inventario.Seguro;
-import Inventario.Vehiculo;
 import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Sede;
 import Reservas.Reserva;
-import Reservas.TarifasGlobales;
+import Reservas.ReservaEspecial;
 
 import java.awt.image.BufferedImage;
 
@@ -102,15 +100,34 @@ public class AppReservas {
     }
 
     private void crearAdministrador() {
-        Administrador admin = new Administrador("ADMIN", "ADMIN", "Nombre", "Apellido", "1234567890","ADMIN@GOOGLE.COM");
+        String username;
+        String password;
+        String nombres;
+        String apellidos;
+        String celular;
+        String correo;
+        System.out.println("Dado que es la primera vez que abre la aplicacion necesitamos que cree un usuario administrador");
+        System.out.println("Decida que tipo de usuario desea crear, sugerimos que cree un usuario personalizado para mayor seguridad");
+        System.out.println("Un usuario personalizado (P) tiene un usuario y contraseña que usted elige, mientras que un usuario default (D) tiene usuario y contraseña ADMIN");
+        String tipoDeAdmin = input("Por favor ingrese el tipo de administrador que desea crear (D/P)");
+        if (tipoDeAdmin.equals("D")) {
+            username = "ADMIN";
+            password = "ADMIN";
+            nombres = "ADMIN";
+            apellidos = "ADMIN";
+            celular = "1234567890";
+            correo = "ADMIN@GOOGLE.COM";
+            System.out.println("Su usuario y contraseña de administrador son: ADMIN/ADMIN");
+        } else {
+            username = input("Por favor ingrese su usuario para la cuenta de administrador");
+            password = input("Por favor ingrese su contraseña para la cuenta de administrador");
+            nombres = input("Por favor ingrese sus nombres");
+            apellidos = input("Por favor ingrese sus apellidos");
+            celular = input("Por favor ingrese su celular");
+            correo = input("Por favor ingrese su correo");
+        }
+        Administrador admin = new Administrador(username, password, nombres, apellidos, celular, correo);
         hashUsuarios.put(admin.getUsername(), admin);
-    }
-
-    public void mostrarMenuUsuario() {
-        System.out.println("Bienvenido a la aplicación de reservas de vehículos");
-        System.out.println("1. Iniciar sesión");
-        System.out.println("2. Registrarse");
-        System.out.println("3. Salir");
     }
 
     private void iniciarApp() {
@@ -118,7 +135,10 @@ public class AppReservas {
         boolean continuar = true;
 		while (continuar) {
 			try {
-				mostrarMenuUsuario();
+				System.out.println("\nBienvenido a la aplicación de reservas de vehículos");
+                System.out.println("1. Iniciar sesión");
+                System.out.println("2. Registrarse");
+                System.out.println("3. Salir\n");
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
                     iniciarSesion();
@@ -183,13 +203,11 @@ public class AppReservas {
                     Administrador admin = (Administrador) usuario;
                     ejecutarMenuAdministrador(admin);
                 } else if (nivelDeAcceso == 2) {
-                    // TODO ejecutarMenuAdministradorLocal(usuario);
                     AdministradorLocal adminLocal = (AdministradorLocal) usuario;
-                    System.out.println("TEST ADMINLOCAL");
+                    ejecutarMenuAdministradorLocal(adminLocal);
                 } else if (nivelDeAcceso == 1) {
-                    //TODO ejecutarMenuCliente(usuario);
                     Cliente cliente = (Cliente) usuario;
-                    System.out.println("TEST CLIENTE");
+                    ejecutarMenuCliente(cliente);
                 } else {
                     System.out.println("Nivel de acceso no válido!!!");
                 }
@@ -204,7 +222,6 @@ public class AppReservas {
     private void ejecutarMenuAdministrador(Administrador admin) {
         Boolean continuar = true;
         while (continuar) {
-            cargarInformacion();
             try {
                 System.out.println("\nBienvenido al menú para administradores\n");
                 System.out.println("Operaciones relacionadas con usuarios:");
@@ -224,8 +241,10 @@ public class AppReservas {
                 System.out.println("9. Crear vehículo");
                 System.out.println("10. Eliminar vehículo");
                 System.out.println("11. Obtener estado del vehículo");
-                System.out.println("12. Trasladar vehículo");
-                System.out.println("13. Salir");
+                System.out.println("12. Trasladar vehículo a otra sede");
+                System.out.println("Operaciones relacionadas con reservas:");
+                System.out.println("13. Consultar reserva por ID\n");
+                System.out.println("14. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
@@ -240,8 +259,12 @@ public class AppReservas {
                     System.out.println("Administrador local creado y guardado exitosamente!!!");
                 } else if (opcion_seleccionada == 2) {
                     String username = input("Ingrese un usuario que desea eliminar");
-                    admin.eliminarUsuario(hashUsuarios, username);
-                    System.out.println("Usuario" + username + "eliminado exitosamente!!!");
+                    if (!username.equals(admin.getUsername())) {
+                        admin.eliminarUsuario(hashUsuarios, username);
+                        System.out.println("Usuario" + username + "eliminado exitosamente!!!");
+                    } else {
+                        System.out.println("No se puede eliminar tu propio usuario!!!");
+                    }
                 } else if (opcion_seleccionada == 3) {
                     String nombreSede = input("Ingrese el nombre de la sede");
                     String ubicacion = input("Ingrese la ubicación de la sede");
@@ -283,46 +306,106 @@ public class AppReservas {
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales actualizadas y guardadas exitosamente!!!");
                 } else if (opcion_seleccionada == 9) {
-                    String placa = input("Ingrese la placa del vehículo nuevo (En formato ABC-123)");
-                    String marca = input("Ingrese la marca del vehículo nuevo");
-                    String modelo = input("Ingrese el modelo del vehículo nuevo");
-                    String color = input("Ingrese el color del vehículo nuevo");
-                    String tipoDeTransmision = input("Ingrese el tipo de transmisión del vehículo nuevo");
-                    String tipoDeDireccion = input("Ingrese el tipo de dirección del vehículo nuevo");
-                    String tipoDeCombustible = input("Ingrese el tipo de combustible del vehículo nuevo");
-                    String cantidadDePasajeros = input("Ingrese la cantidad de pasajeros que puede albergar el vehículo nuevo");
-                    String nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
-                    String categoria = input("Ingrese la categoria del vehículo nuevo");
-                    while (!catalogo.getHashCategorias().containsKey(categoria)) {
-                        System.out.println("La categoria ingresada no existe, por favor ingrese una categoria valida");
-                        System.out.println("La categoria validas son:");
-                        for (String key : catalogo.getHashCategorias().keySet()) {
-                            System.out.println("- " + key);
+                    if (hashSedes.size()>0 && catalogo.getHashCategorias().size()>0) {
+                        String placa = input("Ingrese la placa del vehículo nuevo (En formato ABC-123)");
+                        String marca = input("Ingrese la marca del vehículo nuevo");
+                        String modelo = input("Ingrese el modelo del vehículo nuevo");
+                        String color = input("Ingrese el color del vehículo nuevo");
+                        String tipoDeTransmision = input("Ingrese el tipo de transmisión del vehículo nuevo");
+                        String tipoDeDireccion = input("Ingrese el tipo de dirección del vehículo nuevo");
+                        String tipoDeCombustible = input("Ingrese el tipo de combustible del vehículo nuevo");
+                        String cantidadDePasajeros = input("Ingrese la cantidad de pasajeros que puede albergar el vehículo nuevo incluyendo al conductor");
+
+                        String nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
+                        while (!hashSedes.containsKey(nombreSede)) {
+                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                            System.out.println("Las sedes validas son:");
+                            for (String key : hashSedes.keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
                         }
-                        categoria = input("Ingrese la categoria del vehículo nuevo");
-                    }
-                    Boolean disponibleParaAlquilar = Boolean.parseBoolean(input("Ingrese si el vehículo nuevo se encuentra disponible para alquiler (En formato true/false)"));
-                    String fechaDisponibilidad = input("Ingrese la fecha de disponibilidad del vehículo nuevo (En formato DD/MM/YYYY)");
-                    admin.crearVehiculo(catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, cantidadDePasajeros, nombreSede, categoria, disponibleParaAlquilar, fechaDisponibilidad);
-                    System.out.println("Vehículo creado y guardado exitosamente!!!");
+
+                        String categoria = input("Ingrese la categoria del vehículo nuevo");
+                        while (!catalogo.getHashCategorias().containsKey(categoria)) {
+                            System.out.println("La categoria ingresada no existe, por favor ingrese una categoria valida");
+                            System.out.println("La categoria validas son:");
+                            for (String key : catalogo.getHashCategorias().keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            categoria = input("Ingrese la categoria del vehículo nuevo");
+                        }
+
+                        Boolean disponibleParaAlquilar = Boolean.parseBoolean(input("Ingrese si el vehículo nuevo se encuentra disponible para alquiler (En formato true/false)"));
+                        String fechaDisponibilidad = input("Ingrese la fecha de disponibilidad del vehículo nuevo (En formato DD/MM/YYYY)");
+                        admin.crearVehiculo(catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, cantidadDePasajeros, nombreSede, categoria, disponibleParaAlquilar, fechaDisponibilidad);
+                        System.out.println("Vehículo creado y guardado exitosamente!!!");
+                    } else {
+                        System.out.println("No hay sedes o categorias creadas, por favor cree una antes de crear un vehículo");
+                    }   
                 } else if (opcion_seleccionada == 10) {
                     String placa = input("Ingrese la placa del vehículo que desea eliminar");
-                    admin.eliminarVehiculo(catalogo, placa);
-                    System.out.println("Vehículo eliminado exitosamente!!!");
+                    Boolean esta = false;
+                    for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                        if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                            esta = true;
+                        }
+                    }
+                    if (esta) {
+                        admin.eliminarVehiculo(catalogo, placa);
+                        System.out.println("Vehículo eliminado exitosamente!!!");
+                    } else {
+                        System.out.println("El vehículo no existe!!!");
+                    }
                 } else if (opcion_seleccionada == 11) {
                     String placa = input("Ingrese la placa del vehículo que desea consultar");
-                    String resumenEstado = admin.estadoVehiculo(catalogo, placa);
-                    System.out.println(resumenEstado);
+                    Boolean esta = false;
+                    for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                        if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                            esta = true;
+                        }
+                    }
+                    if (esta) {
+                        String resumenEstado = admin.estadoVehiculo(catalogo, placa);
+                        System.out.println(resumenEstado);
+                    } else {
+                        System.out.println("El vehículo no existe!!!");
+                    }
                 } else if (opcion_seleccionada == 12) {
                     String placa = input("Ingrese la placa del vehículo que desea trasladar");
-                    String nombreSede = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
-                    String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato DD/MM/YYYY)");
-                    String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
-                    String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato DD/MM/YYYY)");
-                    String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, nombreSede, fechaRecoger, horaRecoger, fechaEntregar);
-                    System.out.println(detallesTraslado);
-                    System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
+                    Boolean esta = false;
+                    for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                        if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                            esta = true;
+                        }
+                    }
+                    if (esta) {
+                        String nombreSede = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
+                        while (!hashSedes.containsKey(nombreSede)) {
+                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                            System.out.println("Las sedes validas son:");
+                            for (String key : hashSedes.keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
+                        }
+                        String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato DD/MM/YYYY)");
+                        String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato DD/MM/YYYY)");
+                        String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, nombreSede, fechaRecoger, horaRecoger, fechaEntregar);
+                        System.out.println(detallesTraslado);
+                        System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
+                    } else {
+                        System.out.println("El vehículo no existe!!!");
+                    }
                 } else if (opcion_seleccionada == 13) {
+                    String idReserva = input("Ingrese el id de la reserva que desea consultar");
+                    if (hashReservas.containsKey(idReserva)) {
+                        admin.resumenReserva(hashReservas, idReserva);
+                    } else {
+                        System.out.println("La reserva no existe!!!");
+                    }
+                } else if (opcion_seleccionada == 14) {
                     continuar = false;
                 } else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");
@@ -331,7 +414,16 @@ public class AppReservas {
                 System.out.println("Debe seleccionar uno de los números de las opciones!!!");
             }
             guardarInformacion();
+            cargarInformacion();
         }
+    }
+
+    private void ejecutarMenuAdministradorLocal(AdministradorLocal adminLocal) {
+        // TODO implementar
+    }
+
+    private void ejecutarMenuCliente(Cliente cliente) {
+        // TODO implementar
     }
 
     private String input(String mensaje) {

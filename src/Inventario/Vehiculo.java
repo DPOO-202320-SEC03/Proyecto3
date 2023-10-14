@@ -1,8 +1,9 @@
 package Inventario;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Vehiculo {
+public class Vehiculo implements Serializable {
 
     private String categoria;
     private Boolean enAlquiler = false;

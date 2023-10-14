@@ -68,9 +68,10 @@ public class Administrador extends Usuario {
                 estadoVehiculo += "Fecha de devolucion: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getFechaDevolucion() + "\n";
                 estadoVehiculo += "Sede de devolucion: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getSedeDevolucion() + "\n";
                 estadoVehiculo += "Log de eventos: \n";
+                estadoVehiculo += String.format("%-20s%-80s\n", "_".repeat(20), "_".repeat(80));
                 HashMap<String, String> logEventos = categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().getLogEventos();
                 for (Map.Entry<String, String> evento : logEventos.entrySet()) {
-                    estadoVehiculo += String.format("Evento: %-30s | Fecha: %-30s\n", evento.getValue(), evento.getKey());
+                    estadoVehiculo += String.format("%-20s%-80s\n", "Fecha: " + evento.getKey(), "| Evento: " + evento.getValue());
                 }
             }
         }
@@ -135,5 +136,11 @@ public class Administrador extends Usuario {
         catalogo.getTarifasGlobales().setTarifaConductorExtra(tarifaConductorExtra);
         catalogo.getTarifasGlobales().setTarifaEntregaOtraSede(tarifaEntregaOtraSede);
         catalogo.getTarifasGlobales().setRangoTemporadaAlta(rangoTemporadaAlta);
+    }
+
+    // Funciones para las reservas
+
+    public void resumenReserva(HashMap<String, Reserva> hashReservas, String idReserva) {
+        System.out.println(hashReservas.get(idReserva).getResumen());
     }
 }

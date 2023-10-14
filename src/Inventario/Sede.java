@@ -1,8 +1,9 @@
 package Inventario;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Sede {
+public class Sede implements Serializable {
 
     private String nombreSede;
     private String ubicacion;
