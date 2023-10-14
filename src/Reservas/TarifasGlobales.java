@@ -4,20 +4,29 @@ public class TarifasGlobales {
     
     int tarifaConductorExtra;
     int tarifaEntregaOtraSede;
+    String rangoTemporadaAlta;
     
-    private int getTarifaExtra() {
+    public int getTarifaExtra() {
         return tarifaConductorExtra;
     }
 
-    private int getTarifaSede() {
+    public int getTarifaSede() {
         return tarifaEntregaOtraSede;
     }
 
-    private void setTarifaExtra(int tarifaConductorExtra) {
+    public void setTarifaExtra(int tarifaConductorExtra) {
         this.tarifaConductorExtra = tarifaConductorExtra;
     }
 
-    private void setTarifaEntregaOtraSede(int tarifaEntregaOtraSede) {
+    public void setTarifaEntregaOtraSede(int tarifaEntregaOtraSede) {
         this.tarifaEntregaOtraSede = tarifaEntregaOtraSede;
+    }
+
+    public String getRangoTemporadaAlta() {
+        return rangoTemporadaAlta;
+    }
+
+    public void setRangoTemporadaAlta(String rangoTemporadaAlta) {
+        this.rangoTemporadaAlta = rangoTemporadaAlta;
     }
 }

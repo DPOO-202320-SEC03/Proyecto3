@@ -213,6 +213,9 @@ public class AppReservas {
                 System.out.println("5. Crear o actualizar tarifas por temporada a categoria");
                 System.out.println("→  Operaciones relacionadas con seguros:");
                 System.out.println("6. Crear seguro");
+                System.out.println("→  Operaciones relacionadas con tarifas globales:");
+                System.out.println("7. Crear tarifas globales");
+                System.out.println("8. Editar tarifas globales");
                 System.out.println("100. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
