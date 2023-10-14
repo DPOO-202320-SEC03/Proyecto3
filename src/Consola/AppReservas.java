@@ -4,11 +4,14 @@ import java.util.*;
 
 import SistemaLogin.Administrador;
 import SistemaLogin.Cliente;
+import SistemaLogin.DatosClienteLicencia;
+import SistemaLogin.DatosClienteTarjeta;
 import SistemaLogin.Persona;
 import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Sede;
 import Reservas.Reserva;
+import java.awt.image.BufferedImage;
 
 public class AppReservas {
 
@@ -71,60 +74,32 @@ public class AppReservas {
             File archivoUsuarios = new File(filePath+"usuarios");
             File archivoSedes = new File(filePath+"sedes");
             File archivoReservas = new File(filePath+"reservas");
-            guardarCatalogo(archivoCatalogo);
-            guardarUsuarios(archivoUsuarios);
-            guardarSedes(archivoReservas);
-            guardarReservas(archivoSedes);
+            try {
+                ObjectOutputStream oosC = new ObjectOutputStream(new FileOutputStream(archivoCatalogo));
+                oosC.writeObject(this.catalogo);
+                oosC.close();
+                ObjectOutputStream oosU = new ObjectOutputStream(new FileOutputStream(archivoUsuarios));
+                oosU.writeObject(this.hashUsuarios);
+                oosU.close();
+                ObjectOutputStream oosS = new ObjectOutputStream(new FileOutputStream(archivoSedes));
+                oosS.writeObject(this.hashSedes);
+                oosS.close();
+                ObjectOutputStream oosR = new ObjectOutputStream(new FileOutputStream(archivoReservas));
+                oosR.writeObject(this.hashReservas);
+                oosR.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             System.out.println("Error al guardar la información!!!");
             e.printStackTrace();
         }
     }
 
-    private void guardarCatalogo(File fileCatalogo) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileCatalogo));
-            oos.writeObject(this.catalogo);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void guardarUsuarios(File fileUsuarios) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileUsuarios));
-            oos.writeObject(this.hashUsuarios);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void guardarSedes(File fileSedes) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileSedes));
-            oos.writeObject(this.hashSedes);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void guardarReservas(File fileReservas) {
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileReservas));
-            oos.writeObject(this.hashReservas);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void crearAdministrador() {
         Administrador admin = new Administrador("Nombre", "Apellido", "1234567890");
-        Usuario adminPersona = new Usuario("ADMIN", "ADMIN", admin);
-        hashUsuarios.put(adminPersona.getUsername(), adminPersona);
+        Usuario usuario = new Usuario("ADMIN", "ADMIN", admin);
+        hashUsuarios.put(usuario.getUsername(), usuario);
     }
 
     public void mostrarMenuUsuario() {
@@ -177,10 +152,38 @@ public class AppReservas {
     }
 
     private void registrarse() {
-        // TODO implement here
+        System.out.println("\nPor favor ingrese sus datos personales:");
+        String nombres = input("Por favor ingrese sus nombres");
+        String apellidos = input("Por favor ingrese sus apellidos");
+        String celular = input("Por favor ingrese su celular");
+        System.out.println("\nPor favor ingrese los datos de su licencia:");
+        Integer numeroDeLicencia = Integer.parseInt(input("Por favor ingrese el número de su licencia"));
+        String paisDeExpedicion = input("Por favor ingrese el país de expedición de su licencia");
+        String fechaDeVencimientoLicencia = input("Por favor ingrese la fecha de vencimiento de su licencia");
+        BufferedImage imagenLicencia = null;
+        try {
+            String workingDir = System.getProperty("user.dir");
+            String filePath = workingDir + File.separator + "data" + File.separator;
+            File file = new File(filePath+"licencia.jpg");
+            imagenLicencia = javax.imageio.ImageIO.read(file);
+        } catch (IOException e) {
+            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data!!!");
+        }
+        System.out.println("\nPor favor ingrese los datos de su tarjeta:");
+        Integer numeroDeTarjeta = Integer.parseInt(input("Por favor ingrese el número de su tarjeta"));
+        String fechaDeVencimientoTarjeta = input("Por favor ingrese la fecha de vencimiento de su tarjeta");
+        String titular = input("Por favor ingrese el titular de la tarjeta");
+        String marcaInternacional = input("Por favor ingrese la marca internacional de la tarjeta");
+        Integer ccv = Integer.parseInt(input("Por favor ingrese el ccv de la tarjeta"));
+        DatosClienteLicencia licencia = new DatosClienteLicencia(numeroDeLicencia, paisDeExpedicion, fechaDeVencimientoTarjeta, imagenLicencia);
+        DatosClienteTarjeta tarjeta = new DatosClienteTarjeta(numeroDeTarjeta,fechaDeVencimientoTarjeta,titular,marcaInternacional,ccv);
+        Cliente cliente = new Cliente(nombres,apellidos,celular,licencia,tarjeta);
 
-        Cliente cliente = new Cliente(null, null, null, null, null);
-        
+        System.out.println("\nPor favor ingrese los datos para su usuario:");
+        String username = input("Por favor ingrese su usuario");
+        String password = input("Por favor ingrese su contraseña");
+        Usuario usuario = new Usuario(username,password,cliente);
+        this.hashUsuarios.put(usuario.getUsername(), usuario);
     }
 
     private void iniciarAppUsuario(int nivelDeAcceso, Persona persona) {
