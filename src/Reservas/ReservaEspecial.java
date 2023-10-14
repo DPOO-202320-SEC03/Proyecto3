@@ -19,8 +19,13 @@ public class ReservaEspecial extends Reserva {
         this.fechaEntrega = fechaEntrega;
     }
     
-    private ArrayList<String> getDetallesReserva() {
-        // TODO implement here
-        return null;
+    private String getResumen() {
+    	
+        return "Sede Origen: " + sedeOrigen
+        		+"Sede Destino: " + sedeDestino
+        		+"Fecha Recoger: " + fechaRecoger
+        		+"Hora Recoger: " + horaRecoger
+        		+"Fecha Entrega: " + fechaEntrega;
     }
+    
 }

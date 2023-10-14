@@ -13,17 +13,18 @@ public class Reserva {
     }
 
     private int getIdReserva() {
-        // TODO implement here
-        return 0;
+       
+        return idReserva;
     }
 
     private void setIdReserva(int id) {
-        // TODO implement here
+       
+    	this.idReserva = id;
     }
 
     private String getResumen() {
-        // TODO implement here
-        return "";
+        
+        return "ID Reserva: " + idReserva;
     }
 
 }
