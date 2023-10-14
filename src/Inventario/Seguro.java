@@ -1,8 +1,5 @@
 package Inventario;
 
-import java.io.*;
-import java.util.*;
-
 public class Seguro {
 
     private int tarifaExtraDiaria;

@@ -5,7 +5,6 @@ import Inventario.Sede;
 import Inventario.Seguro;
 import Inventario.Vehiculo;
 
-import java.io.*;
 import java.util.*;
 
 public class Administrador extends Usuario {

@@ -1,6 +1,5 @@
 package Inventario;
 
-import java.io.*;
 import java.util.*;
 import java.io.Serializable;
 import Reservas.TarifasGlobales;
