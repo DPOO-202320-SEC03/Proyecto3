@@ -45,5 +45,24 @@ public class ReservaNormal extends Reserva {
         // TODO implement here
         return 0;
     }
+    private String getResumen() {
+        // TODO implement here
+    	
+    	String seguros = "";
+    	
+    	for (String nomseguro:nombresSeguros) 
+    	{
+    		seguros += "/n" + nomseguro;
+    	}
+        return "Categoria Vehiculo: " + categoriaVehiculo
+        		+"/nSede Recoger: " + sedeRecoger
+        		+"/nFecha Recoger: " + fechaRecoger
+        		+"/nHora Recoger: " + horaRecoger
+        		+"/nSede Entregar: " + sedeEntregar
+        		+"/nFecha Entregar: " + fechaEntregar
+        		+"/nHora Rango Entregar: " + horaRangoEntregar
+        		+"/nUsuario Conductor Principal: " + usuarioConductorPrincipal
+        		+"Seguros: " + seguros;
+    }
 
 }
