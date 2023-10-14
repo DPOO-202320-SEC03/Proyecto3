@@ -27,29 +27,29 @@ public class Cliente extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    private void reservarVehiculo(String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
+    public void reservarVehiculo(String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
         // TODO implement here
     }
 
-    private void alquilarVehiculo(Boolean alterarReserva, Boolean otrosConductores) {
+    public void alquilarVehiculo(Boolean alterarReserva, Boolean otrosConductores) {
         // TODO implement here
     }
 
-    private void alterarReserva(int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar) {
+    public void alterarReserva(int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar) {
         // TODO implement here
     }
 
-    private int calcularValorAlquiler(String fechaRecoger, String fechaEntregar, Vehiculo vehiculo) {
+    public int calcularValorAlquiler(String fechaRecoger, String fechaEntregar, Vehiculo vehiculo) {
         // TODO implement here
         return 0;
     }
 
-    private Reserva getReserva() {
+    public Reserva getReserva() {
         // TODO implement here
         return null;
     }
 
-    private void setReserva(int id) {
+    public void setReserva(int id) {
         // TODO implement here
     }
 }

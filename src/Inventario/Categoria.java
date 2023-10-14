@@ -11,45 +11,40 @@ public class Categoria {
     private HashMap<String, Vehiculo> hashVehiculos;
     private HashMap<String, Integer> hashTarifaPorTemporada;
 
-    public Categoria(String nombreCategoria, int rangoCategoria, int vehiculosDisponibles) {
+    public Categoria(String nombreCategoria, int rangoCategoria) {
         this.nombreCategoria = nombreCategoria;
         this.rangoCategoria = rangoCategoria;
-        this.vehiculosDisponibles = vehiculosDisponibles;
+        this.vehiculosDisponibles = 0;
         this.hashVehiculos = new HashMap<String, Vehiculo>();
         this.hashTarifaPorTemporada = new HashMap<String, Integer>();
     }
 
-    private String getNombreCategoria() {
-        // TODO implement here
-        return "";
+    public String getNombreCategoria() {
+        return this.nombreCategoria;
     }
 
-    private int getRangoCategoria() {
-        // TODO implement here
-        return 0;
+    public int getRangoCategoria() {
+        return this.rangoCategoria;
     }
 
-    private int getVehiculosDisponibles() {
-        // TODO implement here
-        return 0;
+    public int getVehiculosDisponibles() {
+        return this.vehiculosDisponibles;
     }
 
-    private HashMap<String, Vehiculo> getHashVehiculos() {
-        // TODO implement here
-        return null;
+    public HashMap<String, Vehiculo> getHashVehiculos() {
+        return this.hashVehiculos;
     }
 
-    private void updateHashVehiculos(HashMap<String, Vehiculo> hashVehiculos) {
-        // TODO implement here
+    public void updateHashVehiculos(HashMap<String, Vehiculo> hashVehiculos) {
+        this.hashVehiculos = hashVehiculos;
     }
 
-    private HashMap<String, Integer> getHashTarifaPorTemporada() {
-        // TODO implement here
-        return null;
+    public HashMap<String, Integer> getHashTarifaPorTemporada() {
+        return this.hashTarifaPorTemporada;
     }
 
-    private void updateHashTarifaPorTemporada(HashMap<String, Integer> hashTarifaPorTemporada) {
-        // TODO implement here
+    public void updateHashTarifaPorTemporada(HashMap<String, Integer> hashTarifaPorTemporada) {
+        this.hashTarifaPorTemporada = hashTarifaPorTemporada;
     }
 
 }

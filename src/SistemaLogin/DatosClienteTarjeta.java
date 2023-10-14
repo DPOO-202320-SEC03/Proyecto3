@@ -20,12 +20,12 @@ public class DatosClienteTarjeta {
         this.cvv = cvv;
     }
 
-    private Boolean getEstadoTarjeta() {
+    public Boolean getEstadoTarjeta() {
         // TODO implement here
         return false;
     }
 
-    private void bloquearTarjeta() {
+    public void bloquearTarjeta() {
         // TODO implement here
     }
 

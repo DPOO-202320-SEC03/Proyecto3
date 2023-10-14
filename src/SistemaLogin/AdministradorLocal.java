@@ -19,15 +19,15 @@ public class AdministradorLocal extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    private void crearEmpleado(String username, String password, String nombres, String apellidos, String celular) {
+    public void crearEmpleado(String username, String password, String nombres, String apellidos, String celular) {
         // TODO implement here
     }
 
-    private void eliminarEmpleado(String usernameEmpleado) {
-        // TODO implement here
+    public void eliminarEmpleado(String usernameEmpleado) {
+        // TODO implement here Primero se revisa que el usuario sea un empleado, despues se elimina del hashmap y se retorna el hashmap actualizado
     }
 
-    private String getSede() {
+    public String getSede() {
         return nombreSede;
     }
 

@@ -18,7 +18,7 @@ public class DatosClienteLicencia {
         this.imagenLicencia = imagenLicencia;
     }
 
-    private BufferedImage getImagenLicencia() {
+    public BufferedImage getImagenLicencia() {
         return this.imagenLicencia;
     }
 }

@@ -28,6 +28,4 @@ public class Usuario implements Serializable {
         return this.nivelDeAcceso;
     }
 
-    
-
 }
