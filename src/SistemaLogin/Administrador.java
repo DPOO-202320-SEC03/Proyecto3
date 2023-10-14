@@ -4,6 +4,7 @@ import Inventario.Categoria;
 import Inventario.Sede;
 import Inventario.Seguro;
 import Inventario.Vehiculo;
+import Reservas.TarifasGlobales;
 
 import java.util.*;
 
@@ -85,5 +86,15 @@ public class Administrador extends Usuario {
         categoria.updateHashTarifaPorTemporada(hashTarifaPorTemporada);
         hashCategorias.put(categoria.getNombreCategoria(), categoria);
         return hashCategorias;
+    }
+
+    // Funciones para las tarifas
+
+    public TarifasGlobales crearTarifasGlobales(int tarifaConductorExtra, int tarifaEntregaOtraSede, String rangoTemporadaAlta) {
+        TarifasGlobales tarifasGlobales = new TarifasGlobales();
+        tarifasGlobales.setTarifaConductorExtra(tarifaConductorExtra);
+        tarifasGlobales.setTarifaEntregaOtraSede(tarifaEntregaOtraSede);
+        tarifasGlobales.setRangoTemporadaAlta(rangoTemporadaAlta);
+        return tarifasGlobales;
     }
 }

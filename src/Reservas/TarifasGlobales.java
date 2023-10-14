@@ -14,7 +14,7 @@ public class TarifasGlobales {
         return tarifaEntregaOtraSede;
     }
 
-    public void setTarifaExtra(int tarifaConductorExtra) {
+    public void setTarifaConductorExtra(int tarifaConductorExtra) {
         this.tarifaConductorExtra = tarifaConductorExtra;
     }
 

@@ -13,6 +13,8 @@ import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Sede;
 import Reservas.Reserva;
+import Reservas.TarifasGlobales;
+
 import java.awt.image.BufferedImage;
 
 public class AppReservas {
@@ -201,19 +203,20 @@ public class AppReservas {
     private void ejecutarMenuAdministrador(Administrador admin) {
         Boolean continuar = true;
         while (continuar) {
+            cargarInformacion();
             try {
-                System.out.println("Bienvenido al menú para administradores");
-                System.out.println("→  Operaciones relacionadas con usuarios:");
+                System.out.println("\nBienvenido al menú para administradores\n");
+                System.out.println("Operaciones relacionadas con usuarios:");
                 System.out.println("1. Crear administrador local");
                 System.out.println("2. Eliminar usuario");
-                System.out.println("→  Operaciones relacionadas con sedes:");
+                System.out.println("Operaciones relacionadas con sedes:");
                 System.out.println("3. Crear sede");
-                System.out.println("→  Operaciones relacionadas con categorias:");
+                System.out.println("Operaciones relacionadas con categorias:");
                 System.out.println("4. Crear categoria");
                 System.out.println("5. Crear o actualizar tarifas por temporada a categoria");
-                System.out.println("→  Operaciones relacionadas con seguros:");
+                System.out.println("Operaciones relacionadas con seguros:");
                 System.out.println("6. Crear seguro");
-                System.out.println("→  Operaciones relacionadas con tarifas globales:");
+                System.out.println("Operaciones relacionadas con tarifas globales:");
                 System.out.println("7. Crear tarifas globales");
                 System.out.println("8. Editar tarifas globales");
                 System.out.println("100. Salir");
@@ -263,6 +266,25 @@ public class AppReservas {
                     Seguro seguro = admin.crearSeguro(tarifaExtraDiaria, nombreSeguro, descripcionSeguro);
                     this.catalogo.getHashSeguros().put(seguro.getNombreSeguro(), seguro);
                     System.out.println("Seguro creado y guardado exitosamente!!!");
+                } else if (opcion_seleccionada == 7) {
+                    int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
+                    int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
+                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato DD/MM - DD/MM)");
+                    TarifasGlobales tarifasGlobales = admin.crearTarifasGlobales(tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
+                    this.catalogo.setTarifasGlobales(tarifasGlobales);
+                    System.out.println("Tarifas globales creadas y guardadas exitosamente!!!");
+                } else if (opcion_seleccionada == 8) {
+                    System.out.println("A continuacion vera los valores previos de tarifas globales");
+                    System.out.println("- Tarifa por conductor extra: " + this.catalogo.getTarifasGlobales().getTarifaExtra());
+                    System.out.println("- Tarifa por entrega en otra sede: " + this.catalogo.getTarifasGlobales().getTarifaSede());
+                    System.out.println("- Rango de temporada alta: " + this.catalogo.getTarifasGlobales().getRangoTemporadaAlta());
+                    System.out.println("A continuacion ingrese los nuevos valores de tarifas globales");
+                    int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
+                    int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
+                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato DD/MM - DD/MM)");
+                    TarifasGlobales tarifasGlobales = admin.crearTarifasGlobales(tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
+                    this.catalogo.setTarifasGlobales(tarifasGlobales);
+                    System.out.println("Tarifas globales actualizadas y guardadas exitosamente!!!");
                 } else if (opcion_seleccionada == 100) {
                     continuar = false;
                 } else {
@@ -271,6 +293,7 @@ public class AppReservas {
             } catch (NumberFormatException e) {
                 System.out.println("Debe seleccionar uno de los números de las opciones!!!");
             }
+            guardarInformacion();
         }
     }
 
