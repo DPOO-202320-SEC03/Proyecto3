@@ -3,16 +3,19 @@ package SistemaLogin;
 import java.io.*;
 import java.util.*;
 
-public class AdministradorLocal extends Persona {
+public class AdministradorLocal extends Usuario {
 
     private int nivelDeAcceso = 2;
     private String nombreSede;
 
-    public AdministradorLocal(String nombreSede, String nombres, String apellidos, String celular) {
+    public AdministradorLocal(String username, String password, String nombreSede, String nombres, String apellidos, String celular, String correo) {
+        super.username = username;
+        super.password = password;
         this.nombreSede = nombreSede;
         super.nombres = nombres;
         super.apellidos = apellidos;
         super.celular = celular;
+        super.correo = correo;
         super.nivelDeAcceso = nivelDeAcceso;
     }
 

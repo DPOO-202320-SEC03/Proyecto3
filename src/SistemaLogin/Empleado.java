@@ -4,16 +4,19 @@ import java.io.*;
 import java.util.*;
 import java.awt.image.BufferedImage;
 
-public class Empleado extends Persona {
+public class Empleado extends Usuario {
 
     private int nivelDeAcceso = 1;
     private String nombreSede;
 
-    public Empleado(String nombreSede, String nombres, String apellidos, String celular) {
+    public Empleado(String username, String password, String nombreSede, String nombres, String apellidos, String celular, String correo) {
+        super.username = username;
+        super.password = password;
         this.nombreSede = nombreSede;
         super.nombres = nombres;
         super.apellidos = apellidos;
         super.celular = celular;
+        super.correo = correo;
         super.nivelDeAcceso = nivelDeAcceso;
     }
 

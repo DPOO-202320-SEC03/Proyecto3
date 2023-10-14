@@ -5,14 +5,17 @@ import Inventario.Vehiculo;
 import java.io.*;
 import java.util.*;
 
-public class Administrador extends Persona {
+public class Administrador extends Usuario {
 
     private int nivelDeAcceso = 3;
 
-    public Administrador(String nombres, String apellidos, String celular) {
+    public Administrador(String username, String password, String nombres, String apellidos, String celular, String correo) {
+        super.username = username;
+        super.password = password;
         super.nombres = nombres;
         super.apellidos = apellidos;
         super.celular = celular;
+        super.correo = correo;
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
