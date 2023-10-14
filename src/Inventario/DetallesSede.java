@@ -1,39 +1,33 @@
 package Inventario;
 
-import java.io.*;
-import java.util.*;
-
 public class DetallesSede {
     
     private String sedeUbicacion;
     private Boolean disponibleParaAlquilar;
     private String fechaDisponibilidad;
 
-    private String getSedeUbicacion() {
-        // TODO implement here
-        return "";
+    public String getSedeUbicacion() {
+        return this.sedeUbicacion;
     }
 
-    private void setSedeUbicacion(String sede) {
-        // TODO implement here
+    public void setSedeUbicacion(String sede) {
+        this.sedeUbicacion = sede;
     }
 
-    private Boolean getDisponibilidadParaAlquilar() {
-        // TODO implement here
-        return null;
+    public Boolean getDisponibilidadParaAlquilar() {
+        return this.disponibleParaAlquilar;
     }
 
-    private void setDisponibilidadParaAlquilar(Boolean estado) {
-        // TODO implement here
+    public void setDisponibilidadParaAlquilar(Boolean estado) {
+        this.disponibleParaAlquilar = estado;
     }
 
-    private String getFechaDisponibilidad() {
-        // TODO implement here
-        return "";
+    public String getFechaDisponibilidad() {
+        return this.fechaDisponibilidad;
     }
 
-    private void setFechaDisponibilidad(String fecha) {
-        // TODO implement here
+    public void setFechaDisponibilidad(String fecha) {
+        this.fechaDisponibilidad = fecha;
     }
 
 }

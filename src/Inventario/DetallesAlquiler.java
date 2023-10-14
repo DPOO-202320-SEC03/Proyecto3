@@ -1,39 +1,33 @@
 package Inventario;
 
-import java.io.*;
-import java.util.*;
-
 public class DetallesAlquiler {
 
     private String usuarioClienteAlquiler;
     private String fechaDevolucion;
     private String sedeDevolucion;
 
-    private String getUsuarioClienteAlquiler() {
-        // TODO implement here
-        return "";
+    public String getUsuarioClienteAlquiler() {
+        return this.usuarioClienteAlquiler;
     }
 
-    private void setUsuarioClienteAlquiler(String usuario) {
-        // TODO implement here
+    public void setUsuarioClienteAlquiler(String usuario) {
+        this.usuarioClienteAlquiler = usuario;
     }
 
-    private String getFechaDevolucion() {
-        // TODO implement here
-        return "";
+    public String getFechaDevolucion() {
+        return this.fechaDevolucion;
     }
 
-    private void setFechaDevolucion(String fecha) {
-        // TODO implement here
+    public void setFechaDevolucion(String fecha) {
+        this.fechaDevolucion = fecha;
     }
 
-    private String getSedeDevolucion() {
-        // TODO implement here
-        return "";
+    public String getSedeDevolucion() {
+        return this.sedeDevolucion;
     }
 
-    private void setSedeDevolucion(String sede) {
-        // TODO implement here
+    public void setSedeDevolucion(String sede) {
+        this.sedeDevolucion = sede;
     }
 
 }

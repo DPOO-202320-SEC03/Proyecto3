@@ -1,6 +1,5 @@
 package Inventario;
 
-import java.io.*;
 import java.util.*;
 
 public class CaracteristicasBasicas {
@@ -25,13 +24,20 @@ public class CaracteristicasBasicas {
         this.cantidadDePasajeros = cantidadDePasajeros;
     }
 
-    private String getPlaca() {
-        // TODO implement here
-        return "";
+    public String getPlaca() {
+        return this.placa;
     }
 
-    private ArrayList<String> getAllInfo() {
-        // TODO implement here
-        return null;
+    public ArrayList<String> getAllInfo() {
+        ArrayList<String> info = new ArrayList<String>();
+        info.add(this.placa);
+        info.add(this.marca);
+        info.add(this.modelo);
+        info.add(this.color);
+        info.add(this.tipoDeTransmision);
+        info.add(this.tipoDeDireccion);
+        info.add(this.tipoDeCombustible);
+        info.add(this.cantidadDePasajeros);
+        return info;
     }
 }

@@ -1,16 +1,10 @@
 package Inventario;
 
-import java.io.*;
 import java.util.*;
-import Inventario.CaracteristicasBasicas;
-import Inventario.DetallesAlquiler;
-import Inventario.DetallesSede;
-import Inventario.HistorialVehiculo;
 
 public class Vehiculo {
 
     private String categoria;
-    private int rangoCategoria;
     private Boolean enAlquiler = false;
     private ArrayList<Integer> reservas;
     private CaracteristicasBasicas caracteristicasBasicas;
@@ -18,9 +12,8 @@ public class Vehiculo {
     private DetallesSede detallesSede;
     private HistorialVehiculo historialVehiculo;
 
-    public Vehiculo(String categoria, int rangoCategoria, CaracteristicasBasicas caracteristicasBasicas) {
+    public Vehiculo(String categoria, CaracteristicasBasicas caracteristicasBasicas) {
         this.categoria = categoria;
-        this.rangoCategoria = rangoCategoria;
         this.reservas = new ArrayList<Integer>();
         this.caracteristicasBasicas = caracteristicasBasicas;
         this.detallesAlquiler = new DetallesAlquiler();
@@ -28,54 +21,40 @@ public class Vehiculo {
         this.historialVehiculo = new HistorialVehiculo();
     }
 
-    private Boolean getEnAlquiler() {
-        // TODO implement here
-        return null;
+    public String getCategoriaVehiculo() {
+        return this.categoria;
     }
 
-    private void setEnAlquiler(Boolean alquiler) {
-        // TODO implement here
+    public Boolean getEnAlquiler() {
+        return this.enAlquiler;
     }
 
-    private ArrayList<Integer> getReservas() {
-        // TODO implement here
-        return null;
+    public void setEnAlquiler(Boolean alquiler) {
+        this.enAlquiler = alquiler;
     }
 
-    private void addReserva(String rangoDeFechasEnAlquiler) {
-        // TODO implement here
+    public ArrayList<Integer> getReservas() {
+        return this.reservas;
     }
 
-    private CaracteristicasBasicas getCaracteristicasBasicas() {
-        // TODO implement here
-        return null;
+    public void addReserva(int idReserva) {
+        this.reservas.add(idReserva);
     }
 
-    private DetallesAlquiler getDetallesAlquiler() {
-        // TODO implement here
-        return null;
+    public CaracteristicasBasicas getCaracteristicasBasicas() {
+        return this.caracteristicasBasicas;
     }
 
-    private void setDetallesAlquiler(DetallesAlquiler detallesAlquiler) {
-        // TODO implement here
+    public DetallesAlquiler getDetallesAlquiler() {
+        return this.detallesAlquiler;
     }
 
-    private DetallesSede getDetallesSede() {
-        // TODO implement here
-        return null;
+    public DetallesSede getDetallesSede() {
+        return this.detallesSede;
     }
 
-    private void setDetallesSede(DetallesSede detallesSede) {
-        // TODO implement here
-    }
-
-    private HistorialVehiculo getHistorialVehiculo() {
-        // TODO implement here
-        return null;
-    }
-
-    private void setHistorialVehiculo(HistorialVehiculo historialVehiculo) {
-        // TODO implement here
+    public HistorialVehiculo getHistorialVehiculo() {
+        return this.historialVehiculo;
     }
 
 }

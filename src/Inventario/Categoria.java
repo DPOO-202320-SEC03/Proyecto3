@@ -34,16 +34,8 @@ public class Categoria {
         return this.hashVehiculos;
     }
 
-    public void updateHashVehiculos(HashMap<String, Vehiculo> hashVehiculos) {
-        this.hashVehiculos = hashVehiculos;
-    }
-
     public HashMap<String, Integer> getHashTarifaPorTemporada() {
         return this.hashTarifaPorTemporada;
-    }
-
-    public void updateHashTarifaPorTemporada(HashMap<String, Integer> hashTarifaPorTemporada) {
-        this.hashTarifaPorTemporada = hashTarifaPorTemporada;
     }
 
 }

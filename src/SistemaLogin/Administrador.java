@@ -1,10 +1,11 @@
 package SistemaLogin;
 
+import Inventario.CaracteristicasBasicas;
+import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Sede;
 import Inventario.Seguro;
 import Inventario.Vehiculo;
-import Reservas.TarifasGlobales;
 
 import java.util.*;
 
@@ -24,77 +25,102 @@ public class Administrador extends Usuario {
 
     // Funciones para vehiculos
 
-    public Vehiculo crearVehiculo(String placa, String marca, String modelo, String color, String tipoDeTransmision, String tipoDeDireccion) {
-        // TODO implement here
-        return null;
+    public void crearVehiculo(Catalogo catalogo, String placa, String marca, String modelo, String color, String tipoDeTransmision, String tipoDeDireccion, String tipoDeCombustible, String cantidadDePasajeros, String nombreSede, String nombreCategoria, Boolean disponibleParaAlquilar, String fechaDisponibilidad) {
+        CaracteristicasBasicas caracteristicasBasicas = new CaracteristicasBasicas(placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion,tipoDeCombustible, cantidadDePasajeros);
+        Vehiculo vehiculoNuevo = new Vehiculo(nombreCategoria, caracteristicasBasicas);
+        vehiculoNuevo.getDetallesSede().setSedeUbicacion(nombreSede);
+        vehiculoNuevo.getDetallesSede().setDisponibilidadParaAlquilar(disponibleParaAlquilar);
+        vehiculoNuevo.getDetallesSede().setFechaDisponibilidad(fechaDisponibilidad);
+        vehiculoNuevo.getHistorialVehiculo().addEvent(fechaDisponibilidad, "Vehiculo nuevo disponible para alquiler");
+        catalogo.getHashCategorias().get(nombreCategoria).getHashVehiculos().put(placa, vehiculoNuevo);
     }
 
-    public void agregarVehiculo(String placa, String marca, String modelo, String color, String tipoDeTransmision, String tipoDeDireccion, String nombreSede, Vehiculo vehiculo, String nombreCategoria, Boolean disponibleParaAlquilar, String fechaDisponibilidad) {
-        // TODO implement here
+    public void eliminarVehiculo(Catalogo catalogo, String placa) {
+        for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                categoria.getValue().getHashVehiculos().remove(placa);
+            }
+        }
     }
 
-    public void eliminarVehiculo(String placa) {
-        // TODO implement here
+    public String estadoVehiculo(Catalogo catalogo, String placa) {
+        // Construye una string en la cual cada linea tiene una caracteristica del vehiculo adicional a sus detalles de alquiler, sede y reserva
+        String estadoVehiculo = "";
+        for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                estadoVehiculo += "Placa: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getPlaca() + "\n";
+                estadoVehiculo += "Marca: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(1) + "\n";
+                estadoVehiculo += "Modelo: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(2) + "\n";
+                estadoVehiculo += "Color: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(3) + "\n";
+                estadoVehiculo += "Tipo de transmision: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(4) + "\n";
+                estadoVehiculo += "Tipo de direccion: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(5) + "\n";
+                estadoVehiculo += "Tipo de combustible: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(6) + "\n";
+                estadoVehiculo += "Cantidad de pasajeros: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(7) + "\n";
+                estadoVehiculo += "Categoria: " + categoria.getValue().getHashVehiculos().get(placa).getCategoriaVehiculo() + "\n";
+                estadoVehiculo += "En alquiler: " + categoria.getValue().getHashVehiculos().get(placa).getEnAlquiler() + "\n";
+                estadoVehiculo += "Reservas: " + categoria.getValue().getHashVehiculos().get(placa).getReservas() + "\n";
+                estadoVehiculo += "Sede: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion() + "\n";
+                estadoVehiculo += "Disponible para alquilar: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getDisponibilidadParaAlquilar() + "\n";
+                estadoVehiculo += "Fecha de disponibilidad: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getFechaDisponibilidad() + "\n";
+                estadoVehiculo += "Usuario alquilando: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getUsuarioClienteAlquiler() + "\n";
+                estadoVehiculo += "Fecha de devolucion: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getFechaDevolucion() + "\n";
+                estadoVehiculo += "Sede de devolucion: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getSedeDevolucion() + "\n";
+                estadoVehiculo += "Log de eventos: \n";
+                HashMap<String, String> logEventos = categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().getLogEventos();
+                for (Map.Entry<String, String> evento : logEventos.entrySet()) {
+                    estadoVehiculo += String.format("Evento: %-30s | Fecha: %-30s\n", evento.getValue(), evento.getKey());
+                }
+            }
+        }
+        return estadoVehiculo;
     }
 
-    public String estadoVehiculo(String placa) {
-        // TODO implement here
-        return "";
-    }
-
-    public void trasladarVehiculo(String placa, String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
+    public void trasladarVehiculo(Catalogo catalogo, String placa, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega) {
         // TODO implement here
     }
 
     // Funcion para sedes
 
-    public Sede crearSede(String nombreSede, String ubicacion, String horariosDeAtencion) {
+    public void crearSede(HashMap<String, Sede> hashSedes, String nombreSede, String ubicacion, String horariosDeAtencion) {
         Sede sede = new Sede(nombreSede, ubicacion, horariosDeAtencion);
-        return sede;
+        hashSedes.put(nombreSede, sede);
     }
 
     // Funciones para usuarios
 
-    public AdministradorLocal crearAdministradorLocal(String username, String password, String nombreSede, String nombres, String apellidos, String celular, String correo) {
+    public void crearAdministradorLocal(HashMap<String, Usuario> hashUsuarios, String username, String password, String nombreSede, String nombres, String apellidos, String celular, String correo) {
         AdministradorLocal adminLocal = new AdministradorLocal(username, password, nombreSede, nombres, apellidos, celular, correo);
-        return adminLocal;
+        hashUsuarios.put(username, adminLocal);
     }
 
-    public HashMap<String, Usuario> eliminarUsuario(String nombreUsuario, HashMap<String, Usuario> hashUsuarios) {
+    public void eliminarUsuario(HashMap<String, Usuario> hashUsuarios, String nombreUsuario) {
         hashUsuarios.remove(nombreUsuario);
-        return hashUsuarios;
     }
 
     // Funciones para seguros
 
-    public Seguro crearSeguro(int tarifaExtraDiaria, String nombreSeguro, String descripcionSeguro) {
+    public void crearSeguro(Catalogo catalogo, int tarifaExtraDiaria, String nombreSeguro, String descripcionSeguro) {
         Seguro seguro = new Seguro(tarifaExtraDiaria, nombreSeguro, descripcionSeguro);
-        return seguro;
+        catalogo.getHashSeguros().put(nombreSeguro, seguro);
     }
 
     // Funciones para categorias
 
-    public Categoria crearCategoria(String nombreCategoria, int rangoCategoria) {
-        return new Categoria(nombreCategoria, rangoCategoria);
+    public void crearCategoria(Catalogo catalogo, String nombreCategoria, int rangoCategoria) {
+        Categoria categoria = new Categoria(nombreCategoria, rangoCategoria);
+        catalogo.getHashCategorias().put(nombreCategoria, categoria);
     }
 
-    public HashMap<String, Categoria> crearTarifasPorTemporadaCategoria(HashMap<String, Categoria> hashCategorias, String nombreCategoria, int tarifaTemporadaAlta, int tarifaTemporadaBaja) {
-        Categoria categoria = hashCategorias.get(nombreCategoria);
-        HashMap<String, Integer> hashTarifaPorTemporada = categoria.getHashTarifaPorTemporada();
-        hashTarifaPorTemporada.put("alta", tarifaTemporadaAlta);
-        hashTarifaPorTemporada.put("baja", tarifaTemporadaBaja);
-        categoria.updateHashTarifaPorTemporada(hashTarifaPorTemporada);
-        hashCategorias.put(categoria.getNombreCategoria(), categoria);
-        return hashCategorias;
+    public void crearTarifaPorTemporada(Catalogo catalogo, String nombreCategoria, int tarifaTemporadaAlta, int tarifaTemporadaBaja) {
+        catalogo.getHashCategorias().get(nombreCategoria).getHashTarifaPorTemporada().put("alta", tarifaTemporadaAlta);
+        catalogo.getHashCategorias().get(nombreCategoria).getHashTarifaPorTemporada().put("baja", tarifaTemporadaBaja);
     }
 
     // Funciones para las tarifas
 
-    public TarifasGlobales crearTarifasGlobales(int tarifaConductorExtra, int tarifaEntregaOtraSede, String rangoTemporadaAlta) {
-        TarifasGlobales tarifasGlobales = new TarifasGlobales();
-        tarifasGlobales.setTarifaConductorExtra(tarifaConductorExtra);
-        tarifasGlobales.setTarifaEntregaOtraSede(tarifaEntregaOtraSede);
-        tarifasGlobales.setRangoTemporadaAlta(rangoTemporadaAlta);
-        return tarifasGlobales;
+    public void crearTarifasGlobales(Catalogo catalogo, int tarifaConductorExtra, int tarifaEntregaOtraSede, String rangoTemporadaAlta) {
+        catalogo.getTarifasGlobales().setTarifaConductorExtra(tarifaConductorExtra);
+        catalogo.getTarifasGlobales().setTarifaEntregaOtraSede(tarifaEntregaOtraSede);
+        catalogo.getTarifasGlobales().setRangoTemporadaAlta(rangoTemporadaAlta);
     }
 }
