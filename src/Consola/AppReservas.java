@@ -6,7 +6,6 @@ import SistemaLogin.Administrador;
 import SistemaLogin.Cliente;
 import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
-import SistemaLogin.Persona;
 import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Sede;
@@ -97,9 +96,8 @@ public class AppReservas {
     }
 
     private void crearAdministrador() {
-        Administrador admin = new Administrador("Nombre", "Apellido", "1234567890");
-        Usuario usuario = new Usuario("ADMIN", "ADMIN", admin);
-        hashUsuarios.put(usuario.getUsername(), usuario);
+        Administrador admin = new Administrador("ADMIN", "ADMIN", "Nombre", "Apellido", "1234567890","ADMIN@GOOGLE.COM");
+        hashUsuarios.put(admin.getUsername(), admin);
     }
 
     public void mostrarMenuUsuario() {
@@ -139,10 +137,9 @@ public class AppReservas {
         try {
             Usuario usuario = this.hashUsuarios.get(username);
             if (usuario.getPassword().equals(password)) {
-                Persona persona = usuario.getPersona();
-                System.out.println("\nBienvenido " + persona.getInfoUsuario().get(0) + "\n");
-                nivelDeAcceso = persona.getNivelDeAcceso();
-                iniciarAppUsuario(nivelDeAcceso, persona);
+                System.out.println("\nBienvenido " + usuario.getNombre() + "\n");
+                nivelDeAcceso = usuario.getNivelDeAcceso();
+                iniciarAppUsuario(nivelDeAcceso, usuario);
             } else {
                 System.out.println("Contraseña incorrecta!!!");
             }
@@ -156,6 +153,7 @@ public class AppReservas {
         String nombres = input("Por favor ingrese sus nombres");
         String apellidos = input("Por favor ingrese sus apellidos");
         String celular = input("Por favor ingrese su celular");
+        String correo = input("Por favor ingrese su correo");
         System.out.println("\nPor favor ingrese los datos de su licencia:");
         Integer numeroDeLicencia = Integer.parseInt(input("Por favor ingrese el número de su licencia"));
         String paisDeExpedicion = input("Por favor ingrese el país de expedición de su licencia");
@@ -177,16 +175,14 @@ public class AppReservas {
         Integer ccv = Integer.parseInt(input("Por favor ingrese el ccv de la tarjeta"));
         DatosClienteLicencia licencia = new DatosClienteLicencia(numeroDeLicencia, paisDeExpedicion, fechaDeVencimientoTarjeta, imagenLicencia);
         DatosClienteTarjeta tarjeta = new DatosClienteTarjeta(numeroDeTarjeta,fechaDeVencimientoTarjeta,titular,marcaInternacional,ccv);
-        Cliente cliente = new Cliente(nombres,apellidos,celular,licencia,tarjeta);
-
         System.out.println("\nPor favor ingrese los datos para su usuario:");
         String username = input("Por favor ingrese su usuario");
         String password = input("Por favor ingrese su contraseña");
-        Usuario usuario = new Usuario(username,password,cliente);
-        this.hashUsuarios.put(usuario.getUsername(), usuario);
+        Cliente cliente = new Cliente(username,password,nombres,apellidos,celular,correo,licencia,tarjeta);
+        this.hashUsuarios.put(cliente.getUsername(), cliente);
     }
 
-    private void iniciarAppUsuario(int nivelDeAcceso, Persona persona) {
+    private void iniciarAppUsuario(int nivelDeAcceso, Usuario usuario) {
         // TODO implement here
         System.out.println("TEST");
     }

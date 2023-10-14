@@ -4,15 +4,13 @@ import java.io.Serializable;
 
 public class Usuario implements Serializable {
 
-    private String username;
-    private String password;
-    private Persona persona;
-
-    public Usuario(String username, String password, Persona persona) {
-        this.username = username;
-        this.password = password;
-        this.persona = persona;
-    }
+    protected String username;
+    protected String password;
+    protected int nivelDeAcceso;
+    protected String nombres;
+    protected String apellidos;
+    protected String celular;
+    protected String correo;
 
     public String getUsername() {
         return this.username;
@@ -21,8 +19,15 @@ public class Usuario implements Serializable {
     public String getPassword() {
         return this.password;
     }
-    public Persona getPersona() {
-        return this.persona;
+
+    public String getNombre() {
+        return this.nombres;
     }
+
+    public int getNivelDeAcceso() {
+        return this.nivelDeAcceso;
+    }
+
+    
 
 }

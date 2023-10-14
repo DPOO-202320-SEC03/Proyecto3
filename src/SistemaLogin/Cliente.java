@@ -7,20 +7,23 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
-public class Cliente extends Persona {
+public class Cliente extends Usuario {
 
     private int nivelDeAcceso = 0;
     private int idReserva = -1;
     private ArrayList<DatosClienteLicencia> datosClienteLicencia;
     private DatosClienteTarjeta datosClienteTarjeta;
 
-    public Cliente(String nombres, String apellidos, String celular, DatosClienteLicencia datosClienteLicencia, DatosClienteTarjeta datosClienteTarjeta) {
+    public Cliente(String username, String password, String nombres, String apellidos, String celular, String correo, DatosClienteLicencia datosClienteLicencia, DatosClienteTarjeta datosClienteTarjeta) {
+        super.username = username;
+        super.password = password;        
         this.datosClienteLicencia = new ArrayList<DatosClienteLicencia>();
         this.datosClienteLicencia.add(datosClienteLicencia);
         this.datosClienteTarjeta = datosClienteTarjeta;
         super.nombres = nombres;
         super.apellidos = apellidos;
         super.celular = celular;
+        super.correo = correo;
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
