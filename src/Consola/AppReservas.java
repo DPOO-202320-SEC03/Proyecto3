@@ -12,7 +12,6 @@ import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Sede;
 import Reservas.Reserva;
-import Reservas.ReservaEspecial;
 
 import java.awt.image.BufferedImage;
 
