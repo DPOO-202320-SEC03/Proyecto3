@@ -121,6 +121,10 @@ public class AppReservas {
         } else {
             username = input("Por favor ingrese su usuario para la cuenta de administrador");
             password = input("Por favor ingrese su contraseña para la cuenta de administrador");
+            while (password.length() < 3) {
+                System.out.println("La contraseña debe tener al menos 3 caracteres");
+                password = input("Por favor ingrese su contraseña para la cuenta de administrador");
+            }
             nombres = input("Por favor ingrese sus nombres");
             apellidos = input("Por favor ingrese sus apellidos");
             celular = input("Por favor ingrese su celular");
@@ -173,7 +177,7 @@ public class AppReservas {
             File file = new File(filePath+"licencia.jpg");
             imagenLicencia = javax.imageio.ImageIO.read(file);
         } catch (IOException e) {
-            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data!!!");
+            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como licencia con extensión .png!!!");
         }
         System.out.println("\nPor favor ingrese los datos de su tarjeta:");
         Integer numeroDeTarjeta = Integer.parseInt(input("Por favor ingrese el número de su tarjeta"));
@@ -181,11 +185,19 @@ public class AppReservas {
         String titular = input("Por favor ingrese el titular de la tarjeta");
         String marcaInternacional = input("Por favor ingrese la marca internacional de la tarjeta");
         Integer ccv = Integer.parseInt(input("Por favor ingrese el ccv de la tarjeta"));
-        DatosClienteLicencia licencia = new DatosClienteLicencia(numeroDeLicencia, paisDeExpedicion, fechaDeVencimientoTarjeta, imagenLicencia);
+        DatosClienteLicencia licencia = new DatosClienteLicencia(numeroDeLicencia, paisDeExpedicion, fechaDeVencimientoLicencia, imagenLicencia);
         DatosClienteTarjeta tarjeta = new DatosClienteTarjeta(numeroDeTarjeta,fechaDeVencimientoTarjeta,titular,marcaInternacional,ccv);
         System.out.println("\nPor favor ingrese los datos para su usuario:");
         String username = input("Por favor ingrese su usuario");
+        while (hashUsuarios.containsKey(username)) {
+            System.out.println("El usuario ingresado ya existe, por favor ingrese un usuario nuevo");
+            username = input("Por favor ingrese su usuario");
+        }
         String password = input("Por favor ingrese su contraseña");
+        while (password.length() < 3) {
+            System.out.println("La contraseña debe tener al menos 3 caracteres");
+            password = input("Por favor ingrese su contraseña");
+        }
         Cliente cliente = new Cliente(username,password,nombres,apellidos,celular,correo,licencia,tarjeta);
         this.hashUsuarios.put(cliente.getUsername(), cliente);
     }
@@ -249,7 +261,15 @@ public class AppReservas {
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
                     String username = input("Ingrese un usuario para el administrador local");
+                    while (hashUsuarios.containsKey(username)) {
+                        System.out.println("El usuario ingresado ya existe, por favor ingrese un usuario nuevo");
+                        username = input("Ingrese un usuario para el administrador local");
+                    }
                     String password = input("Ingrese una contraseña para el administrador local");
+                    while (password.length() < 3) {
+                        System.out.println("La contraseña debe tener al menos 3 caracteres");
+                        password = input("Ingrese una contraseña para el administrador local");
+                    }
                     String nombreSede = input("Ingrese el nombre de la sede para el administrador local");
                     String nombres = input("Ingrese los nombres del administrador local");
                     String apellidos = input("Ingrese los apellidos del administrador local");
@@ -374,25 +394,29 @@ public class AppReservas {
                 } else if (opcion_seleccionada == 12) {
                     String placa = input("Ingrese la placa del vehículo que desea trasladar");
                     Boolean esta = false;
+                    String sedeActual = "";
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
                         if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                             esta = true;
+                            sedeActual = categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion();
                         }
                     }
                     if (esta) {
-                        String nombreSede = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
-                        while (!hashSedes.containsKey(nombreSede)) {
-                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                        String sedeDestino = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
+                        while (!hashSedes.containsKey(sedeDestino) || sedeDestino.equals(sedeActual)) {
+                            System.out.println("La sede destino ingresada no existe o es la actual, por favor ingrese una sede valida");
                             System.out.println("Las sedes validas son:");
                             for (String key : hashSedes.keySet()) {
-                                System.out.println("- " + key);
+                                if (!key.equals(sedeActual)) {
+                                    System.out.println("- " + key);
+                                }
                             }
-                            nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
+                            sedeDestino = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
                         }
                         String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato DD/MM/YYYY)");
                         String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
                         String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato DD/MM/YYYY)");
-                        String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, nombreSede, fechaRecoger, horaRecoger, fechaEntregar);
+                        String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, sedeDestino, fechaRecoger, horaRecoger, fechaEntregar);
                         System.out.println(detallesTraslado);
                         System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
                     } else {
