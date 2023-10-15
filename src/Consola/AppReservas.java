@@ -15,6 +15,9 @@ import Reservas.Reserva;
 
 import java.awt.image.BufferedImage;
 
+// USUARIO DEFAULT ADMINISTRADOR: ADMIN
+// CONTRASEÑA DEFAULT ADMINISTRADOR: ADMIN
+
 public class AppReservas {
 
     private Catalogo catalogo;
