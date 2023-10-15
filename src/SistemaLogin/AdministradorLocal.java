@@ -1,7 +1,7 @@
 package SistemaLogin;
 
-import java.io.*;
 import java.util.*;
+
 
 public class AdministradorLocal extends Usuario {
 
@@ -19,16 +19,22 @@ public class AdministradorLocal extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    public void crearEmpleado(String username, String password, String nombres, String apellidos, String celular) {
-        // TODO implement here
+    public void crearEmpleado(HashMap<String, Usuario> hashUsuarios, String username, String password, String nombres, String apellidos, String celular, String correo) {
+        String nombreSede = getSede();
+        Empleado empleado = new Empleado(username, password, nombreSede, nombres, apellidos, celular, correo);
+        hashUsuarios.put(username, empleado);
     }
 
-    public void eliminarEmpleado(String usernameEmpleado) {
-        // TODO implement here Primero se revisa que el usuario sea un empleado, despues se elimina del hashmap y se retorna el hashmap actualizado
+    public void eliminarEmpleado(HashMap<String, Usuario> hashUsuarios, String usernameEmpleado) {
+        for (Usuario usuario : hashUsuarios.values()) {
+            if (usuario.getUsername().equals(usernameEmpleado) && usuario.getNivelDeAcceso() == 1) {
+                hashUsuarios.remove(usernameEmpleado);
+            }
+        }
     }
 
     public String getSede() {
-        return nombreSede;
+        return this.nombreSede;
     }
 
 }
