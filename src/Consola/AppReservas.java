@@ -446,10 +446,52 @@ public class AppReservas {
 
     private void ejecutarMenuAdministradorLocal(AdministradorLocal adminLocal) {
         // TODO implementar
+        Boolean continuar = true;
+        while (continuar) {
+            try {
+                System.out.println("\nBienvenido al menú para administradores locales\n");
+                // TODO implementar
+                System.out.println("14. Salir");
+                
+                int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                if (opcion_seleccionada == 1) {
+                    // TODO implementar
+                } else if (opcion_seleccionada == 14) {
+                    continuar = false;
+                } else {
+                    System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+            }
+            guardarInformacion();
+            cargarInformacion();
+        }
     }
 
     private void ejecutarMenuCliente(Cliente cliente) {
         // TODO implementar
+        Boolean continuar = true;
+        while (continuar) {
+            try {
+                System.out.println("\nBienvenido al menú para clientes\n");
+                // TODO implementar
+                System.out.println("14. Salir");
+                
+                int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                if (opcion_seleccionada == 1) {
+                    // TODO implementar
+                } else if (opcion_seleccionada == 14) {
+                    continuar = false;
+                } else {
+                    System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+            }
+            guardarInformacion();
+            cargarInformacion();
+        }
     }
 
     private String input(String mensaje) {
