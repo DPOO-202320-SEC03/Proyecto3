@@ -42,6 +42,13 @@ public class Cliente extends Usuario {
         return "";
     }
 
+    public String getResumenReservaActual(HashMap<String, Reserva> hashReservas) {
+        // TODO implement here
+        // En esta parte se tiene que mostrar el resumen de la reserva actual
+        // primero se busca con el id luego se genera el resumen y se retorna
+        return "";
+    }
+
     public ArrayList<DatosClienteLicencia> getDatosClienteLicencia() {
         return this.datosClienteLicencia;
     }
