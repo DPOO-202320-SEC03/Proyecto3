@@ -46,7 +46,6 @@ public class Administrador extends Usuario {
     }
 
     public String estadoVehiculo(Catalogo catalogo, String placa) {
-        // Construye una string en la cual cada linea tiene una caracteristica del vehiculo adicional a sus detalles de alquiler, sede y reserva
         String estadoVehiculo = "";
         for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
             if (categoria.getValue().getHashVehiculos().containsKey(placa)) {

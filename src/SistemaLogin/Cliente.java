@@ -31,7 +31,7 @@ public class Cliente extends Usuario {
         // TODO implement here
     }
 
-    public void alquilarVehiculo(Boolean alterarReserva, Boolean otrosConductores) {
+    public void alquilarVehiculo(Boolean alterarReserva, int otrosConductores) {
         // TODO implement here
     }
 
@@ -44,12 +44,15 @@ public class Cliente extends Usuario {
         return 0;
     }
 
-    public Reserva getReserva() {
-        // TODO implement here
-        return null;
+    public ArrayList<DatosClienteLicencia> getDatosClienteLicencia() {
+        return this.datosClienteLicencia;
     }
 
-    public void setReserva(int id) {
-        // TODO implement here
+    public Integer getIdReserva() {
+        return this.idReserva;
+    }
+
+    public void setIdReserva(int id) {
+        this.idReserva = id;
     }
 }

@@ -7,7 +7,6 @@ public class ReservaEspecial extends Reserva {
     private String fechaRecoger;
     private String horaRecoger;
     private String fechaEntrega;
-    private String placa;
 
     public ReservaEspecial(String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega, String placa) {
         super.idReserva = ++Reserva.totalDeReservas;
@@ -16,7 +15,7 @@ public class ReservaEspecial extends Reserva {
         this.fechaRecoger = fechaRecoger;
         this.horaRecoger = horaRecoger;
         this.fechaEntrega = fechaEntrega;
-        this.placa = placa;
+        super.placa = placa;
     }
     
     public String getResumen() {
@@ -27,7 +26,7 @@ public class ReservaEspecial extends Reserva {
         		+"\nFecha recoger: " + fechaRecoger
         		+"\nHora recoger: " + horaRecoger
         		+"\nFecha entrega: " + fechaEntrega
-                +"\nPlaca del vehículo: " + placa;
+                +"\nPlaca del vehículo: " + super.placa;
     }
     
 }

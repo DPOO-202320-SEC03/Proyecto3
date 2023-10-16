@@ -6,6 +6,7 @@ public class Reserva implements Serializable {
 
     public static int totalDeReservas = 0;
     protected int idReserva;
+    protected String placa;
 
     public int getIdReserva() {
         return idReserva;
@@ -16,8 +17,15 @@ public class Reserva implements Serializable {
     }
 
     public String getResumen() {
-        
         return "ID Reserva: " + idReserva;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+    	this.placa = placa;
     }
 
 }

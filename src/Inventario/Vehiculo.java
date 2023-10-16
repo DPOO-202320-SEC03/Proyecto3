@@ -12,6 +12,7 @@ public class Vehiculo implements Serializable {
     private DetallesAlquiler detallesAlquiler;
     private DetallesSede detallesSede;
     private HistorialVehiculo historialVehiculo;
+    private Boolean enReserva = false;
 
     public Vehiculo(String categoria, CaracteristicasBasicas caracteristicasBasicas) {
         this.categoria = categoria;
@@ -56,6 +57,14 @@ public class Vehiculo implements Serializable {
 
     public HistorialVehiculo getHistorialVehiculo() {
         return this.historialVehiculo;
+    }
+
+    public Boolean getEnReserva() {
+        return this.enReserva;
+    }
+
+    public void setEnReserva(Boolean estado) {
+        this.enReserva = estado;
     }
 
 }
