@@ -273,6 +273,14 @@ public class AppReservas {
                         password = input("Ingrese una contraseña para el administrador local");
                     }
                     String nombreSede = input("Ingrese el nombre de la sede para el administrador local");
+                    while (!hashSedes.containsKey(nombreSede)) {
+                        System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                        System.out.println("Las sedes validas son:");
+                        for (String key : hashSedes.keySet()) {
+                            System.out.println("- " + key);
+                        }
+                        nombreSede = input("Ingrese el nombre de la sede para el administrador local");
+                    }
                     String nombres = input("Ingrese los nombres del administrador local");
                     String apellidos = input("Ingrese los apellidos del administrador local");
                     String celular = input("Ingrese el celular del administrador local");
