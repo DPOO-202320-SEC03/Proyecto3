@@ -7,6 +7,7 @@ import SistemaLogin.AdministradorLocal;
 import SistemaLogin.Cliente;
 import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
+import SistemaLogin.Empleado;
 import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Categoria;
@@ -220,6 +221,9 @@ public class AppReservas {
                     AdministradorLocal adminLocal = (AdministradorLocal) usuario;
                     ejecutarMenuAdministradorLocal(adminLocal);
                 } else if (nivelDeAcceso == 1) {
+                    Empleado empleado = (Empleado) usuario;
+                    ejecutarMenuEmpleado(empleado);
+                } else if (nivelDeAcceso == 0) {
                     Cliente cliente = (Cliente) usuario;
                     ejecutarMenuCliente(cliente);
                 } else {
@@ -453,11 +457,57 @@ public class AppReservas {
     }
 
     private void ejecutarMenuAdministradorLocal(AdministradorLocal adminLocal) {
-        // TODO implementar
         Boolean continuar = true;
         while (continuar) {
             try {
                 System.out.println("\nBienvenido al menú para administradores locales\n");
+                System.out.println("1. Crear un nuevo empleado para la sede");
+                System.out.println("2. Eliminar un empleado");
+                System.out.println("14. Salir");
+                
+                int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                if (opcion_seleccionada == 1) {
+                    String username = input("Ingrese un usuario para el empleado");
+                    while (hashUsuarios.containsKey(username) || username.length() < 3) {
+                        System.out.println("El usuario ingresado ya existe o tiene menos de 3 caracteres, por favor ingrese un usuario nuevo");
+                        username = input("Ingrese un usuario para el empleado");
+                    }
+                    String password = input("Ingrese una contraseña para el empleado");
+                    while (password.length() < 3) {
+                        System.out.println("La contraseña debe tener al menos 3 caracteres");
+                        password = input("Ingrese una contraseña para el empleado");
+                    }
+                    String nombres = input("Ingrese los nombres del empleado");
+                    String apellidos = input("Ingrese los apellidos del empleado");
+                    String celular = input("Ingrese el celular del empleado");
+                    String correo = input("Ingrese el correo del empleado");
+                    adminLocal.crearEmpleado(hashUsuarios, username, password, nombres, apellidos, celular, correo);
+                    System.out.println("Administrador local creado y guardado exitosamente!!!");
+                }
+                else if(opcion_seleccionada == 2){
+                    String username = input("Ingrese un usuario que desea eliminar");
+                    adminLocal.eliminarEmpleado(hashUsuarios, username);
+                }
+                 else if (opcion_seleccionada == 14) {
+                    continuar = false;
+                } 
+                else {
+                    System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Debe seleccionar uno de los números de las opciones!!!");
+            }
+            guardarInformacion();
+            cargarInformacion();
+        }
+    }
+
+    private void ejecutarMenuEmpleado(Empleado empleado) {
+        // TODO implementar
+        Boolean continuar = true;
+        while (continuar) {
+            try {
+                System.out.println("\nBienvenido al menú para empleados\n");
                 // TODO implementar
                 System.out.println("14. Salir");
                 
