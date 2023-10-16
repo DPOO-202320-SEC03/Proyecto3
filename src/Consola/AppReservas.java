@@ -32,6 +32,9 @@ public class AppReservas {
         app.iniciarApp();
     }
 
+    /**
+     * metodo privado usado para cargar toda la informacion del sistema
+     */
     private void cargarInformacion() {
         try {
             String workingDir = System.getProperty("user.dir");
@@ -73,6 +76,9 @@ public class AppReservas {
         }
     }
 
+    /**
+     * metodo privado para guardar en los archivos todos los cambios 
+     */
     private void guardarInformacion() {
         try {
             String workingDir = System.getProperty("user.dir");
@@ -103,17 +109,23 @@ public class AppReservas {
         }
     }
 
+    /**
+     * metodo privado para crear un nuevo administradno 
+     */
     private void crearAdministrador() {
+        // variables usado para la creacion de un administrador personalizado
         String username;
         String password;
         String nombres;
         String apellidos;
         String celular;
         String correo;
+        // cuando se abre por primera vez el programa de la opcion de crear un administrados default o uno personalizado 
         System.out.println("Dado que es la primera vez que abre la aplicacion necesitamos que cree un usuario administrador");
         System.out.println("Decida que tipo de usuario desea crear, sugerimos que cree un usuario personalizado para mayor seguridad");
         System.out.println("Un usuario personalizado (P) tiene un usuario y contraseña que usted elige, mientras que un usuario default (D) tiene usuario y contraseña ADMIN");
         String tipoDeAdmin = input("Por favor ingrese el tipo de administrador que desea crear (D/P)");
+        // si se elije la opcion de default se asignan unos datos preestablecidos
         if (tipoDeAdmin.equals("D")) {
             username = "ADMIN";
             password = "ADMIN";
@@ -122,8 +134,14 @@ public class AppReservas {
             celular = "1234567890";
             correo = "ADMIN@GOOGLE.COM";
             System.out.println("Su usuario y contraseña de administrador son: ADMIN/ADMIN");
-        } else {
+        } 
+        // se le pide todos los datos al cliente, en donde la contraseña debe tener como minimo 3 caracteres 
+        else {
             username = input("Por favor ingrese su usuario para la cuenta de administrador");
+            while (username.length() < 3) {
+                System.out.println("El usuario debe tener al menos 3 caracteres");
+                password = input("Por favor ingrese su usuario para la cuenta de administrador");
+            }
             password = input("Por favor ingrese su contraseña para la cuenta de administrador");
             while (password.length() < 3) {
                 System.out.println("La contraseña debe tener al menos 3 caracteres");
@@ -134,11 +152,16 @@ public class AppReservas {
             celular = input("Por favor ingrese su celular");
             correo = input("Por favor ingrese su correo");
         }
+        // se crea un nuevo administrador cno los datos 
         Administrador admin = new Administrador(username, password, nombres, apellidos, celular, correo);
         hashUsuarios.put(admin.getUsername(), admin);
     }
-
+    
+    /**
+     * metodo privado para inicar la app
+     */
     private void iniciarApp() {
+        // se carga la informacion y se crea un variable usada para verificar cunado el programa debe seguir
         cargarInformacion();
         boolean continuar = true;
 		while (continuar) {
@@ -148,13 +171,20 @@ public class AppReservas {
                 System.out.println("2. Registrarse");
                 System.out.println("3. Salir\n");
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                // opcion para que un usuario inicie seccion, segun el nivel de acceso del usuario se lleva a menus diferentes
                 if (opcion_seleccionada == 1) {
                     iniciarSesion();
-                } else if (opcion_seleccionada == 2) {
+                } 
+                // opcion para que un nuevo cliente se registre
+                else if (opcion_seleccionada == 2) {
                     registrarse();
-                } else if (opcion_seleccionada == 3) {
+                } 
+                // opcion para terminar el programa 
+                else if (opcion_seleccionada == 3) {
                     continuar = false;
-                } else {
+                } 
+                // mensaje de error por si no se selecciona una opcion valida
+                else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");
                 }
             } catch (NumberFormatException e) {
@@ -164,7 +194,11 @@ public class AppReservas {
         guardarInformacion();
     }
 
+    /**
+     * metodo privado usado para registrar un cliente nuevo 
+     */
     private void registrarse() {
+        // se piden todos los datos al cliente, nombre, apellido, celular, correo, datos de licencia, datos de tarjeta, usuario y contraseña
         System.out.println("\nPor favor ingrese sus datos personales:");
         String nombres = input("Por favor ingrese sus nombres");
         String apellidos = input("Por favor ingrese sus apellidos");
@@ -202,15 +236,22 @@ public class AppReservas {
             System.out.println("La contraseña debe tener al menos 3 caracteres");
             password = input("Por favor ingrese su contraseña");
         }
+        // se crea el cliente y se agrega la hash de usuario
         Cliente cliente = new Cliente(username,password,nombres,apellidos,celular,correo,licencia,tarjeta);
         this.hashUsuarios.put(cliente.getUsername(), cliente);
     }
     
+    /**
+     * funcion privada usada para que un usuario ya creado inicie seccion 
+     */
     private void iniciarSesion() {
+        // se pide el usuario y contraseña
         String username = input("Por favor ingrese su usuario");
         String password = input("Por favor ingrese su contraseña");
         int nivelDeAcceso;
         try {
+            // se busca el usuario en el hash de usuario y se comprueba su nivel de acceso para verificar a que menu accede se dividen en
+            //  3. administrador, 2. administrador local, 1. empleado, 0. cliente
             Usuario usuario = this.hashUsuarios.get(username);
             if (usuario.getPassword().equals(password)) {
                 System.out.println("\nBienvenido " + usuario.getNombre() + "\n");
@@ -230,15 +271,24 @@ public class AppReservas {
                 } else {
                     System.out.println("Nivel de acceso no válido!!!");
                 }
-            } else {
+            } 
+            // mensaje de error por si la contraseña no es valida
+            else {
                 System.out.println("Contraseña incorrecta!!!");
             }
-        } catch (Exception e) {
+        }
+        // mensaje de error por si el usuario no existe
+         catch (Exception e) {
             System.out.println("Usuario no encontrado!!!");
         }
     }
 
+    /**
+     * metodo privado que ejecuta el menu con todas las funciones del administrador
+     * @param admin parametro para invoncar los metodos de la clase Administrador
+     */
     private void ejecutarMenuAdministrador(Administrador admin) {
+        // variable para verificar si el menu se debe seguir ejecutando
         Boolean continuar = true;
         while (continuar) {
             try {
@@ -266,18 +316,22 @@ public class AppReservas {
                 System.out.println("14. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                // opcion uno que sirve para la creacion de un nuevo administrador local
                 if (opcion_seleccionada == 1) {
                     if (hashSedes.size() > 0) {
+                // se pide un nuevo usuario para el empleado este debe tener 3 caracteres como minimo y debe de ser unico
                         String username = input("Ingrese un usuario para el administrador local");
                         while (hashUsuarios.containsKey(username) || username.length() < 3) {
                             System.out.println("El usuario ingresado ya existe o tiene menos de 3 caracteres, por favor ingrese un usuario valido");
                             username = input("Ingrese un usuario para el administrador local");
                         }
+                // se pide un contraseña para el usuario con 3 carateres como minimo
                         String password = input("Ingrese una contraseña para el administrador local");
                         while (password.length() < 3) {
                             System.out.println("La contraseña debe tener al menos 3 caracteres");
                             password = input("Ingrese una contraseña para el administrador local");
                         }
+                // se pide la sede en donde se ubicara el administrador local, si no existe la sede abre un menu con todas las disponibles
                         String nombreSede = input("Ingrese el nombre de la sede para el administrador local");
                         while (!hashSedes.containsKey(nombreSede)) {
                             System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
@@ -287,65 +341,95 @@ public class AppReservas {
                             }
                             nombreSede = input("Ingrese el nombre de la sede para el administrador local");
                         }
+                // se pide los nombres, apellidos celular y correo de el administrador local y se llama al metodo para crear el aministrador local 
                         String nombres = input("Ingrese los nombres del administrador local");
                         String apellidos = input("Ingrese los apellidos del administrador local");
                         String celular = input("Ingrese el celular del administrador local");
                         String correo = input("Ingrese el correo del administrador local");
                         admin.crearAdministradorLocal(hashUsuarios, username, password, nombreSede, nombres, apellidos, celular, correo);
                         System.out.println("Administrador local creado y guardado exitosamente!!!");
-                    } else {
+                    } 
+                // mensaje de error por si no se a creadio ninguna sede
+                    else {
                         System.out.println("No hay sedes creadas, por favor cree una antes de crear un administrador local");
                     }
-                } else if (opcion_seleccionada == 2) {
+                } 
+                // opcion dos que sirve para eliminar un usuario
+                else if (opcion_seleccionada == 2) {
                     String username = input("Ingrese un usuario que desea eliminar");
+                    // se verifica que el usuario no sea el mismo administrador y se elimina si existe
                     if (!username.equals(admin.getUsername())) {
                         admin.eliminarUsuario(hashUsuarios, username);
                         System.out.println("Usuario " + username + " eliminado exitosamente!!!");
-                    } else {
+                    } 
+                // mensaje de error por si no existe el usuario
+                    else {
                         System.out.println("No se puede eliminar tu propio usuario!!!");
                     }
-                } else if (opcion_seleccionada == 3) {
+                } 
+                // opcion 3 que sirve para crear una nueva sede 
+                else if (opcion_seleccionada == 3) {
+                // se pide el nombre, ubicacion y los horarios de la sede
                     String nombreSede = input("Ingrese el nombre de la sede");
                     String ubicacion = input("Ingrese la ubicación de la sede");
                     String horariosDeAtencion = input("Ingrese los horarios de atención de la sede (En formato HH:MM - HH:MM)");
                     admin.crearSede(hashSedes, nombreSede, ubicacion, horariosDeAtencion);
                     System.out.println("Sede creada y guardada exitosamente!!!");
-                } else if (opcion_seleccionada == 4) {
+                } 
+                // opcion 4 que sirve para crear una nueva categoria para el auto movil
+                else if (opcion_seleccionada == 4) {
+                // se le pide el nombre de la categoria, el rando y se crea 
                     String nombreCategoria = input("Ingrese el nombre de la categoria");
                     int rangoCategoria = Integer.parseInt(input("Ingrese el rango de la categoria"));
                     admin.crearCategoria(catalogo, nombreCategoria, rangoCategoria);
                     System.out.println("Categoria creada y guardada exitosamente!!!");
-                } else if (opcion_seleccionada == 5) {
+                } 
+                // opcion 5 que sirve para Crear o actualizar tarifas por temporada a categoria
+                else if (opcion_seleccionada == 5) {
+                // se pide la categoria y las tarifas en temporada alta y baja, para despues crear las tarifas
                     String nombreCategoria = input("Ingrese el nombre de la categoria");
                     int tarifaTemporadaAlta = Integer.parseInt(input("Ingrese la tarifa para temporada alta"));
                     int tarifaTemporadaBaja = Integer.parseInt(input("Ingrese la tarifa para temporada baja"));
                     admin.crearTarifaPorTemporada(catalogo, nombreCategoria, tarifaTemporadaAlta, tarifaTemporadaBaja);
                     System.out.println("Tarifas por temporada creadas y guardadas exitosamente!!!");
-                } else if (opcion_seleccionada == 6) {
+                } 
+                // opcion 6 que sirve para crear un seguro
+                else if (opcion_seleccionada == 6) {
+                // se pide una tarifa por cada dia extra, un numero, una descripcion del seguro y se crea el seguro
                     int tarifaExtraDiaria = Integer.parseInt(input("Ingrese la tarifa extra diaria del seguro"));
                     String nombreSeguro = input("Ingrese el nombre del seguro");
                     String descripcionSeguro = input("Ingrese la descripción del seguro");
                     admin.crearSeguro(catalogo, tarifaExtraDiaria, nombreSeguro, descripcionSeguro);
                     System.out.println("Seguro creado y guardado exitosamente!!!");
-                } else if (opcion_seleccionada == 7) {
+                } 
+                // opcion 7 que sirve para crear tarifas globales
+                else if (opcion_seleccionada == 7) {
+                // se pide una tarifa por un conductor extra, tarifa por entregar el vehiculo en una sede distinta, y el rango de tiempo de la temporada alta
                     int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
                     int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
                     String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato DD/MM - DD/MM)");
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales creadas y guardadas exitosamente!!!");
-                } else if (opcion_seleccionada == 8) {
+                } 
+                // opcion 8 que sirve para editar tarifas globales
+                else if (opcion_seleccionada == 8) {
+                // se imprimen las tarifas actuales
                     System.out.println("A continuacion vera los valores previos de tarifas globales");
                     System.out.println("- Tarifa por conductor extra: " + this.catalogo.getTarifasGlobales().getTarifaExtra());
                     System.out.println("- Tarifa por entrega en otra sede: " + this.catalogo.getTarifasGlobales().getTarifaSede());
                     System.out.println("- Rango de temporada alta: " + this.catalogo.getTarifasGlobales().getRangoTemporadaAlta());
                     System.out.println("A continuacion ingrese los nuevos valores de tarifas globales");
+                // se piden todas las nuevas tarifas y se crea la nueva tarifa
                     int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
                     int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
                     String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato DD/MM - DD/MM)");
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales actualizadas y guardadas exitosamente!!!");
-                } else if (opcion_seleccionada == 9) {
+                } 
+                // opcion 9 que sirve para crear un nuevo vehiculo
+                else if (opcion_seleccionada == 9) {
                     if (hashSedes.size()>0 && catalogo.getHashCategorias().size()>0) {
+                // se pide la informacion del vehiculo como la placa, marca modelo, colo, transmision, direccion, combustible, pasajero..
                         String placa = input("Ingrese la placa del vehículo nuevo (En formato ABC-123)");
                         String marca = input("Ingrese la marca del vehículo nuevo");
                         String modelo = input("Ingrese el modelo del vehículo nuevo");
@@ -355,6 +439,7 @@ public class AppReservas {
                         String tipoDeCombustible = input("Ingrese el tipo de combustible del vehículo nuevo");
                         String cantidadDePasajeros = input("Ingrese la cantidad de pasajeros que puede albergar el vehículo nuevo incluyendo al conductor");
 
+                // se pide un nobre de sede, si esta no es valida muestra un menu con todos los menus disponibles
                         String nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
                         while (!hashSedes.containsKey(nombreSede)) {
                             System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
@@ -365,6 +450,7 @@ public class AppReservas {
                             nombreSede = input("Ingrese el nombre de la sede donde se encuentra el vehículo nuevo");
                         }
 
+                // se pide una categoria, si esta no es valida muestra un menu con todas las categorias disponibles
                         String categoria = input("Ingrese la categoria del vehículo nuevo");
                         while (!catalogo.getHashCategorias().containsKey(categoria)) {
                             System.out.println("La categoria ingresada no existe, por favor ingrese una categoria valida");
@@ -375,51 +461,74 @@ public class AppReservas {
                             categoria = input("Ingrese la categoria del vehículo nuevo");
                         }
 
+                // se pregunta si esta listo para alquilar de enseguida y en que fecha estara disponible y se crea
                         Boolean disponibleParaAlquilar = Boolean.parseBoolean(input("Ingrese si el vehículo nuevo se encuentra disponible para alquiler (En formato true/false)"));
                         String fechaDisponibilidad = input("Ingrese la fecha de disponibilidad del vehículo nuevo (En formato DD/MM/YYYY)");
                         admin.crearVehiculo(catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, cantidadDePasajeros, nombreSede, categoria, disponibleParaAlquilar, fechaDisponibilidad);
                         System.out.println("Vehículo creado y guardado exitosamente!!!");
-                    } else {
+                    } 
+                // mensaje de error por si no existe ninguna sede o categoria
+                    else {
                         System.out.println("No hay sedes o categorias creadas, por favor cree una antes de crear un vehículo");
                     }   
-                } else if (opcion_seleccionada == 10) {
+                } 
+                // opcion 10 que sirve para eliminar un vehiculo
+                else if (opcion_seleccionada == 10) {
+                // se pide la placa del vehiculo
                     String placa = input("Ingrese la placa del vehículo que desea eliminar");
                     Boolean esta = false;
+                // se busca en el hash de vehiculos si exite la placa
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
                         if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                             esta = true;
                         }
                     }
+                // si existe se elimina
                     if (esta) {
                         admin.eliminarVehiculo(catalogo, placa);
                         System.out.println("Vehículo eliminado exitosamente!!!");
-                    } else {
+                    } 
+                // mensaje de error por si no se encontro la placa
+                    else {
                         System.out.println("El vehículo no existe!!!");
                     }
-                } else if (opcion_seleccionada == 11) {
+                } 
+                // opcion 11 que sirve para consultar el estado de un vehiculo
+                else if (opcion_seleccionada == 11) {
+                // se pregunta la placa del vehiculo
                     String placa = input("Ingrese la placa del vehículo que desea consultar");
                     Boolean esta = false;
+                // se busca si existe la placa
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
                         if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                             esta = true;
                         }
                     }
+                // si existe se muestra todo el estado del vehiculo
                     if (esta) {
                         String resumenEstado = admin.estadoVehiculo(catalogo, placa);
                         System.out.println(resumenEstado);
-                    } else {
+                    } 
+                // mensaje de error por si no se encontro la placa
+                    else {
                         System.out.println("El vehículo no existe!!!");
                     }
-                } else if (opcion_seleccionada == 12) {
+                } 
+                // opcion 12 por si se desea trasladar el vehiculo a otra sede
+                else if (opcion_seleccionada == 12) {
+                // se pide la placa del vehiculo
                     String placa = input("Ingrese la placa del vehículo que desea trasladar");
                     Boolean esta = false;
                     String sedeActual = "";
+                // se busca si existe la placa y se guarda la sede actual
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
                         if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                             esta = true;
                             sedeActual = categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion();
                         }
                     }
+                // si se encontro se pide la sede de destino y se compara de que sea diferente a la actual o si no existe, en ambos casos
+                // se despliega un menu con todas las sedes disponibles
                     if (esta) {
                         String sedeDestino = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
                         while (!hashSedes.containsKey(sedeDestino) || sedeDestino.equals(sedeActual)) {
@@ -432,25 +541,38 @@ public class AppReservas {
                             }
                             sedeDestino = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
                         }
+                // se establece una fecha y hora en la que se recoge el vehiculo y una fecha en la cual se entrga
                         String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato DD/MM/YYYY)");
                         String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
                         String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato DD/MM/YYYY)");
                         String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, sedeDestino, fechaRecoger, horaRecoger, fechaEntregar);
                         System.out.println(detallesTraslado);
                         System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
-                    } else {
+                    } 
+                // mensaje de error por si no existe la placa 
+                    else {
                         System.out.println("El vehículo no existe!!!");
                     }
-                } else if (opcion_seleccionada == 13) {
+                } 
+                // opcion 13 que sirve para consulatar un reserva basada en su ID
+                else if (opcion_seleccionada == 13) {
+                // se pide la ID
                     String idReserva = input("Ingrese el id de la reserva que desea consultar");
+                // se busca la ID y si existe se muestran los detalles
                     if (hashReservas.containsKey(idReserva)) {
                         admin.resumenReserva(hashReservas, idReserva);
-                    } else {
+                    } 
+                // mensaje de error por si no se encuentra la reserva
+                    else {
                         System.out.println("La reserva no existe!!!");
                     }
-                } else if (opcion_seleccionada == 14) {
+                } 
+                // opcion 14 que sirve para salir del menu
+                else if (opcion_seleccionada == 14) {
                     continuar = false;
-                } else {
+                } 
+                // mensaje de error por si no se selecciona una opcion valida
+                else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");
                 }
             } catch (NumberFormatException e) {
@@ -460,8 +582,12 @@ public class AppReservas {
             cargarInformacion();
         }
     }
-
+/**
+     * metodo para ejecutar el menu del administrador local
+     * @param adminLocal parametro para invocar los metodos del administrador local
+     */
     private void ejecutarMenuAdministradorLocal(AdministradorLocal adminLocal) {
+        // variable para verificar cuando debe de parar el programa
         Boolean continuar = true;
         while (continuar) {
             try {
@@ -469,19 +595,22 @@ public class AppReservas {
                 System.out.println("1. Crear un nuevo empleado para la sede");
                 System.out.println("2. Eliminar un empleado");
                 System.out.println("14. Salir");
-                
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+                // primera opcion que sirve para crear un nuevo empleado
+                // se pide un nuevo usuario para el empleado este debe tener 3 caracteres como minimo y debe de ser unico
                 if (opcion_seleccionada == 1) {
                     String username = input("Ingrese un usuario para el empleado");
                     while (hashUsuarios.containsKey(username) || username.length() < 3) {
                         System.out.println("El usuario ingresado ya existe o tiene menos de 3 caracteres, por favor ingrese un usuario valido");
                         username = input("Ingrese un usuario para el empleado");
                     }
+                // se pide un contraseña para el usuario con 3 carateres como minimo
                     String password = input("Ingrese una contraseña para el empleado");
                     while (password.length() < 3) {
                         System.out.println("La contraseña debe tener al menos 3 caracteres");
                         password = input("Ingrese una contraseña para el empleado");
                     }
+                // se pide los nombres, apellidos celular y correo de empleaddo y se llama al metodo para crear el empleado
                     String nombres = input("Ingrese los nombres del empleado");
                     String apellidos = input("Ingrese los apellidos del empleado");
                     String celular = input("Ingrese el celular del empleado");
@@ -489,27 +618,35 @@ public class AppReservas {
                     adminLocal.crearEmpleado(hashUsuarios, username, password, nombres, apellidos, celular, correo);
                     System.out.println("Empleado creado y guardado exitosamente!!!");
                 }
+                // opcion 2 para eliminar un empleado
                 else if(opcion_seleccionada == 2){
+                // se pide el usuario que se desea eliminar 
                     String username = input("Ingrese un usuario que desea eliminar");
+                // se verifica el usuario que se desea eliminar no sea el mismo con el que se esta ejecutano el programa, si es el mismo manda un mensaje de error
                     if (!username.equals(adminLocal.getUsername())) {
                         boolean esta = false;
+                // se busca en el hasmap de usuario si existe el usuario que se busca y si tiene un nivel de acceso 1 que significa que es empleado
                         for (Usuario usuario : hashUsuarios.values()) {
                             if (usuario.getUsername().equals(username) && usuario.getNivelDeAcceso() == 1) {
                                 esta = true;
                             }
                         }
+                // si ambas condiciones se cumplen se crea el usuario y el programa dice que se creo con exito
                         if (esta) {
                             adminLocal.eliminarEmpleado(hashUsuarios, username);
                             System.out.println("Usuario " + username + " eliminado exitosamente!!!");
                         } 
+                // si no cumple una de las condiciones o ninguna, notifica que no se pudo crear 
                         else {System.out.println("El usuario no existe o no es un empleado!!!");}
                     } else {
                         System.out.println("No se puede eliminar tu propio usuario!!!");
                     }
                 }
+                // opcion 14 para salir del programa se usa 14 porque la idea que todos los salir sean el mismo numero
                  else if (opcion_seleccionada == 14) {
                     continuar = false;
                 } 
+                // mensaje de error por si no selecciona ninguna de la opciones disponible
                 else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");
                 }
@@ -521,6 +658,10 @@ public class AppReservas {
         }
     }
 
+    /**
+     * metodo privado que ejecuta el menu de empleado
+     * @param empleado parametro usado par acceder a los metodos de los empleados
+     */
     private void ejecutarMenuEmpleado(Empleado empleado) {
         Boolean continuar = true;
         while (continuar) {
@@ -533,7 +674,9 @@ public class AppReservas {
                 System.out.println("5. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
+            // opcion 1 que sirve para alquilar un vehiculo
                 if (opcion_seleccionada == 1) {
+            // se pide una placa, el cliente que alguila, una fecha y sede de devolucion, y es que fecha se alquilo 
                     String placa = input("Ingrese la placa del vehiculo");
                     String username = input("Ingrese el usuario del cliente a alquilar");
                     String fechaDevolucion = input("Ingrese la fecha de devolucion del vehiculo");
@@ -541,7 +684,10 @@ public class AppReservas {
                     String fechaDeAlquiler = input("Ingrese la fecha de alquiler del vehiculo");
                     empleado.alquilarVehiculo(catalogo, placa, username, fechaDevolucion, sedeDevolucion, fechaDeAlquiler);
                     System.out.println("Vehiculo alquilado exitosamente!!!");
-                } else if (opcion_seleccionada == 2) {
+                } 
+            // opcion 2 que sirve para agregar la licencia de otro conductor 
+                else if (opcion_seleccionada == 2) {
+            // se pide el usuario del cliente y se busca si existe
                     String username = input("Por favor ingrese el usuario del cliente");
                     boolean esta = false;
                     for (Usuario usuario : hashUsuarios.values()) {
@@ -549,6 +695,7 @@ public class AppReservas {
                             esta = true;
                         }
                     }
+            // si existe se pide un numero de licencia, el pais de expedicion y la fecha de vencimiento
                     if (esta) {
                         Integer numeroDeLicencia = Integer.parseInt(input("Por favor ingrese el número de la licencia del conductor extra"));
                         String paisDeExpedicion = input("Por favor ingrese el país de expedición de la licencia del conductor extra");
@@ -567,10 +714,14 @@ public class AppReservas {
                     } else {
                         System.out.println("El usuario ingresado no existe o no es un cliente!!!");
                     }
-                } else if (opcion_seleccionada == 3) {
+                } 
+                // opcion 3 que sirve para administrar la entrega de un vehiculo
+                else if (opcion_seleccionada == 3) {
+                // se pide el usuaio que alquilo el vehiculo y se verifica que exista y que su nivel de acceso sea de 0 que significa que es un cliente
                     String username = input("Ingrese el usuario del cliente que lo alquiló: ");
                     String placaEnAlquiler = "";
                     boolean esta = false;
+                // bucle que sirve para la verificacion
                     for (Usuario usuario : hashUsuarios.values()) {
                         if (usuario.getUsername().equals(username) && usuario.getNivelDeAcceso() == 0) {
                             esta = true;
@@ -582,23 +733,30 @@ public class AppReservas {
                             }
                         }
                     }
+                // si existe se pregunta si el vehiculo necesita mantenimiento
                     if (esta && !placaEnAlquiler.equals("")) {
                         boolean mantenimiento = Boolean.parseBoolean(input("El vehiculo necesita mantenimiento? (Necesita mecanico o lavado) (true/false): "));
+                // si necesita mantenimiento se ingrsa un fecha estimada de regreso del vehiculo y la descripcion del vehiculo
                         if (mantenimiento) {
-                            String fechaRegreso = input("Ingrese la fecha estimada de regraso del vehiculo: ");
+                            String fechaRegreso = input("Ingrese la fecha estimada de regreso del vehiculo: ");
                             String descriMantenimiento = input("Ingrese la descripcion del mantenimiento: ");
                             empleado.recibirVehiculoConMantenimiento(catalogo, placaEnAlquiler, username, fechaRegreso, descriMantenimiento);
-                        } else {
+                        } 
+                // si no necesita mantenimiento se pone de enseguida en alquiler
+                        else {
                             empleado.recibirVehiculoSinMantenimiento(catalogo, placaEnAlquiler, username);
                         }
                         System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + username + " recibido exitosamente!!!");
                     } else {
                         System.out.println("El usuario ingresado no existe o no es un cliente o no tiene un vehículo alquilado!!!");
                     }
-                } else if (opcion_seleccionada == 4) {
+                } 
+                // opcion 4 que sirve para poner un vehiculo en disponibilidad de alquiler
+                else if (opcion_seleccionada == 4) {
+                //  se pide la placa y la fecha actual
                     String placa = input("Ingrese la placa del vehiculo: ");
                     String fechaDispo = input("Ingrese la fecha actual: ");
-                    // verifica que la placa exista y que el vehiculo este en mantenimiento
+                // verifica que la placa exista y que el vehiculo este en mantenimiento
                     Boolean esta = false;
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
                         if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
@@ -608,13 +766,18 @@ public class AppReservas {
                             }
                         }
                     }
+                // si esta disponible para alquilar cambiamos le estado para que este listo
                     if (esta) {
                         empleado.vehiculoListoParaAlquiler(catalogo, placa, fechaDispo);
                         System.out.println("Vehiculo listo para alquilar!!!");
-                    } else {
+                    } 
+                // mensaje de error por si el vehiculo no existe o no esta en mantenimineto
+                    else {
                         System.out.println("El vehículo no existe o no esta en mantenimiento!!!");
                     }
-                } else if (opcion_seleccionada == 5) {
+                } 
+                // opcion 5 que sirve para salir de la aplicacion 
+                else if (opcion_seleccionada == 5) {
                     continuar = false;
                 } else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");
