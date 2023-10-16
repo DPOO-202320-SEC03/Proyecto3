@@ -26,20 +26,7 @@ public class AdministradorLocal extends Usuario {
     }
 
     public void eliminarEmpleado(HashMap<String, Usuario> hashUsuarios, String usernameEmpleado) {
-        boolean encontrado = false;
-        boolean permiso = false;
-        for (Usuario usuario : hashUsuarios.values()) {
-            if (usuario.getUsername().equals(usernameEmpleado)) {
-                encontrado = true;
-                if (usuario.getNivelDeAcceso() == 1){
-                    permiso = true;
-                    hashUsuarios.remove(usernameEmpleado);
-            }
-        }   
-    }
-    if(encontrado == false){System.out.println("El usuario no existe");}
-    else if(permiso == false){System.out.println("El usuario no es un empleado");}
-    else{System.out.println("Usuario eliminado con exito");}
+        hashUsuarios.remove(usernameEmpleado);
     }
 
     public String getSede() {

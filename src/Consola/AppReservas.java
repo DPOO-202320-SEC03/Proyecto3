@@ -266,31 +266,35 @@ public class AppReservas {
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
-                    String username = input("Ingrese un usuario para el administrador local");
-                    while (hashUsuarios.containsKey(username) || username.length() < 3) {
-                        System.out.println("El usuario ingresado ya existe o tiene menos de 3 caracteres, por favor ingrese un usuario nuevo");
-                        username = input("Ingrese un usuario para el administrador local");
-                    }
-                    String password = input("Ingrese una contraseña para el administrador local");
-                    while (password.length() < 3) {
-                        System.out.println("La contraseña debe tener al menos 3 caracteres");
-                        password = input("Ingrese una contraseña para el administrador local");
-                    }
-                    String nombreSede = input("Ingrese el nombre de la sede para el administrador local");
-                    while (!hashSedes.containsKey(nombreSede)) {
-                        System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
-                        System.out.println("Las sedes validas son:");
-                        for (String key : hashSedes.keySet()) {
-                            System.out.println("- " + key);
+                    if (hashSedes.size() > 0) {
+                        String username = input("Ingrese un usuario para el administrador local");
+                        while (hashUsuarios.containsKey(username) || username.length() < 3) {
+                            System.out.println("El usuario ingresado ya existe o tiene menos de 3 caracteres, por favor ingrese un usuario nuevo");
+                            username = input("Ingrese un usuario para el administrador local");
                         }
-                        nombreSede = input("Ingrese el nombre de la sede para el administrador local");
+                        String password = input("Ingrese una contraseña para el administrador local");
+                        while (password.length() < 3) {
+                            System.out.println("La contraseña debe tener al menos 3 caracteres");
+                            password = input("Ingrese una contraseña para el administrador local");
+                        }
+                        String nombreSede = input("Ingrese el nombre de la sede para el administrador local");
+                        while (!hashSedes.containsKey(nombreSede)) {
+                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                            System.out.println("Las sedes validas son:");
+                            for (String key : hashSedes.keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            nombreSede = input("Ingrese el nombre de la sede para el administrador local");
+                        }
+                        String nombres = input("Ingrese los nombres del administrador local");
+                        String apellidos = input("Ingrese los apellidos del administrador local");
+                        String celular = input("Ingrese el celular del administrador local");
+                        String correo = input("Ingrese el correo del administrador local");
+                        admin.crearAdministradorLocal(hashUsuarios, username, password, nombreSede, nombres, apellidos, celular, correo);
+                        System.out.println("Administrador local creado y guardado exitosamente!!!");
+                    } else {
+                        System.out.println("No hay sedes creadas, por favor cree una antes de crear un administrador local");
                     }
-                    String nombres = input("Ingrese los nombres del administrador local");
-                    String apellidos = input("Ingrese los apellidos del administrador local");
-                    String celular = input("Ingrese el celular del administrador local");
-                    String correo = input("Ingrese el correo del administrador local");
-                    admin.crearAdministradorLocal(hashUsuarios, username, password, nombreSede, nombres, apellidos, celular, correo);
-                    System.out.println("Administrador local creado y guardado exitosamente!!!");
                 } else if (opcion_seleccionada == 2) {
                     String username = input("Ingrese un usuario que desea eliminar");
                     if (!username.equals(admin.getUsername())) {
@@ -482,11 +486,26 @@ public class AppReservas {
                     String celular = input("Ingrese el celular del empleado");
                     String correo = input("Ingrese el correo del empleado");
                     adminLocal.crearEmpleado(hashUsuarios, username, password, nombres, apellidos, celular, correo);
-                    System.out.println("Administrador local creado y guardado exitosamente!!!");
+                    System.out.println("Empleado creado y guardado exitosamente!!!");
                 }
                 else if(opcion_seleccionada == 2){
                     String username = input("Ingrese un usuario que desea eliminar");
-                    adminLocal.eliminarEmpleado(hashUsuarios, username);
+                    if (!username.equals(adminLocal.getUsername())) {
+                        boolean encontrado = false;
+                        boolean permiso = false;
+                        for (Usuario usuario : hashUsuarios.values()) {
+                            if (usuario.getUsername().equals(username) && usuario.getNivelDeAcceso() == 1) {
+                                encontrado = true;
+                                permiso = true;
+                            }
+                        }
+                        if (encontrado && permiso) {
+                            adminLocal.eliminarEmpleado(hashUsuarios, username);
+                            System.out.println("Usuario " + username + " eliminado exitosamente!!!");
+                        } 
+                    } else {
+                        System.out.println("No se puede eliminar tu propio usuario!!!");
+                    }
                 }
                  else if (opcion_seleccionada == 14) {
                     continuar = false;
