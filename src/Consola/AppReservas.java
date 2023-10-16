@@ -503,6 +503,7 @@ public class AppReservas {
                             adminLocal.eliminarEmpleado(hashUsuarios, username);
                             System.out.println("Usuario " + username + " eliminado exitosamente!!!");
                         } 
+                        else {System.out.println("no se encontro el empleado");}
                     } else {
                         System.out.println("No se puede eliminar tu propio usuario!!!");
                     }
@@ -522,17 +523,45 @@ public class AppReservas {
     }
 
     private void ejecutarMenuEmpleado(Empleado empleado) {
-        // TODO implementar
         Boolean continuar = true;
         while (continuar) {
             try {
                 System.out.println("\nBienvenido al menú para empleados\n");
-                // TODO implementar
+                System.out.println("1. Alquilar vehiculo");
+                System.out.println("2. Agregar licencia de otros conductores");
+                System.out.println("3. Entrega de vehiculo");
+                System.out.println("4. Listo para alquiler");
                 System.out.println("14. Salir");
                 
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
-                    // TODO implementar
+                    String placa = input("Ingrese la placa del vehiculo");
+                    String username = input("Ingrese el usuario del cliente a alquilar");
+                    String fechaDevolucion = input("Ingrese la fecha de devolucion del vehiculo");
+                    String sedeDevolucion = input("Ingrese la sede de devolucion del vehiculo");
+                    String fechaDeAlquiler = input("Ingrese la fecha de alquiler del vehiculo");
+                    empleado.alquilarVehiculo(catalogo, placa, username, fechaDevolucion, sedeDevolucion, fechaDeAlquiler);
+
+                } else if (opcion_seleccionada == 2) {
+                    continuar = false;
+                } else if (opcion_seleccionada == 3) {
+                    String placa = input("Ingrese la placa del vehiculo: ");
+                    String username = input("Ingrese el usuario del cliente a alquilar: ");
+                    boolean mantenimiento = Boolean.parseBoolean(input("el vehiculo necesita mantenimiento (true/false): "));
+                    if (mantenimiento == true){
+                        empleado.recibirVehiculo(catalogo, placa, username, true);}
+                    else{
+                        empleado.recibirVehiculo(catalogo, placa, username, false);
+                        String fechaRegreso = input("Ingrese la placa del vehiculo: ");
+                        String descriMantenimiento = input("Ingrese la descripcion del mantenimiento: ");
+                        empleado.necesitaMantenimiento(catalogo, fechaRegreso, placa, descriMantenimiento);
+                    }
+
+                } else if (opcion_seleccionada == 4) {
+                    String placa = input("Ingrese la placa del vehiculo: ");
+                    String fechaDispo = input("Ingrese la fecha actual: ");
+                    empleado.vehiculoListoParaAlquiler(catalogo, placa, fechaDispo);
+
                 } else if (opcion_seleccionada == 14) {
                     continuar = false;
                 } else {
