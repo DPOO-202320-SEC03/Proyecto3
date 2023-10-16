@@ -291,7 +291,7 @@ public class AppReservas {
                     String username = input("Ingrese un usuario que desea eliminar");
                     if (!username.equals(admin.getUsername())) {
                         admin.eliminarUsuario(hashUsuarios, username);
-                        System.out.println("Usuario" + username + "eliminado exitosamente!!!");
+                        System.out.println("Usuario " + username + " eliminado exitosamente!!!");
                     } else {
                         System.out.println("No se puede eliminar tu propio usuario!!!");
                     }
