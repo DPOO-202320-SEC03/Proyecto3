@@ -263,8 +263,8 @@ public class AppReservas {
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
                     String username = input("Ingrese un usuario para el administrador local");
-                    while (hashUsuarios.containsKey(username)) {
-                        System.out.println("El usuario ingresado ya existe, por favor ingrese un usuario nuevo");
+                    while (hashUsuarios.containsKey(username) || username.length() < 3) {
+                        System.out.println("El usuario ingresado ya existe o tiene menos de 3 caracteres, por favor ingrese un usuario nuevo");
                         username = input("Ingrese un usuario para el administrador local");
                     }
                     String password = input("Ingrese una contraseña para el administrador local");
