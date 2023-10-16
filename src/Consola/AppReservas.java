@@ -635,7 +635,7 @@ public class AppReservas {
                 System.out.println("\nBienvenido al menú para clientes\n");
                 // TODO implementar
                 System.out.println("14. Salir");
-                
+                // TODO no olvidar usar el meteodo de categoria getVehiculosDisponibles para saber cuantos vehiculos disponibles hay para una sede determinada
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
                     // TODO implementar

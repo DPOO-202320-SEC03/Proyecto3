@@ -1,5 +1,6 @@
 package SistemaLogin;
 
+import Inventario.Catalogo;
 import Inventario.Vehiculo;
 import Reservas.Reserva;
 
@@ -27,21 +28,18 @@ public class Cliente extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    public void reservarVehiculo(String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
+    public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
         // TODO implement here
+        // En esta parte debe cambiar el estado de un vehiculo a reservado, tambien debe crearse una reserva nueva y guardarla en el hash de reservas, adicionalmente se debe cambiar el id de reserva del empleado
+        // al final debe mostrarle al usuario el resumen de la reserva
+        return "";
     }
 
-    public void alquilarVehiculo(Boolean alterarReserva, int otrosConductores) {
+    public String alterarReserva(HashMap<String, Reserva> hashReservas, Catalogo catalogo, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores) {
         // TODO implement here
-    }
-
-    public void alterarReserva(int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar) {
-        // TODO implement here
-    }
-
-    public int calcularValorAlquiler(String fechaRecoger, String fechaEntregar, Vehiculo vehiculo) {
-        // TODO implement here
-        return 0;
+        // En esta parte se tiene que alterar la reserva anteriormente creada
+        // al final debe mostrarle al usuario el resumen de la reserva editada
+        return "";
     }
 
     public ArrayList<DatosClienteLicencia> getDatosClienteLicencia() {
