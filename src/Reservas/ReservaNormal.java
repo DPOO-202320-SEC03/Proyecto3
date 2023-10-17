@@ -152,6 +152,8 @@ public class ReservaNormal extends Reserva {
         return valorAlquiler;
     }
 
+
+    @Override
     public String getResumen(Catalogo catalogo, TarifasGlobales tarifaGlobal) {
     	
     	String seguros = "";

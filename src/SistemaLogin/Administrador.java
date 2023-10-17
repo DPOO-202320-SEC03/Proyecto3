@@ -88,7 +88,7 @@ public class Administrador extends Usuario {
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(sedeDestino);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaRecoger, "Vehiculo trasladado a " + sedeDestino);
                 hashReservas.put(Integer.toString(reservaTraslado.getIdReserva()), reservaTraslado);
-                detallesTraslado = reservaTraslado.getResumen();
+                detallesTraslado = reservaTraslado.getResumen(catalogo, catalogo.getTarifasGlobales());
             }
         }
         return detallesTraslado;
@@ -141,7 +141,7 @@ public class Administrador extends Usuario {
 
     // Funciones para las reservas
 
-    public void resumenReserva(HashMap<String, Reserva> hashReservas, String idReserva) {
-        System.out.println(hashReservas.get(idReserva).getResumen());
+    public void resumenReserva(HashMap<String, Reserva> hashReservas, String idReserva, Catalogo catalogo) {
+        System.out.println(hashReservas.get(idReserva).getResumen(catalogo, catalogo.getTarifasGlobales()));
     }
 }

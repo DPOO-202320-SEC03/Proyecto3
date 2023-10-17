@@ -1,5 +1,7 @@
 package Reservas;
 
+import Inventario.Catalogo;
+
 public class ReservaEspecial extends Reserva {
 
     private String sedeOrigen;
@@ -17,9 +19,8 @@ public class ReservaEspecial extends Reserva {
         this.fechaEntrega = fechaEntrega;
         super.placa = placa;
     }
-    
-    public String getResumen() {
-    	
+    @Override
+    public String getResumen(Catalogo catalogo, TarifasGlobales tarifaGlobal) {
         return "ID Reserva: " + super.idReserva 
                 +"\nSede origen: " + sedeOrigen
         		+"\nSede destino: " + sedeDestino

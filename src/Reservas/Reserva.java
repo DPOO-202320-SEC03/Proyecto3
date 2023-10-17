@@ -2,6 +2,8 @@ package Reservas;
 
 import java.io.Serializable;
 
+import Inventario.Catalogo;
+
 public class Reserva implements Serializable {
 
     public static int totalDeReservas = 0;
@@ -16,8 +18,8 @@ public class Reserva implements Serializable {
     	this.idReserva = id;
     }
 
-    public String getResumen() {
-        return "ID Reserva: " + idReserva;
+    public String getResumen(Catalogo catalogo, TarifasGlobales tarifaGlobal) {
+        return "";
     }
 
     public String getPlaca() {

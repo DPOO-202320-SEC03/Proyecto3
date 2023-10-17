@@ -561,7 +561,7 @@ public class AppReservas {
                     String idReserva = input("Ingrese el id de la reserva que desea consultar");
                 // se busca la ID y si existe se muestran los detalles
                     if (hashReservas.containsKey(idReserva)) {
-                        admin.resumenReserva(hashReservas, idReserva);
+                        admin.resumenReserva(hashReservas, idReserva, catalogo);
                     } 
                 // mensaje de error por si no se encuentra la reserva
                     else {
@@ -871,7 +871,7 @@ public class AppReservas {
                         }  
                         cliente.reservarVehiculo(hashReservas, catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, listaSeguros);
                         System.out.println("\n Detalles de la reserva a continuación:");
-                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                        System.out.println(cliente.getResumenReservaActual(hashReservas, catalogo));
                     } else if (cliente.getTieneTarjetaBloqueada()) {
                         System.out.println("Su tarjeta esta bloqueada, no puede hacer reservas!!!");
                     } else {
@@ -880,7 +880,7 @@ public class AppReservas {
                 } else if (opcion_seleccionada == 2) {
                     if (cliente.getTieneReserva()) {
                         System.out.println("A continuacion tiene los detalles de su reserva actual");
-                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                        System.out.println(cliente.getResumenReservaActual(hashReservas, catalogo));
                         String sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         while (!hashSedes.containsKey(sedeEntregar)) {
                             System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
@@ -893,17 +893,17 @@ public class AppReservas {
                         String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato DD/MM/YYYY)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
-                        cliente.alterarReserva(hashReservas, cliente.getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores);
+                        cliente.alterarReserva(hashReservas, cliente.getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, catalogo);
                         System.out.println("Reserva editada exitosamente!!!");
                         System.out.println("\n Detalles de la reserva a continuación:");
-                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                        System.out.println(cliente.getResumenReservaActual(hashReservas, catalogo));
                     } else {
                         System.out.println("No tiene una reserva activa!!!");
                     }
                 } else if (opcion_seleccionada == 3) {
                     if (cliente.getTieneReserva()) {
                         System.out.println("\nA continuacion tiene los detalles de su reserva actual: ");
-                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                        System.out.println(cliente.getResumenReservaActual(hashReservas, catalogo));
                     } else {
                         System.out.println("No tiene una reserva activa!!!");
                     }

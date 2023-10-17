@@ -36,17 +36,17 @@ public class Cliente extends Usuario {
             hashReservas.put(Integer.toString(reservaCliente.getIdReserva()), reservaCliente);
             this.idReserva = reservaCliente.getIdReserva();
             this.tieneReserva = true;
-            return reservaCliente.getResumen();
+            return reservaCliente.getResumen(catalogo, catalogo.getTarifasGlobales());
         }
     }
 
-    public String alterarReserva(HashMap<String, Reserva> hashReservas, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores) {
+    public String alterarReserva(HashMap<String, Reserva> hashReservas, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores, Catalogo catalogo) {
         ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores);
-        return ((ReservaNormal)hashReservas.get(Integer.toString(idReserva))).getResumen();
+        return ((ReservaNormal)hashReservas.get(Integer.toString(idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
     }
 
-    public String getResumenReservaActual(HashMap<String, Reserva> hashReservas) {
-        return ((ReservaNormal)hashReservas.get(Integer.toString(this.idReserva))).getResumen();
+    public String getResumenReservaActual(HashMap<String, Reserva> hashReservas, Catalogo catalogo) {
+        return ((ReservaNormal)hashReservas.get(Integer.toString(this.idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
     }
 
     public ArrayList<DatosClienteLicencia> getDatosClienteLicencia() {
