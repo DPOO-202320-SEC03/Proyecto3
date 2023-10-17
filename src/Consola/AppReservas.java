@@ -408,7 +408,7 @@ public class AppReservas {
                 // se pide una tarifa por un conductor extra, tarifa por entregar el vehiculo en una sede distinta, y el rango de tiempo de la temporada alta
                     int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
                     int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
-                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato DD/MM - DD/MM)");
+                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato MM/DD - MM/DD)");
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales creadas y guardadas exitosamente!!!");
                 } 
@@ -423,7 +423,7 @@ public class AppReservas {
                 // se piden todas las nuevas tarifas y se crea la nueva tarifa
                     int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
                     int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
-                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato DD/MM - DD/MM)");
+                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato MM/DD - MM/DD)");
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales actualizadas y guardadas exitosamente!!!");
                 } 
@@ -464,7 +464,7 @@ public class AppReservas {
 
                 // se pregunta si esta listo para alquilar de enseguida y en que fecha estara disponible y se crea
                         Boolean disponibleParaAlquilar = Boolean.parseBoolean(input("Ingrese si el vehículo nuevo se encuentra disponible para alquiler (En formato true/false)"));
-                        String fechaDisponibilidad = input("Ingrese la fecha de disponibilidad del vehículo nuevo (En formato DD/MM/YYYY)");
+                        String fechaDisponibilidad = input("Ingrese la fecha de disponibilidad del vehículo nuevo (En formato MM/DD/AAAA)");
                         admin.crearVehiculo(catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, cantidadDePasajeros, nombreSede, categoria, disponibleParaAlquilar, fechaDisponibilidad);
                         System.out.println("Vehículo creado y guardado exitosamente!!!");
                     } 
@@ -543,9 +543,9 @@ public class AppReservas {
                             sedeDestino = input("Ingrese el nombre de la sede a la cual desea trasladar el vehículo");
                         }
                 // se establece una fecha y hora en la que se recoge el vehiculo y una fecha en la cual se entrga
-                        String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato DD/MM/YYYY)");
+                        String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato MM/DD/AAAA)");
                         String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
-                        String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato DD/MM/YYYY)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato MM/DD/AAAA)");
                         String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, sedeDestino, fechaRecoger, horaRecoger, fechaEntregar);
                         System.out.println(detallesTraslado);
                         System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
@@ -823,7 +823,7 @@ public class AppReservas {
                             }
                             sedeRecoger = input("Ingrese el nombre de la sede donde quiere recoger el vehículo");
                         }
-                        String fechaRecoger = input("Ingrese la fecha en la cual quiere recoger el vehículo (En formato DD/MM/YYYY)");
+                        String fechaRecoger = input("Ingrese la fecha en la cual quiere recoger el vehículo (En formato MM/DD/AAAA)");
                         String horaRecoger = input("Ingrese la hora en la cual quiere recoger el vehículo (En formato HH:MM)");
                         String sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         while (!hashSedes.containsKey(sedeEntregar)) {
@@ -834,7 +834,7 @@ public class AppReservas {
                             }
                             sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         }
-                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato DD/MM/YYYY)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato MM/DD/AAAA)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
                         // lista los seguros disponibles actuales y su descripcion y su precio extra diario
@@ -890,7 +890,7 @@ public class AppReservas {
                             }
                             sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         }
-                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato DD/MM/YYYY)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato MM/DD/AAAA)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
                         cliente.alterarReserva(hashReservas, cliente.getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, catalogo);
