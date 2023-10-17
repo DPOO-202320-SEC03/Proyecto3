@@ -28,8 +28,8 @@ public class Cliente extends Usuario {
     }
 
     public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores, ArrayList<String> nombresSeguros) {
-        ReservaNormal reservaCliente = new ReservaNormal(catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaRangoEntregar, super.getUsername(), otrosConductores, nombresSeguros);
-        if (reservaCliente.getPlaca().equals("na")) {
+        ReservaNormal reservaCliente = new ReservaNormal(catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaRangoEntregar, super.username, otrosConductores, nombresSeguros);
+        if (reservaCliente.getPlaca().equals("NA")) {
             return "No hay vehiculos disponibles en este momento para esta categoria";
         } else {
             catalogo.getHashCategorias().get(nombreCategoria).getHashVehiculos().get(reservaCliente.getPlaca()).setEnReserva(true);
@@ -42,11 +42,11 @@ public class Cliente extends Usuario {
 
     public String alterarReserva(HashMap<String, Reserva> hashReservas, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores, Catalogo catalogo) {
         ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores);
-        return ((ReservaNormal)hashReservas.get(Integer.toString(idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
+        return ((ReservaNormal)hashReservas.get(String.valueOf(idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
     }
 
     public String getResumenReservaActual(HashMap<String, Reserva> hashReservas, Catalogo catalogo) {
-        return ((ReservaNormal)hashReservas.get(Integer.toString(this.idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
+        return ((ReservaNormal)(hashReservas.get(String.valueOf(this.idReserva)))).getResumen(catalogo, catalogo.getTarifasGlobales());
     }
 
     public ArrayList<DatosClienteLicencia> getDatosClienteLicencia() {

@@ -9,7 +9,6 @@ import Inventario.Seguro;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
-import java.util.Date;
 
 
 public class ReservaNormal extends Reserva {
@@ -37,6 +36,7 @@ public class ReservaNormal extends Reserva {
         this.usuarioConductorPrincipal = usuarioConductorPrincipal;
         this.otrosConductores = otrosConductores;
         this.nombresSeguros = nombresSeguros;
+        
         String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva();
         while (placa.equals("na")) {
             int rangoCategoriaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getRangoCategoria() + 1;
@@ -46,10 +46,10 @@ public class ReservaNormal extends Reserva {
                     categoriaNueva = categoria.getKey();
                 }
             }
-            if (!categoriaNueva.equals("na")) {
+            if (!(categoriaNueva.equals("na"))) {
                 placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva();
             } else {
-                placa = "No hay vehiculos disponibles en este momento";
+                placa = "NA";
             }
         } 
         super.placa = placa;
@@ -69,7 +69,6 @@ public class ReservaNormal extends Reserva {
     }
 
     public int getValorAlquilerCompleto(Catalogo catalogo, TarifasGlobales tarifaGlobal) {
-        
         // Aca se tiene que tener en cuenta tanto:
         // 1. el valor por temporada, se analzia cuantos dias esta en alquiler el vehiculo y se obtiene de la categoria el valor por temporada
         // 2. el valor por seguros adicionales, se analiza si el cliente quiere alguno de los seguros adicionales y se suma al valor total
@@ -95,7 +94,7 @@ public class ReservaNormal extends Reserva {
         int tarifaBaja = hashCategorias.get(categoriaVehiculo).getHashTarifaPorTemporada().get("baja");
         int tarifaAlta = hashCategorias.get(categoriaVehiculo).getHashTarifaPorTemporada().get("alta");
         int valorAlquiler =0;
-        
+         
         //valor por dia de alquiler
         if(diasAlquiler < 365)
         {
@@ -151,22 +150,19 @@ public class ReservaNormal extends Reserva {
         {
             valorAlquiler += tarifaGlobal.getTarifaSede();
         }
-
         return valorAlquiler;
     }
 
 
     @Override
     public String getResumen(Catalogo catalogo, TarifasGlobales tarifaGlobal) {
-    	
     	String seguros = "";
     	
     	for (String nomseguro : nombresSeguros) 
     	{
     		seguros += nomseguro + "/n" ;
     	}
-
-        return "ID Reserva: " + super.idReserva 
+        return "ID Reserva: " + String.valueOf(super.idReserva)
                 +"\nCategoria Vehiculo: " + categoriaVehiculo
         		+"\nSede Recoger: " + sedeRecoger
         		+"\nFecha Recoger: " + fechaRecoger

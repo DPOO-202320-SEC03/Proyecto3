@@ -670,7 +670,7 @@ public class AppReservas {
                 System.out.println("\nBienvenido al menú para empleados\n");
                 System.out.println("1. Alquilar vehiculo");
                 System.out.println("2. Agregar licencia de otros conductores");
-                System.out.println("3. Entrega de vehiculo");
+                System.out.println("3. Recibir vehiculo");
                 System.out.println("4. Listo para alquiler");
                 System.out.println("5. Salir");
                 
@@ -719,7 +719,7 @@ public class AppReservas {
                 // opcion 3 que sirve para administrar la entrega de un vehiculo
                 else if (opcion_seleccionada == 3) {
                 // se pide el usuaio que alquilo el vehiculo y se verifica que exista y que su nivel de acceso sea de 0 que significa que es un cliente
-                    String username = input("Ingrese el usuario del cliente que lo alquiló: ");
+                    String username = input("Ingrese el usuario del cliente que lo alquiló");
                     String placaEnAlquiler = "";
                     boolean esta = false;
                 // bucle que sirve para la verificacion
@@ -736,7 +736,7 @@ public class AppReservas {
                     }
                 // si existe se pregunta si el vehiculo necesita mantenimiento
                     if (esta && !placaEnAlquiler.equals("")) {
-                        boolean mantenimiento = Boolean.parseBoolean(input("El vehiculo necesita mantenimiento? (Necesita mecanico o lavado) (true/false): "));
+                        boolean mantenimiento = Boolean.parseBoolean(input("El vehiculo necesita mantenimiento? (Necesita mecanico o lavado) (true/false)"));
                 // si necesita mantenimiento se ingrsa un fecha estimada de regreso del vehiculo y la descripcion del vehiculo
                         if (mantenimiento) {
                             String fechaRegreso = input("Ingrese la fecha estimada de regreso del vehiculo: ");
@@ -850,7 +850,7 @@ public class AppReservas {
                             for (String seguro : segurosArray) {
                                 listaSeguros.add(seguro);
                             }
-                            boolean todosSegurosValidos = true;
+                            Boolean todosSegurosValidos = true;
                             for (String seguro : listaSeguros) {
                                 if (!listaSegurosDisponibles.contains(seguro)) {
                                     todosSegurosValidos = false;
@@ -866,10 +866,15 @@ public class AppReservas {
                                     System.out.println("- " + seguro.getValue().getNombreSeguro() + " - " + seguro.getValue().getDescripcionSeguro() + " - " + String.valueOf(seguro.getValue().getTarifaExtra()));
                                 }
                             }
-                        }  
-                        cliente.reservarVehiculo(hashReservas, catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, listaSeguros);
-                        System.out.println("\n Detalles de la reserva a continuación:");
-                        System.out.println(cliente.getResumenReservaActual(hashReservas, catalogo));
+                        }
+                        String resultado = cliente.reservarVehiculo(hashReservas, catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, listaSeguros);
+                        if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria"))
+                            System.out.println(resultado);
+                        else {
+                            System.out.println("Reserva creada exitosamente!!!");
+                            System.out.println("\nDetalles de la reserva a continuación:");
+                            System.out.println(resultado);
+                        }
                     } else if (cliente.getTieneTarjetaBloqueada()) {
                         System.out.println("Su tarjeta esta bloqueada, no puede hacer reservas!!!");
                     } else {
@@ -888,7 +893,7 @@ public class AppReservas {
                             }
                             sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         }
-                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato MM/DD/AAAA)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler, tiene que estar en el mismo año que cuando recoge el vehículo!!!\n Fecha (En formato MM/DD/AAAA incluir digitos 0, ej 01/01/2023)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
                         cliente.alterarReserva(hashReservas, cliente.getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, catalogo);
