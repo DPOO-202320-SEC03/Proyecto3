@@ -43,7 +43,7 @@ public class Empleado extends Usuario {
         }
     }
 
-    public void recibirVehiculoSinMantenimiento(Catalogo catalogo, String placa, String usernameClienteAlquiler) {
+    public void recibirVehiculoSinMantenimiento(Catalogo catalogo, String placa, String usernameClienteAlquiler, HashMap<String, Usuario> hashUsuarios) {
         for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
            if (categoria.getValue().getHashVehiculos().containsKey(placa)){
                 String devolucion = categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getFechaDevolucion();
@@ -52,12 +52,13 @@ public class Empleado extends Usuario {
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setUsuarioClienteAlquiler("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setFechaDevolucion("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setFechaDisponibilidad(devolucion);
+                ((Cliente)hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Vehiculo entregado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
             }
         }
     }
 
-    public void recibirVehiculoConMantenimiento(Catalogo catalogo, String placa, String usernameClienteAlquiler, String fechaEstimadaRegreso, String descripcionMantenimiento) {
+    public void recibirVehiculoConMantenimiento(Catalogo catalogo, String placa, String usernameClienteAlquiler, String fechaEstimadaRegreso, String descripcionMantenimiento, HashMap<String, Usuario> hashUsuarios) {
         for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                 String devolucion = categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getFechaDevolucion();
@@ -66,6 +67,7 @@ public class Empleado extends Usuario {
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setUsuarioClienteAlquiler("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setFechaDevolucion("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setFechaDisponibilidad(fechaEstimadaRegreso);
+                ((Cliente)hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Vehiculo entregado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Necesita mantenimiento, descripción: " + descripcionMantenimiento);
             }

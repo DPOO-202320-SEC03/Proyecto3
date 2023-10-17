@@ -55,7 +55,7 @@ public class ReservaNormal extends Reserva {
         super.placa = placa;
     }
 
-    public void editarReserva(Catalogo catalogo, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
+    public void editarReserva(String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
         this.sedeEntregar = sedeEntregar;
         this.fechaEntregar = fechaEntregar;
         this.horaRangoEntregar = horaRangoEntregar;
@@ -174,6 +174,7 @@ public class ReservaNormal extends Reserva {
                 +"\nValor proyectado del alquiler " + String.valueOf(getValorProyectadoAlquiler(catalogo, tarifaGlobal))
                 +"\nValor total del alquiler " + String.valueOf(getValorAlquilerCompleto(catalogo, tarifaGlobal));
     }
+
     public long rangoFecha(String rangoF)
     {
         // el formato de rangoF es un string de este tipo "MM/dd/aaaa" "01/01/2023-01/15/2023"

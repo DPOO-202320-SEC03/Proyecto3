@@ -1,17 +1,16 @@
 package SistemaLogin;
 
 import Inventario.Catalogo;
-import Inventario.Vehiculo;
 import Reservas.Reserva;
+import Reservas.ReservaNormal;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.util.*;
 
 public class Cliente extends Usuario {
 
     private int nivelDeAcceso = 0;
     private int idReserva = -1;
+    private Boolean tieneReserva = false;
     private ArrayList<DatosClienteLicencia> datosClienteLicencia;
     private DatosClienteTarjeta datosClienteTarjeta;
 
@@ -28,36 +27,45 @@ public class Cliente extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar) {
-        // TODO implement here
-        // En esta parte debe cambiar el estado de un vehiculo a reservado, tambien debe crearse una reserva nueva y guardarla en el hash de reservas, adicionalmente se debe cambiar el id de reserva del empleado
-        // al final debe mostrarle al usuario el resumen de la reserva
-        return "";
+    public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores, ArrayList<String> nombresSeguros) {
+        ReservaNormal reservaCliente = new ReservaNormal(catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaRangoEntregar, super.getUsername(), otrosConductores, nombresSeguros);
+        if (reservaCliente.getPlaca().equals("na")) {
+            return "No hay vehiculos disponibles en este momento para esta categoria";
+        } else {
+            catalogo.getHashCategorias().get(nombreCategoria).getHashVehiculos().get(reservaCliente.getPlaca()).setEnReserva(true);
+            hashReservas.put(Integer.toString(reservaCliente.getIdReserva()), reservaCliente);
+            this.idReserva = reservaCliente.getIdReserva();
+            this.tieneReserva = true;
+            return reservaCliente.getResumen();
+        }
     }
 
-    public String alterarReserva(HashMap<String, Reserva> hashReservas, Catalogo catalogo, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores) {
-        // TODO implement here
-        // En esta parte se tiene que alterar la reserva anteriormente creada
-        // al final debe mostrarle al usuario el resumen de la reserva editada
-        return "";
+    public String alterarReserva(HashMap<String, Reserva> hashReservas, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores) {
+        ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores);
+        return ((ReservaNormal)hashReservas.get(Integer.toString(idReserva))).getResumen();
     }
 
     public String getResumenReservaActual(HashMap<String, Reserva> hashReservas) {
-        // TODO implement here
-        // En esta parte se tiene que mostrar el resumen de la reserva actual
-        // primero se busca con el id luego se genera el resumen y se retorna
-        return "";
+        return ((ReservaNormal)hashReservas.get(Integer.toString(this.idReserva))).getResumen();
     }
 
     public ArrayList<DatosClienteLicencia> getDatosClienteLicencia() {
         return this.datosClienteLicencia;
     }
 
-    public Integer getIdReserva() {
-        return this.idReserva;
+    public Boolean getTieneTarjetaBloqueada() {
+        return this.datosClienteTarjeta.getEstadoTarjeta();
     }
 
-    public void setIdReserva(int id) {
-        this.idReserva = id;
+    public void setTieneReserva(Boolean estado) {
+        this.tieneReserva = estado;
+    }
+
+    public Boolean getTieneReserva() {
+        return this.tieneReserva;
+    }
+
+    public Integer getIdReserva() {
+        return this.idReserva;
     }
 }

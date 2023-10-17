@@ -87,7 +87,7 @@ public class Administrador extends Usuario {
                 ReservaEspecial reservaTraslado = new ReservaEspecial(sedeOrigen, sedeDestino, fechaRecoger, horaRecoger, fechaEntrega, placa);
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(sedeDestino);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaRecoger, "Vehiculo trasladado a " + sedeDestino);
-                hashReservas.put(String.valueOf(reservaTraslado.getIdReserva()), reservaTraslado);
+                hashReservas.put(Integer.toString(reservaTraslado.getIdReserva()), reservaTraslado);
                 detallesTraslado = reservaTraslado.getResumen();
             }
         }

@@ -12,6 +12,7 @@ import SistemaLogin.Usuario;
 import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Sede;
+import Inventario.Seguro;
 import Inventario.Vehiculo;
 import Reservas.Reserva;
 
@@ -740,11 +741,11 @@ public class AppReservas {
                         if (mantenimiento) {
                             String fechaRegreso = input("Ingrese la fecha estimada de regreso del vehiculo: ");
                             String descriMantenimiento = input("Ingrese la descripcion del mantenimiento: ");
-                            empleado.recibirVehiculoConMantenimiento(catalogo, placaEnAlquiler, username, fechaRegreso, descriMantenimiento);
+                            empleado.recibirVehiculoConMantenimiento(catalogo, placaEnAlquiler, username, fechaRegreso, descriMantenimiento, hashUsuarios);
                         } 
                 // si no necesita mantenimiento se pone de enseguida en alquiler
                         else {
-                            empleado.recibirVehiculoSinMantenimiento(catalogo, placaEnAlquiler, username);
+                            empleado.recibirVehiculoSinMantenimiento(catalogo, placaEnAlquiler, username, hashUsuarios);
                         }
                         System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + username + " recibido exitosamente!!!");
                     } else {
@@ -796,13 +797,117 @@ public class AppReservas {
         while (continuar) {
             try {
                 System.out.println("\nBienvenido al menú para clientes\n");
-                // TODO implementar
-                System.out.println("14. Salir");
+                System.out.println("1. Reservar un vehiculo");
+                System.out.println("2. Editar reserva");
+                System.out.println("3. Obtener resumen de reserva actual"); 
+                System.out.println("4. Salir");
                 // TODO no olvidar usar el meteodo de categoria getVehiculosDisponibles para saber cuantos vehiculos disponibles hay para una sede determinada
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
-                    // TODO implementar
-                } else if (opcion_seleccionada == 14) {
+                    if (!cliente.getTieneReserva()) {
+                        String nombreCategoria = input("Ingrese el nombre de la categoria del vehículo que quiere");
+                        while (!catalogo.getHashCategorias().containsKey(nombreCategoria)) {
+                            System.out.println("La categoria ingresada no existe, por favor ingrese una categoria valida");
+                            System.out.println("Las categoria validas son:");
+                            for (String key : catalogo.getHashCategorias().keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            nombreCategoria = input("Ingrese el nombre de la categoria del vehículo que quiere");
+                        }
+                        String sedeRecoger = input("Ingrese el nombre de la sede donde quiere recoger el vehículo");
+                        while (!hashSedes.containsKey(sedeRecoger)) {
+                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                            System.out.println("Las sedes validas son:");
+                            for (String key : hashSedes.keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            sedeRecoger = input("Ingrese el nombre de la sede donde quiere recoger el vehículo");
+                        }
+                        String fechaRecoger = input("Ingrese la fecha en la cual quiere recoger el vehículo (En formato DD/MM/YYYY)");
+                        String horaRecoger = input("Ingrese la hora en la cual quiere recoger el vehículo (En formato HH:MM)");
+                        String sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
+                        while (!hashSedes.containsKey(sedeEntregar)) {
+                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                            System.out.println("Las sedes validas son:");
+                            for (String key : hashSedes.keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
+                        }
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato DD/MM/YYYY)");
+                        String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
+                        int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
+                        // lista los seguros disponibles actuales y su descripcion y su precio extra diario
+                        ArrayList<String> listaSegurosDisponibles = new ArrayList<String>();
+                        System.out.println("Los seguros disponibles son:");
+                        for (Map.Entry<String, Seguro> seguro : catalogo.getHashSeguros().entrySet()) {
+                            listaSegurosDisponibles.add(seguro.getValue().getNombreSeguro());
+                            System.out.println("- " + seguro.getValue().getNombreSeguro() + " - " + seguro.getValue().getDescripcionSeguro() + " - " + String.valueOf(seguro.getValue().getTarifaExtra()));
+                        }
+                        ArrayList<String> listaSeguros = new ArrayList<String>();
+                        Boolean listaSegurosValida = false;
+                        while (listaSegurosValida) {
+                            String seguros = input("Ingrese los nombre de los seguros que quiere, separados por coma");
+                            String[] segurosArray = seguros.split(",");
+                            for (String seguro : segurosArray) {
+                                listaSeguros.add(seguro);
+                            }
+                            boolean todosSegurosValidos = true;
+                            for (String seguro : listaSeguros) {
+                                if (!listaSegurosDisponibles.contains(seguro)) {
+                                    todosSegurosValidos = false;
+                                }
+                            }
+                            if (todosSegurosValidos) {
+                                listaSegurosValida = true;
+                            } else {
+                                System.out.println("Uno o mas seguros ingresados no son validos, por favor ingrese seguros validos");
+                                System.out.println("Los seguros disponibles son:");
+                                for (Map.Entry<String, Seguro> seguro : catalogo.getHashSeguros().entrySet()) {
+                                    listaSegurosDisponibles.add(seguro.getValue().getNombreSeguro());
+                                    System.out.println("- " + seguro.getValue().getNombreSeguro() + " - " + seguro.getValue().getDescripcionSeguro() + " - " + String.valueOf(seguro.getValue().getTarifaExtra()));
+                                }
+                            }
+                        }  
+                        cliente.reservarVehiculo(hashReservas, catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, listaSeguros);
+                        System.out.println("\n Detalles de la reserva a continuación:");
+                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                    } else if (cliente.getTieneTarjetaBloqueada()) {
+                        System.out.println("Su tarjeta esta bloqueada, no puede hacer reservas!!!");
+                    } else {
+                        System.out.println("Ya tiene una reserva activa!!!");
+                    }
+                } else if (opcion_seleccionada == 2) {
+                    if (cliente.getTieneReserva()) {
+                        System.out.println("A continuacion tiene los detalles de su reserva actual");
+                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                        String sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
+                        while (!hashSedes.containsKey(sedeEntregar)) {
+                            System.out.println("La sede ingresada no existe, por favor ingrese una sede valida");
+                            System.out.println("Las sedes validas son:");
+                            for (String key : hashSedes.keySet()) {
+                                System.out.println("- " + key);
+                            }
+                            sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
+                        }
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato DD/MM/YYYY)");
+                        String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
+                        int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
+                        cliente.alterarReserva(hashReservas, cliente.getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores);
+                        System.out.println("Reserva editada exitosamente!!!");
+                        System.out.println("\n Detalles de la reserva a continuación:");
+                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                    } else {
+                        System.out.println("No tiene una reserva activa!!!");
+                    }
+                } else if (opcion_seleccionada == 3) {
+                    if (cliente.getTieneReserva()) {
+                        System.out.println("\nA continuacion tiene los detalles de su reserva actual: ");
+                        System.out.println(cliente.getResumenReservaActual(hashReservas));
+                    } else {
+                        System.out.println("No tiene una reserva activa!!!");
+                    }
+                } else if (opcion_seleccionada == 4) {
                     continuar = false;
                 } else {
                     System.out.println("Debe seleccionar uno de los números de las opciones!!!");
