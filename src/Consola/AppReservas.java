@@ -846,7 +846,7 @@ public class AppReservas {
                         }
                         ArrayList<String> listaSeguros = new ArrayList<String>();
                         Boolean listaSegurosValida = false;
-                        while (listaSegurosValida) {
+                        while (!listaSegurosValida) {
                             String seguros = input("Ingrese los nombre de los seguros que quiere, separados por coma");
                             String[] segurosArray = seguros.split(",");
                             for (String seguro : segurosArray) {
