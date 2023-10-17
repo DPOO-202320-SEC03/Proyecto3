@@ -792,7 +792,6 @@ public class AppReservas {
     }
 
     private void ejecutarMenuCliente(Cliente cliente) {
-        // TODO implementar
         Boolean continuar = true;
         while (continuar) {
             try {
@@ -801,7 +800,6 @@ public class AppReservas {
                 System.out.println("2. Editar reserva");
                 System.out.println("3. Obtener resumen de reserva actual"); 
                 System.out.println("4. Salir");
-                // TODO no olvidar usar el meteodo de categoria getVehiculosDisponibles para saber cuantos vehiculos disponibles hay para una sede determinada
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
                 if (opcion_seleccionada == 1) {
                     if (!cliente.getTieneReserva()) {
