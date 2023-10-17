@@ -408,7 +408,7 @@ public class AppReservas {
                 // se pide una tarifa por un conductor extra, tarifa por entregar el vehiculo en una sede distinta, y el rango de tiempo de la temporada alta
                     int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
                     int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
-                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato MM/DD - MM/DD)");
+                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato MM/DD-MM/DD)");
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales creadas y guardadas exitosamente!!!");
                 } 
@@ -423,7 +423,7 @@ public class AppReservas {
                 // se piden todas las nuevas tarifas y se crea la nueva tarifa
                     int tarifaConductorExtra = Integer.parseInt(input("Ingrese la tarifa por un conductor extra"));
                     int tarifaEntregaOtraSede = Integer.parseInt(input("Ingrese la tarifa por entregar el vehículo en otra sede"));
-                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato MM/DD - MM/DD)");
+                    String rangoTemporadaAlta = input("Ingrese el rango de la temporada alta (En formato MM/DD-MM/DD)");
                     admin.crearTarifasGlobales(catalogo, tarifaConductorExtra, tarifaEntregaOtraSede, rangoTemporadaAlta);
                     System.out.println("Tarifas globales actualizadas y guardadas exitosamente!!!");
                 } 
