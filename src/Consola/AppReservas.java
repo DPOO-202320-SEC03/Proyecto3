@@ -796,6 +796,7 @@ public class AppReservas {
         while (continuar) {
             try {
                 System.out.println("\nBienvenido al menú para clientes\n");
+                System.out.println("\nNo olvides que solo puedes reservar una semana antes de tu alquiler!!!\n");
                 System.out.println("1. Reservar un vehiculo");
                 System.out.println("2. Editar reserva");
                 System.out.println("3. Obtener resumen de reserva actual"); 
