@@ -81,9 +81,10 @@ public class ReservaNormal extends Reserva {
         hashCategorias = catalogo.getHashCategorias();
         hashSeguros = catalogo.getHashSeguros();
 
+        String anioReserva = fechaRecoger.split("/")[2];
         String rangoTempAlta = tarifaGlobal.getRangoTemporadaAlta();
-        String fechaInicioTempAlta = rangoTempAlta.split("-")[0];
-        String fechaFinalTempAlta = rangoTempAlta.split("-")[1];
+        String fechaInicioTempAlta = rangoTempAlta.split("-")[0] + "/" + anioReserva;
+        String fechaFinalTempAlta = rangoTempAlta.split("-")[1] + "/" + anioReserva;
         
         long queTempInicio= rangoFecha(fechaRecoger + "-" + fechaInicioTempAlta);
         long queTempTermino = rangoFecha(fechaEntregar + "-" + fechaFinalTempAlta);

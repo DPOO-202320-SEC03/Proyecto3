@@ -834,7 +834,7 @@ public class AppReservas {
                             }
                             sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         }
-                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler!!!\n Fecha (En formato MM/DD/AAAA)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler, tiene que estar en el mismo año que cuando recoge el vehículo!!!\n Fecha (En formato MM/DD/AAAA)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
                         // lista los seguros disponibles actuales y su descripcion y su precio extra diario
