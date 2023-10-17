@@ -83,13 +83,15 @@ public class ReservaNormal extends Reserva {
 
         String anioReserva = fechaRecoger.split("/")[2];
         String rangoTempAlta = tarifaGlobal.getRangoTemporadaAlta();
+        String rangoTempAltaIncio = rangoTempAlta.split("-")[0] + "/" + anioReserva;
+        String rangoTempAltaFinal = rangoTempAlta.split("-")[1] + "/" + anioReserva;
         String fechaInicioTempAlta = rangoTempAlta.split("-")[0] + "/" + anioReserva;
         String fechaFinalTempAlta = rangoTempAlta.split("-")[1] + "/" + anioReserva;
         
         long queTempInicio= rangoFecha(fechaRecoger + "-" + fechaInicioTempAlta);
         long queTempTermino = rangoFecha(fechaEntregar + "-" + fechaFinalTempAlta);
         long diasAlquiler = rangoFecha(fechaRecoger + "-" + fechaEntregar);
-        long diasTempAlta = rangoFecha(rangoTempAlta);
+        long diasTempAlta = rangoFecha(rangoTempAltaIncio+"-"+rangoTempAltaFinal);
         int tarifaBaja = hashCategorias.get(categoriaVehiculo).getHashTarifaPorTemporada().get("baja");
         int tarifaAlta = hashCategorias.get(categoriaVehiculo).getHashTarifaPorTemporada().get("alta");
         int valorAlquiler =0;
@@ -181,7 +183,7 @@ public class ReservaNormal extends Reserva {
     public long rangoFecha(String rangoF)
     {
         // el formato de rangoF es un string de este tipo "MM/dd/aaaa" "01/01/2023-01/15/2023"
-                long resultado= 0;
+        long resultado= 0;
 
         // Specifica el formato de la fecha
         SimpleDateFormat formatoFecha = new SimpleDateFormat("MM/dd/yyyy");
