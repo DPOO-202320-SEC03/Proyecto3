@@ -8,7 +8,7 @@ public class DatosClienteLicencia implements Serializable {
     private int numeroLicencia;
     private String paisExpedicion;
     private String fechaVencimiento;
-    private BufferedImage imagenLicencia;
+    private transient BufferedImage imagenLicencia;
 
     public DatosClienteLicencia(int numeroLicencia, String paisExpedicion, String fechaVencimiento, BufferedImage imagenLicencia) {
         this.numeroLicencia = numeroLicencia;

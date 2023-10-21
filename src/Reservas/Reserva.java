@@ -30,4 +30,8 @@ public class Reserva implements Serializable {
     	this.placa = placa;
     }
 
+    public String getRangoAlquiler() {
+        return "";
+    }
+
 }

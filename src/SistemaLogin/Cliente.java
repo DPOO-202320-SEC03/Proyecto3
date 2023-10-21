@@ -32,7 +32,6 @@ public class Cliente extends Usuario {
         if (reservaCliente.getPlaca().equals("NA")) {
             return "No hay vehiculos disponibles en este momento para esta categoria";
         } else {
-            catalogo.getHashCategorias().get(nombreCategoria).getHashVehiculos().get(reservaCliente.getPlaca()).setEnReserva(true);
             hashReservas.put(Integer.toString(reservaCliente.getIdReserva()), reservaCliente);
             this.idReserva = reservaCliente.getIdReserva();
             this.tieneReserva = true;
@@ -41,8 +40,12 @@ public class Cliente extends Usuario {
     }
 
     public String alterarReserva(HashMap<String, Reserva> hashReservas, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores, Catalogo catalogo) {
-        ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores);
-        return ((ReservaNormal)hashReservas.get(String.valueOf(idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
+        String placaNueva = ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(catalogo, nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores);
+        if (placaNueva.equals("na")) {
+            return "No hay vehiculos disponibles en este momento para esta categoria, no se pudo editar la reserva";
+        } else {
+            return ((ReservaNormal)hashReservas.get(String.valueOf(idReserva))).getResumen(catalogo, catalogo.getTarifasGlobales());
+        }
     }
 
     public String getResumenReservaActual(HashMap<String, Reserva> hashReservas, Catalogo catalogo) {

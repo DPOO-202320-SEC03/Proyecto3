@@ -27,11 +27,11 @@ public class Administrador extends Usuario {
 
     // Funciones para vehiculos
 
-    public void crearVehiculo(Catalogo catalogo, String placa, String marca, String modelo, String color, String tipoDeTransmision, String tipoDeDireccion, String tipoDeCombustible, String cantidadDePasajeros, String nombreSede, String nombreCategoria, Boolean disponibleParaAlquilar, String fechaDisponibilidad) {
+    public void crearVehiculo(Catalogo catalogo, String placa, String marca, String modelo, String color, String tipoDeTransmision, String tipoDeDireccion, String tipoDeCombustible, String cantidadDePasajeros, String nombreSede, String nombreCategoria, String fechaDisponibilidad) {
         CaracteristicasBasicas caracteristicasBasicas = new CaracteristicasBasicas(placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion,tipoDeCombustible, cantidadDePasajeros);
         Vehiculo vehiculoNuevo = new Vehiculo(nombreCategoria, caracteristicasBasicas);
         vehiculoNuevo.getDetallesSede().setSedeUbicacion(nombreSede);
-        vehiculoNuevo.getDetallesSede().setDisponibilidadParaAlquilar(disponibleParaAlquilar);
+        vehiculoNuevo.getDetallesSede().setDisponibilidadParaAlquilar(true);
         vehiculoNuevo.getDetallesSede().setFechaDisponibilidad(fechaDisponibilidad);
         vehiculoNuevo.getHistorialVehiculo().addEvent(fechaDisponibilidad, "Vehiculo nuevo disponible para alquiler");
         catalogo.getHashCategorias().get(nombreCategoria).getHashVehiculos().put(placa, vehiculoNuevo);
@@ -59,7 +59,14 @@ public class Administrador extends Usuario {
                 estadoVehiculo += "Cantidad de pasajeros: " + categoria.getValue().getHashVehiculos().get(placa).getCaracteristicasBasicas().getAllInfo().get(7) + "\n";
                 estadoVehiculo += "Categoria: " + categoria.getValue().getHashVehiculos().get(placa).getCategoriaVehiculo() + "\n";
                 estadoVehiculo += "En alquiler: " + categoria.getValue().getHashVehiculos().get(placa).getEnAlquiler() + "\n";
-                estadoVehiculo += "Reservas: " + categoria.getValue().getHashVehiculos().get(placa).getReservas() + "\n";
+                ArrayList<Integer> idReservas = new ArrayList<Integer>();
+                ArrayList<String> rangoReservas = new ArrayList<String>();
+                for (Reserva reserva : categoria.getValue().getHashVehiculos().get(placa).getReservas()) {
+                    idReservas.add(reserva.getIdReserva());
+                    rangoReservas.add(reserva.getRangoAlquiler());
+                }
+                estadoVehiculo += "Historial de ID de reservas: " + idReservas + "\n";
+                estadoVehiculo += "Rango reservas activas: " + rangoReservas + "\n";
                 estadoVehiculo += "Sede: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion() + "\n";
                 estadoVehiculo += "Disponible para alquilar: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getDisponibilidadParaAlquilar() + "\n";
                 estadoVehiculo += "Fecha de disponibilidad: " + categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getFechaDisponibilidad() + "\n";
@@ -85,6 +92,7 @@ public class Administrador extends Usuario {
                 ReservaEspecial reservaTraslado = new ReservaEspecial(sedeOrigen, sedeDestino, fechaRecoger, horaRecoger, fechaEntrega, placa);
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(sedeDestino);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaRecoger, "Vehiculo trasladado a " + sedeDestino);
+                categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setDisponibilidadParaAlquilar(false);
                 hashReservas.put(Integer.toString(reservaTraslado.getIdReserva()), reservaTraslado);
                 detallesTraslado = reservaTraslado.getResumen(catalogo, catalogo.getTarifasGlobales());
             }

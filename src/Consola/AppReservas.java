@@ -15,6 +15,7 @@ import Inventario.Sede;
 import Inventario.Seguro;
 import Inventario.Vehiculo;
 import Reservas.Reserva;
+import Reservas.ReservaNormal;
 
 import java.awt.image.BufferedImage;
 
@@ -213,7 +214,7 @@ public class AppReservas {
         try {
             String workingDir = System.getProperty("user.dir");
             String filePath = workingDir + File.separator + "data" + File.separator;
-            File file = new File(filePath+"licencia.jpg");
+            File file = new File(filePath+"licencia.png");
             imagenLicencia = javax.imageio.ImageIO.read(file);
         } catch (IOException e) {
             System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como licencia con extensión .png!!!");
@@ -463,9 +464,8 @@ public class AppReservas {
                         }
 
                 // se pregunta si esta listo para alquilar de enseguida y en que fecha estara disponible y se crea
-                        Boolean disponibleParaAlquilar = Boolean.parseBoolean(input("Ingrese si el vehículo nuevo se encuentra disponible para alquiler (En formato true/false)"));
-                        String fechaDisponibilidad = input("Ingrese la fecha de disponibilidad del vehículo nuevo (En formato MM/DD/AAAA)");
-                        admin.crearVehiculo(catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, cantidadDePasajeros, nombreSede, categoria, disponibleParaAlquilar, fechaDisponibilidad);
+                        String fechaDisponibilidad = input("Ingrese la fecha de ingreso del vehículo nuevo (En formato MM/DD/AAAA)");
+                        admin.crearVehiculo(catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, cantidadDePasajeros, nombreSede, categoria, fechaDisponibilidad);
                         System.out.println("Vehículo creado y guardado exitosamente!!!");
                     } 
                 // mensaje de error por si no existe ninguna sede o categoria
@@ -520,14 +520,14 @@ public class AppReservas {
                 // se pide la placa del vehiculo
                     String placa = input("Ingrese la placa del vehículo que desea trasladar");
                     Boolean esta = false;
-                    String sedeActual = "";
-                // se busca si existe la placa y se guarda la sede actual
+                    String categoriaNombre = "";
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
-                        if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
-                            esta = true;
-                            sedeActual = categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion();
+                            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                                esta = true;
+                                categoriaNombre = categoria.getKey();
+                            }
                         }
-                    }
+                    String sedeActual = "";
                 // si se encontro se pide la sede de destino y se compara de que sea diferente a la actual o si no existe, en ambos casos
                 // se despliega un menu con todas las sedes disponibles
                     if (esta) {
@@ -546,9 +546,27 @@ public class AppReservas {
                         String fechaRecoger = input("Ingrese la fecha en la cual desea recoger el vehículo (En formato MM/DD/AAAA)");
                         String horaRecoger = input("Ingrese la hora en la cual desea recoger el vehículo (En formato HH:MM)");
                         String fechaEntregar = input("Ingrese la fecha en la cual desea entregar el vehículo (En formato MM/DD/AAAA)");
-                        String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, sedeDestino, fechaRecoger, horaRecoger, fechaEntregar);
-                        System.out.println(detallesTraslado);
-                        System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
+                        Boolean tieneReservas = false;
+                        for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                                for (Reserva reserva : categoria.getValue().getHashVehiculos().get(placa).getReservas()) {
+                                    if (ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[1]+"-"+fechaRecoger) < 0) {
+                                        tieneReservas = true;
+                                    }
+                                }
+                                sedeActual = categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion();
+                            }
+                        }
+                        Boolean estadoAlquiler = catalogo.getHashCategorias().get(categoriaNombre).getHashVehiculos().get(placa).getEnAlquiler();
+                        Boolean disponibleAlquiler = catalogo.getHashCategorias().get(categoriaNombre).getHashVehiculos().get(placa).getDetallesSede().getDisponibilidadParaAlquilar();
+                        if (!tieneReservas && !estadoAlquiler && disponibleAlquiler) {
+                            String detallesTraslado = admin.trasladarVehiculo(catalogo, hashReservas, placa, sedeDestino, fechaRecoger, horaRecoger, fechaEntregar);
+                            System.out.println(detallesTraslado);
+                            System.out.println("Vehículo trasladado y reserva especial creada exitosamente!!!");
+                            System.out.println("No olvidar pedir a un empleado de la sede cambiar estado a listo para alquiler!!!");
+                        } else {
+                            System.out.println("El vehículo tiene reservas activas (despues de la fecha a recoger) o no esta disponible para alquiler, no se puede trasladar!!!");
+                        }
                     } 
                 // mensaje de error por si no existe la placa 
                     else {
@@ -677,14 +695,19 @@ public class AppReservas {
                 int opcion_seleccionada = Integer.parseInt(input("Por favor seleccione una opción"));
             // opcion 1 que sirve para alquilar un vehiculo
                 if (opcion_seleccionada == 1) {
-            // se pide una placa, el cliente que alguila, una fecha y sede de devolucion, y es que fecha se alquilo 
-                    String placa = input("Ingrese la placa del vehiculo");
+            // se pide el cliente que alguila 
                     String username = input("Ingrese el usuario del cliente a alquilar");
-                    String fechaDevolucion = input("Ingrese la fecha de devolucion del vehiculo");
-                    String sedeDevolucion = input("Ingrese la sede de devolucion del vehiculo");
-                    String fechaDeAlquiler = input("Ingrese la fecha de alquiler del vehiculo");
-                    empleado.alquilarVehiculo(catalogo, placa, username, fechaDevolucion, sedeDevolucion, fechaDeAlquiler);
-                    System.out.println("Vehiculo alquilado exitosamente!!!");
+                    if (((Cliente) hashUsuarios.get(username)).getTieneReserva()) {
+                        String placa = empleado.alquilarVehiculo(catalogo, hashUsuarios, hashReservas, username);
+                        if (placa.equals("No hay vehiculos disponibles en este momento para esta categoria. Crear una nueva reserva, se elimino la reserva antigua del usuario")) {
+                            System.out.println("No hay vehiculos disponibles en este momento para esta categoria. Crear una nueva reserva, se elimino la reserva antigua del usuario!!!");
+                        } else {
+                            System.out.println("Vehiculo " + placa + " alquilado exitosamente!!!");
+                            System.out.println(((Cliente) hashUsuarios.get(username)).getResumenReservaActual(hashReservas, catalogo));
+                        }
+                    } else {
+                        System.out.println("El cliente no tiene una reserva activa!!!");
+                    }
                 } 
             // opcion 2 que sirve para agregar la licencia de otro conductor 
                 else if (opcion_seleccionada == 2) {
@@ -741,11 +764,17 @@ public class AppReservas {
                         if (mantenimiento) {
                             String fechaRegreso = input("Ingrese la fecha estimada de regreso del vehiculo: ");
                             String descriMantenimiento = input("Ingrese la descripcion del mantenimiento: ");
-                            empleado.recibirVehiculoConMantenimiento(catalogo, placaEnAlquiler, username, fechaRegreso, descriMantenimiento, hashUsuarios);
+                            String rta = empleado.recibirVehiculoConMantenimiento(catalogo, placaEnAlquiler, username, fechaRegreso, descriMantenimiento, hashUsuarios);
+                            if (rta.equals("")) {
+                                System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + username + " recibido exitosamente!!!");
+                            } else {
+                                System.out.println("Las siguientes reservas fueron editadas a causa del mantenimiento: " + rta);
+                            }
                         } 
                 // si no necesita mantenimiento se pone de enseguida en alquiler
                         else {
                             empleado.recibirVehiculoSinMantenimiento(catalogo, placaEnAlquiler, username, hashUsuarios);
+                            System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + username + " recibido exitosamente!!!");
                         }
                         System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + username + " recibido exitosamente!!!");
                     } else {
@@ -762,7 +791,7 @@ public class AppReservas {
                     for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
                         if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                             Vehiculo vehiculo = categoria.getValue().getHashVehiculos().get(placa);
-                            if (!vehiculo.getEnAlquiler() && !vehiculo.getEnReserva() && !vehiculo.getDetallesSede().getDisponibilidadParaAlquilar()) {
+                            if (!vehiculo.getEnAlquiler() && !vehiculo.getDetallesSede().getDisponibilidadParaAlquilar()) {
                                 esta = true;
                             }
                         }
@@ -833,7 +862,7 @@ public class AppReservas {
                             }
                             sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         }
-                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler, tiene que estar en el mismo año que cuando recoge el vehículo!!!\n Fecha (En formato MM/DD/AAAA incluir digitos 0, ej 01/01/2023)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo(En formato MM/DD/AAAA)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
                         // lista los seguros disponibles actuales y su descripcion y su precio extra diario
@@ -841,14 +870,13 @@ public class AppReservas {
                         System.out.println("Los seguros disponibles son:");
                         for (Map.Entry<String, Seguro> seguro : catalogo.getHashSeguros().entrySet()) {
                             listaSegurosDisponibles.add(seguro.getValue().getNombreSeguro());
-                            System.out.println("- " + seguro.getValue().getNombreSeguro() + " - " + seguro.getValue().getDescripcionSeguro() + " - " + String.valueOf(seguro.getValue().getTarifaExtra()));
+                            System.out.println("-NOMBRE: " + seguro.getValue().getNombreSeguro() + " -DESC: " + seguro.getValue().getDescripcionSeguro() + " -PRECIO: " + String.valueOf(seguro.getValue().getTarifaExtra()));
                         }
                         ArrayList<String> listaSeguros = new ArrayList<String>();
-                        Boolean listaSegurosValida = false;
+                        Boolean listaSegurosValida = Boolean.parseBoolean(input("Desea agregar seguros a su reserva? (true/false)"));
                         while (!listaSegurosValida) {
-                            String seguros = input("Ingrese los nombre de los seguros que quiere, separados por coma");
-                            String[] segurosArray = seguros.split(",");
-                            for (String seguro : segurosArray) {
+                            String seguros = input("Ingrese los nombre de los seguros que quiere, separados por coma (En formato SEG1, SEG2)");
+                            for (String seguro : seguros.split(", ")) {
                                 listaSeguros.add(seguro);
                             }
                             Boolean todosSegurosValidos = true;
@@ -862,9 +890,10 @@ public class AppReservas {
                             } else {
                                 System.out.println("Uno o mas seguros ingresados no son validos, por favor ingrese seguros validos");
                                 System.out.println("Los seguros disponibles son:");
+                                listaSeguros.clear();
                                 for (Map.Entry<String, Seguro> seguro : catalogo.getHashSeguros().entrySet()) {
                                     listaSegurosDisponibles.add(seguro.getValue().getNombreSeguro());
-                                    System.out.println("- " + seguro.getValue().getNombreSeguro() + " - " + seguro.getValue().getDescripcionSeguro() + " - " + String.valueOf(seguro.getValue().getTarifaExtra()));
+                                    System.out.println("-NOMBRE: " + seguro.getValue().getNombreSeguro() + " -DESC: " + seguro.getValue().getDescripcionSeguro() + " -PRECIO: " + String.valueOf(seguro.getValue().getTarifaExtra()));
                                 }
                             }
                         }
@@ -894,7 +923,7 @@ public class AppReservas {
                             }
                             sedeEntregar = input("Ingrese el nombre de la sede donde quiere entregar el vehículo");
                         }
-                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo \nRecuerde que esta fecha no puede superar un año de alquiler, tiene que estar en el mismo año que cuando recoge el vehículo!!!\n Fecha (En formato MM/DD/AAAA incluir digitos 0, ej 01/01/2023)");
+                        String fechaEntregar = input("Ingrese la fecha en la cual quiere entregar el vehículo (En formato MM/DD/AAAA)");
                         String horaEntregar = input("Ingrese la hora en la cual quiere entregar el vehículo (En formato HH:MM)");
                         int otrosCunductores = Integer.parseInt(input("Ingrese la cantidad de conductores extra que quiere"));
                         cliente.alterarReserva(hashReservas, cliente.getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, catalogo);

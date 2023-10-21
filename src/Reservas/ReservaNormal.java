@@ -5,6 +5,8 @@ import java.util.*;
 import Inventario.Catalogo;
 import Inventario.Categoria;
 import Inventario.Seguro;
+import SistemaLogin.Cliente;
+import SistemaLogin.Usuario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ public class ReservaNormal extends Reserva {
     private String usuarioConductorPrincipal;
     private int otrosConductores = 0;
     private ArrayList<String> nombresSeguros;
+    private String rangoAlquiler;
 
     public ReservaNormal(Catalogo catalogo, String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros) {
         super.idReserva = ++Reserva.totalDeReservas;
@@ -36,8 +39,8 @@ public class ReservaNormal extends Reserva {
         this.usuarioConductorPrincipal = usuarioConductorPrincipal;
         this.otrosConductores = otrosConductores;
         this.nombresSeguros = nombresSeguros;
-        
-        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva();
+        this.rangoAlquiler = fechaRecoger + "-" + fechaEntregar;
+        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler);
         while (placa.equals("na")) {
             int rangoCategoriaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getRangoCategoria() + 1;
             String categoriaNueva = "na";
@@ -47,7 +50,7 @@ public class ReservaNormal extends Reserva {
                 }
             }
             if (!(categoriaNueva.equals("na"))) {
-                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva();
+                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler);
             } else {
                 placa = "NA";
             }
@@ -55,11 +58,47 @@ public class ReservaNormal extends Reserva {
         super.placa = placa;
     }
 
-    public void editarReserva(String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
-        this.sedeEntregar = sedeEntregar;
-        this.fechaEntregar = fechaEntregar;
-        this.horaRangoEntregar = horaRangoEntregar;
-        this.otrosConductores = otrosConductores;
+    public String getNuevaPlacaParaReserva(Catalogo catalogo, HashMap<String, Usuario> hashUsuarios, String usernameClienteAlquiler) {
+        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler);
+        while (placa.equals("na")) {
+            int rangoCategoriaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getRangoCategoria() + 1;
+            String categoriaNueva = "na";
+            for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                if (categoria.getValue().getRangoCategoria() == rangoCategoriaNueva) {
+                    categoriaNueva = categoria.getKey();
+                }
+            }
+            if (!(categoriaNueva.equals("na"))) {
+                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler);
+            } else {
+                placa = "NA";
+            }
+        } 
+        super.placa = placa;
+        if (super.placa.equals("NA")) {
+            ((Cliente) hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
+        }
+        return super.placa;
+    }
+
+    public String editarReserva(Catalogo catalogo, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
+        String rangoAlquilerNuevo = fechaRecoger + "-" + fechaEntregar;
+        // encuentra y elimina el rango viejo del vehiculo
+        catalogo.getHashCategorias().get(categoriaVehiculo).getHashVehiculos().get(super.placa).getReservas().remove(this);
+        String placaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquilerNuevo);
+
+        if (!placaNueva.equals("na")) {
+            this.sedeEntregar = sedeEntregar;
+            this.fechaEntregar = fechaEntregar;
+            this.horaRangoEntregar = horaRangoEntregar;
+            this.otrosConductores = otrosConductores;
+            this.rangoAlquiler = rangoAlquilerNuevo;
+            super.placa = placaNueva;
+            catalogo.getHashCategorias().get(categoriaVehiculo).getHashVehiculos().get(placaNueva).getReservas().add(this);
+        } else {
+            catalogo.getHashCategorias().get(categoriaVehiculo).getHashVehiculos().get(super.placa).getReservas().add(this);
+        }
+        return placaNueva;
     }
 
     public int getValorProyectadoAlquiler(Catalogo catalogo, TarifasGlobales tarifaGlobal) {
@@ -75,63 +114,30 @@ public class ReservaNormal extends Reserva {
         // 3. el valor por conductor adicional, se analiza si el cliente quiere un conductores adicionales y se suma al valor total
         // 4. el valor por entregar en otra sede, se analiza si el cliente quiere entregar el vehiculo en otra sede y se suma al valor total
         
-        HashMap<String, Categoria>  hashCategorias = new HashMap<>();
-        HashMap<String, Seguro> hashSeguros = new HashMap<>();
-        hashCategorias = catalogo.getHashCategorias();
-        hashSeguros = catalogo.getHashSeguros();
+        HashMap<String, Categoria>  hashCategorias = catalogo.getHashCategorias();
+        HashMap<String, Seguro> hashSeguros = catalogo.getHashSeguros();
 
-        String anioReserva = fechaRecoger.split("/")[2];
+        String anioInicialReserva = fechaRecoger.split("/")[2];
         String rangoTempAlta = tarifaGlobal.getRangoTemporadaAlta();
-        String rangoTempAltaIncio = rangoTempAlta.split("-")[0] + "/" + anioReserva;
-        String rangoTempAltaFinal = rangoTempAlta.split("-")[1] + "/" + anioReserva;
-        String fechaInicioTempAlta = rangoTempAlta.split("-")[0] + "/" + anioReserva;
-        String fechaFinalTempAlta = rangoTempAlta.split("-")[1] + "/" + anioReserva;
-        
-        long queTempInicio= rangoFecha(fechaRecoger + "-" + fechaInicioTempAlta);
-        long queTempTermino = rangoFecha(fechaEntregar + "-" + fechaFinalTempAlta);
+        String fechaInicioTempAlta = rangoTempAlta.split("-")[0] + "/" + anioInicialReserva;
+        String fechaFinalTempAlta = rangoTempAlta.split("-")[1] + "/" + anioInicialReserva;
+        Boolean inicioEnTemporadaAlta = false;
+        long diferenciaInicioTInicioR = rangoFecha(fechaInicioTempAlta+"-"+fechaRecoger);
+        long diferenciaFinalTInicioR = rangoFecha(fechaFinalTempAlta+"-"+fechaRecoger);
+        if ((diferenciaInicioTInicioR > 0) && (diferenciaFinalTInicioR < 0)) {
+            inicioEnTemporadaAlta = true;
+        }
+
         long diasAlquiler = rangoFecha(fechaRecoger + "-" + fechaEntregar);
-        long diasTempAlta = rangoFecha(rangoTempAltaIncio+"-"+rangoTempAltaFinal);
         int tarifaBaja = hashCategorias.get(categoriaVehiculo).getHashTarifaPorTemporada().get("baja");
         int tarifaAlta = hashCategorias.get(categoriaVehiculo).getHashTarifaPorTemporada().get("alta");
         int valorAlquiler =0;
-         
-        //valor por dia de alquiler
-        if(diasAlquiler < 365)
-        {
-            if(queTempInicio>0)
-            {
-                valorAlquiler += (tarifaBaja * queTempInicio);
-                
-                if(queTempTermino>0)
-                {
-                    valorAlquiler += (tarifaAlta * rangoFecha(fechaInicioTempAlta + "-" + fechaEntregar));
-                }
-                else
-                {
-                    if(diasAlquiler > diasTempAlta)
-                    {
-                        valorAlquiler += (diasTempAlta * tarifaAlta) + (tarifaBaja * rangoFecha(fechaFinalTempAlta + "-" + fechaEntregar));                     
-                    }
-                    else
-                    {
-                        valorAlquiler += tarifaBaja * rangoFecha(fechaInicioTempAlta + "-" + fechaEntregar);
-                    }
-                }
-            }
-            if(queTempInicio<0)
-            {
-                valorAlquiler += (tarifaAlta * queTempInicio);
-                
-                if(queTempTermino>0)
-                {
-                    valorAlquiler += (tarifaAlta * rangoFecha(fechaInicioTempAlta + "-" + fechaEntregar));
-                }
-                else
-                {
-                    valorAlquiler += tarifaBaja * rangoFecha(fechaInicioTempAlta + "-" + fechaEntregar);
-                }
-            
-            }
+
+
+        if(inicioEnTemporadaAlta) {
+            valorAlquiler += diasAlquiler * tarifaAlta;
+        } else {
+            valorAlquiler += diasAlquiler * tarifaBaja;
         }
         
         //valor por seguros adicionales
@@ -160,8 +166,11 @@ public class ReservaNormal extends Reserva {
     	
     	for (String nomseguro : nombresSeguros) 
     	{
-    		seguros += nomseguro + "/n" ;
+    		seguros += nomseguro + ", " ;
     	}
+
+        seguros = seguros.substring(0, seguros.length() - 2);
+
         return "ID Reserva: " + String.valueOf(super.idReserva)
                 +"\nCategoria Vehiculo: " + categoriaVehiculo
         		+"\nSede Recoger: " + sedeRecoger
@@ -171,12 +180,14 @@ public class ReservaNormal extends Reserva {
         		+"\nFecha Entregar: " + fechaEntregar
         		+"\nHora Rango Entregar: " + horaRangoEntregar
         		+"\nUsuario Conductor Principal: " + usuarioConductorPrincipal
+           		+"\nNúmero de conductores extra: " + String.valueOf(otrosConductores)
         		+"\nSeguros: " + seguros
+                +"\nDias en alquiler: " + String.valueOf(rangoFecha(fechaRecoger + "-" + fechaEntregar))
                 +"\nValor proyectado del alquiler " + String.valueOf(getValorProyectadoAlquiler(catalogo, tarifaGlobal))
                 +"\nValor total del alquiler " + String.valueOf(getValorAlquilerCompleto(catalogo, tarifaGlobal));
     }
 
-    public long rangoFecha(String rangoF)
+    public static long rangoFecha(String rangoF)
     {
         // el formato de rangoF es un string de este tipo "MM/dd/aaaa" "01/01/2023-01/15/2023"
         long resultado= 0;
@@ -201,5 +212,31 @@ public class ReservaNormal extends Reserva {
         }
     
     return resultado;
+    }
+
+
+    public String getSedeEntrega() {
+        return this.sedeEntregar;
+    }
+
+    public String getFechaEntrega() {
+        return this.fechaEntregar;
+    }
+
+    public String getFechaAlquiler() {
+        return this.fechaRecoger;
+    }
+
+    public String getCategoriaVehiculo() {
+        return this.categoriaVehiculo;
+    }
+
+    public String getUsuarioAlquiler() {
+        return this.usuarioConductorPrincipal;
+    }
+    
+    @Override
+    public String getRangoAlquiler() {
+        return this.rangoAlquiler;
     }
 }

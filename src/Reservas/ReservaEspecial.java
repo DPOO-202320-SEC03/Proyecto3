@@ -9,6 +9,7 @@ public class ReservaEspecial extends Reserva {
     private String fechaRecoger;
     private String horaRecoger;
     private String fechaEntrega;
+    private String rangoAlquiler;
 
     public ReservaEspecial(String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega, String placa) {
         super.idReserva = ++Reserva.totalDeReservas;
@@ -17,6 +18,7 @@ public class ReservaEspecial extends Reserva {
         this.fechaRecoger = fechaRecoger;
         this.horaRecoger = horaRecoger;
         this.fechaEntrega = fechaEntrega;
+        this.rangoAlquiler = fechaRecoger + "-" + fechaEntrega;
         super.placa = placa;
     }
     @Override
@@ -28,6 +30,10 @@ public class ReservaEspecial extends Reserva {
         		+"\nHora recoger: " + horaRecoger
         		+"\nFecha entrega: " + fechaEntrega
                 +"\nPlaca del vehículo: " + super.placa;
+    }
+    @Override
+    public String getRangoAlquiler() {
+        return this.rangoAlquiler;
     }
     
 }

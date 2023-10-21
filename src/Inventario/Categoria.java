@@ -3,6 +3,9 @@ package Inventario;
 import java.io.Serializable;
 import java.util.*;
 
+import Reservas.Reserva;
+import Reservas.ReservaNormal;
+
 public class Categoria implements Serializable {
 
     private String nombreCategoria;
@@ -45,7 +48,7 @@ public class Categoria implements Serializable {
         int disponibles = 0;
         for (Map.Entry<String, Vehiculo> vehiculo : this.hashVehiculos.entrySet()) {
             if (vehiculo.getValue().getDetallesSede().getSedeUbicacion().equals(sede)) {
-                if (!vehiculo.getValue().getEnAlquiler() && vehiculo.getValue().getDetallesSede().getDisponibilidadParaAlquilar() && !vehiculo.getValue().getEnReserva()) {
+                if (!vehiculo.getValue().getEnAlquiler() && vehiculo.getValue().getDetallesSede().getDisponibilidadParaAlquilar()) {
                     disponibles++;
                 }
             }
@@ -57,12 +60,31 @@ public class Categoria implements Serializable {
      * metodo publico usado para saber el numero de placa de un vehiculo
      * @return el numero de placa del vehiculo
      */
-    public String getPlacaVehiculoParaReserva() {
+    public String getPlacaVehiculoParaReserva(String rangoAlquiler) {
         String placa = "na";
+        Boolean encontrado = false;
+        String inicioAlquiler = rangoAlquiler.split("-")[0];
+        String finAlquiler = rangoAlquiler.split("-")[1];
         for (Map.Entry<String, Vehiculo> vehiculo : this.hashVehiculos.entrySet()) {
-            if (!vehiculo.getValue().getEnAlquiler() && vehiculo.getValue().getDetallesSede().getDisponibilidadParaAlquilar() && !vehiculo.getValue().getEnReserva()) {
-                placa = vehiculo.getKey();
-                vehiculo.getValue().setEnReserva(true);
+            if (!encontrado) {
+                Boolean validoParaAlquiler = true;
+                ArrayList<Reserva> listaDeReservas = vehiculo.getValue().getReservas();
+                for (Reserva reserva : listaDeReservas) {
+                    long diferenciaFinalRInicioA = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[1]+"-"+inicioAlquiler);
+                    if (diferenciaFinalRInicioA < 0) {
+                        long diferenciaInicioRInicioA = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[0]+"-"+inicioAlquiler);
+                        long diferenciaInicioRFinalA = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[0]+"-"+finAlquiler);
+                        if (diferenciaInicioRInicioA > 0) {
+                            validoParaAlquiler = false;
+                        } else if (diferenciaInicioRFinalA > 0) {
+                            validoParaAlquiler = false;
+                        }
+                    }
+                }
+                if (validoParaAlquiler) {
+                    placa = vehiculo.getKey();
+                    encontrado = true;
+                }
             }
         }
         return placa;

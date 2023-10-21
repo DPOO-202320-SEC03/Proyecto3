@@ -3,16 +3,17 @@ package Inventario;
 import java.io.Serializable;
 import java.util.*;
 
+import Reservas.Reserva;
+
 public class Vehiculo implements Serializable {
 
     private String categoria;
     private Boolean enAlquiler = false;
-    private ArrayList<Integer> reservas;
+    private ArrayList<Reserva> reservas;
     private CaracteristicasBasicas caracteristicasBasicas;
     private DetallesAlquiler detallesAlquiler;
     private DetallesSede detallesSede;
     private HistorialVehiculo historialVehiculo;
-    private Boolean enReserva = false;
 
     /**
      * metodo constructo de un vehiculo
@@ -21,7 +22,7 @@ public class Vehiculo implements Serializable {
      */
     public Vehiculo(String categoria, CaracteristicasBasicas caracteristicasBasicas) {
         this.categoria = categoria;
-        this.reservas = new ArrayList<Integer>();
+        this.reservas = new ArrayList<Reserva>();
         this.caracteristicasBasicas = caracteristicasBasicas;
         this.detallesAlquiler = new DetallesAlquiler();
         this.detallesSede = new DetallesSede();
@@ -53,7 +54,7 @@ public class Vehiculo implements Serializable {
     /**
      * @return retorna la reserva del vehiculo
      */
-    public ArrayList<Integer> getReservas() {
+    public ArrayList<Reserva> getReservas() {
         return this.reservas;
     }
 
@@ -61,8 +62,8 @@ public class Vehiculo implements Serializable {
      * metodo que sirve para asignar el vehiculo a una reserva
      * @param idReserva un int unico para la reserva
      */
-    public void addReserva(int idReserva) {
-        this.reservas.add(idReserva);
+    public void addReserva(Reserva reserva) {
+        this.reservas.add(reserva);
     }
 
     /**
@@ -91,21 +92,6 @@ public class Vehiculo implements Serializable {
      */
     public HistorialVehiculo getHistorialVehiculo() {
         return this.historialVehiculo;
-    }
-
-    /**
-     * @return retorna si el vehiculo esta o no en reserva
-     */
-    public Boolean getEnReserva() {
-        return this.enReserva;
-    }
-
-    /**
-     * metodo que sirve para poner o quitar un vehiculo de reserva 
-     * @param estado boolean que define el estado del vehiculo, true para en reserva, false para en no reserva
-     */
-    public void setEnReserva(Boolean estado) {
-        this.enReserva = estado;
     }
 
 }

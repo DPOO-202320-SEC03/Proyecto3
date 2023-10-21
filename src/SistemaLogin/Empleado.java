@@ -3,6 +3,8 @@ package SistemaLogin;
 import java.util.*;
 import java.awt.image.BufferedImage;
 import Inventario.Categoria;
+import Reservas.Reserva;
+import Reservas.ReservaNormal;
 import Inventario.Catalogo;
 
 public class Empleado extends Usuario {
@@ -21,17 +23,49 @@ public class Empleado extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    public void alquilarVehiculo(Catalogo catalogo, String placa, String usernameClienteAlquiler, String fechaDevolucion, String sedeDevolucion, String fechaDeAlquiler) {
-        for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
-           if (categoria.getValue().getHashVehiculos().containsKey(placa)){
-                categoria.getValue().getHashVehiculos().get(placa).setEnAlquiler(true);
-                categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setDisponibilidadParaAlquilar(false); 
-                categoria.getValue().getHashVehiculos().get(placa).setEnReserva(false);
-                categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setUsuarioClienteAlquiler(usernameClienteAlquiler);
-                categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setFechaDevolucion(fechaDevolucion);
-                categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setSedeDevolucion(sedeDevolucion);
-                categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaDeAlquiler, "Vehiculo alquilado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
-           }
+    public String alquilarVehiculo(Catalogo catalogo, HashMap<String, Usuario> hashUsuarios, HashMap<String, Reserva> hashReservas, String usernameClienteAlquiler) {
+        // encuentra el usuario que quiere va a alquilar en el hash de usuarios y obtiene los detalles de su reserva retorna la placa del vehiculo alquilado
+        Integer id = ((Cliente) hashUsuarios.get(usernameClienteAlquiler)).getIdReserva();
+        ReservaNormal reserva = (ReservaNormal) hashReservas.get(Integer.toString(id));
+        String placa = reserva.getPlaca();
+        String rangoAlquiler = reserva.getRangoAlquiler();
+        if (placa.equals("NA")) {
+            placa = catalogo.getHashCategorias().get(reserva.getCategoriaVehiculo()).getPlacaVehiculoParaReserva(rangoAlquiler);
+            while (placa.equals("na")) {
+                int rangoCategoriaNueva = catalogo.getHashCategorias().get(reserva.getCategoriaVehiculo()).getRangoCategoria() + 1;
+                String categoriaNueva = "na";
+                for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                    if (categoria.getValue().getRangoCategoria() == rangoCategoriaNueva) {
+                        categoriaNueva = categoria.getKey();
+                    }
+                }
+                if (!(categoriaNueva.equals("na"))) {
+                    placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler);
+                } else {
+                    placa = "NA";
+                }
+            } 
+            reserva.setPlaca(placa);
+        }
+        if (placa.equals("NA")) {
+            ((Cliente) hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
+            return "No hay vehiculos disponibles en este momento para esta categoria. Crear una nueva reserva, se elimino la reserva antigua del usuario";
+        } else {
+            String fechaDeAlquiler = reserva.getFechaAlquiler();
+            String fechaDevolucion = reserva.getFechaEntrega();
+            String sedeDevolucion = reserva.getSedeEntrega();
+
+            for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+            if (categoria.getValue().getHashVehiculos().containsKey(placa)){
+                    categoria.getValue().getHashVehiculos().get(placa).setEnAlquiler(true);
+                    categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setDisponibilidadParaAlquilar(false);
+                    categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setUsuarioClienteAlquiler(usernameClienteAlquiler);
+                    categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setFechaDevolucion(fechaDevolucion);
+                    categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setSedeDevolucion(sedeDevolucion);
+                    categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaDeAlquiler, "Vehiculo alquilado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
+            }
+            }
+            return placa;
         }
     }
 
@@ -58,7 +92,9 @@ public class Empleado extends Usuario {
         }
     }
 
-    public void recibirVehiculoConMantenimiento(Catalogo catalogo, String placa, String usernameClienteAlquiler, String fechaEstimadaRegreso, String descripcionMantenimiento, HashMap<String, Usuario> hashUsuarios) {
+    public String recibirVehiculoConMantenimiento(Catalogo catalogo, String placa, String usernameClienteAlquiler, String fechaEstimadaRegreso, String descripcionMantenimiento, HashMap<String, Usuario> hashUsuarios) {
+        String rta = "";
+        String placaNueva = "";
         for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                 String devolucion = categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().getFechaDevolucion();
@@ -70,8 +106,28 @@ public class Empleado extends Usuario {
                 ((Cliente)hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Vehiculo entregado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Necesita mantenimiento, descripción: " + descripcionMantenimiento);
+                // recorre cada una de las reservas que tiene el vehiculo y si esta dentro del rango de mantenimiento, la actualiza la placa
+                for (Reserva reserva : categoria.getValue().getHashVehiculos().get(placa).getReservas()) {
+                    Integer indexReserva = categoria.getValue().getHashVehiculos().get(placa).getReservas().indexOf(reserva);
+                    long diferenciaFinalRInicioM = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[1]+"-"+devolucion);
+                    if (diferenciaFinalRInicioM < 0) {
+                        long diferenciaFinalMInicioR = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[0]+"-"+devolucion);
+                        long diferenciaInicioRFinalM = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[0]+"-"+fechaEstimadaRegreso);
+                        if (diferenciaFinalMInicioR > 0) {
+                            placaNueva = ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getNuevaPlacaParaReserva(catalogo, hashUsuarios, usernameClienteAlquiler);
+                        } else if (diferenciaInicioRFinalM > 0) {
+                            placaNueva = ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getNuevaPlacaParaReserva(catalogo, hashUsuarios, usernameClienteAlquiler);
+                        }
+                        if (placaNueva.equals("NA")) {
+                            rta = "- Se elimino la reserva del usuario " + ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getUsuarioAlquiler() +" dado el cruze en fechas por mantenimiento y que no hay mas vehiculos disponibles.\n";
+                        } else if (!placaNueva.equals("")){
+                            rta = "- Se edito la reserva del usuario " + ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getUsuarioAlquiler() +" dado el cruze en fechas por mantenimiento y se le asigno el vehiculo" + placaNueva + ".\n";;
+                        }
+                    }
+                }
             }
         }
+        return rta;
     }
 
     public void vehiculoListoParaAlquiler(Catalogo catalogo, String placa, String fechaDisponibilidad) {
