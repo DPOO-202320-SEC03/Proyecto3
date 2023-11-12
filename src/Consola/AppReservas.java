@@ -71,6 +71,7 @@ public class AppReservas {
                 this.hashSedes = new HashMap<String, Sede>();
                 this.hashReservas = new HashMap<String, Reserva>();
                 crearAdministrador();
+                cargarInformacionEjemplo((Administrador) hashUsuarios.get("ADMIN"));
             }
         } catch (Exception e) {
             System.out.println("Error al cargar la información!!!");
@@ -158,6 +159,55 @@ public class AppReservas {
         Administrador admin = new Administrador(username, password, nombres, apellidos, celular, correo);
         hashUsuarios.put(admin.getUsername(), admin);
     }
+
+    private void cargarInformacionEjemplo(Administrador admin) {
+
+        // Operaciones Admin
+
+        admin.crearSede(hashSedes, "SEDE1", "N.A.", "N.A.");
+        admin.crearSede(hashSedes, "SEDE2", "N.A.", "N.A.");
+        admin.crearAdministradorLocal(hashUsuarios, "ADMIN1", "ADMIN1", "SEDE1", "ADMIN1", "ADMIN1", "1234567890", "ADMIN1@GOOGLE.COM");
+        admin.crearAdministradorLocal(hashUsuarios, "ADMIN2", "ADMIN2", "SEDE2", "ADMIN2", "ADMIN2", "1234567890", "ADMIN2@GOOGLE.COM");
+        admin.crearCategoria(catalogo, "CATEGORIA1", 1);
+        admin.crearCategoria(catalogo, "CATEGORIA2", 2);
+        admin.crearCategoria(catalogo, "CATEGORIA3", 3);
+        admin.crearTarifaPorTemporada(catalogo, "CATEGORIA1", 100, 20);
+        admin.crearTarifaPorTemporada(catalogo, "CATEGORIA2", 200, 40);
+        admin.crearTarifaPorTemporada(catalogo, "CATEGORIA3", 300, 60);
+        admin.crearSeguro(catalogo, 50, "SEGURO1", "SEGURO1");
+        admin.crearSeguro(catalogo, 100, "SEGURO2", "SEGURO2");
+        admin.crearSeguro(catalogo, 150, "SEGURO3", "SEGURO3");
+        admin.crearTarifasGlobales(catalogo, 1000, 500, "01/01-01/31");
+        admin.crearVehiculo(catalogo, "AAA-001", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE1", "CATEGORIA1", "01/01/2020");
+        admin.crearVehiculo(catalogo, "AAA-002", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE1", "CATEGORIA2", "01/01/2020");
+        admin.crearVehiculo(catalogo, "AAA-003", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE1", "CATEGORIA3", "01/01/2020");
+        admin.crearVehiculo(catalogo, "BBB-001", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE2", "CATEGORIA1", "01/01/2020");
+        admin.crearVehiculo(catalogo, "BBB-002", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE2", "CATEGORIA2", "01/01/2020");
+        admin.crearVehiculo(catalogo, "BBB-003", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE2", "CATEGORIA3", "01/01/2020");
+
+        // Operaciones Admin Local
+
+        AdministradorLocal adminLocal1 = (AdministradorLocal) hashUsuarios.get("ADMIN1");
+        AdministradorLocal adminLocal2 = (AdministradorLocal) hashUsuarios.get("ADMIN2");
+        adminLocal1.crearEmpleado(hashUsuarios, "EMPLEADO1", "EMPLEADO1", "EMPLEADO1", "EMPLEADO1", "1234567890", "EMPLEADO1@GOOGLE.COM");
+        adminLocal2.crearEmpleado(hashUsuarios, "EMPLEADO2", "EMPLEADO2", "EMPLEADO2", "EMPLEADO2", "1234567890", "EMPLEADO2@GOOGLE.COM");
+
+        BufferedImage imagenLicencia = null;
+        try {
+            String workingDir = System.getProperty("user.dir");
+            String filePath = workingDir + File.separator + "data" + File.separator;
+            File file = new File(filePath+"alicencia.png");
+            imagenLicencia = javax.imageio.ImageIO.read(file);
+        } catch (IOException e) {
+            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como licencia con extensión .png!!!");
+        }
+        DatosClienteLicencia licencia = new DatosClienteLicencia(0, "N.A.", "N.A.", imagenLicencia);
+        DatosClienteTarjeta tarjeta = new DatosClienteTarjeta(0,"N.A.","N.A.","N.A.",000);
+        Cliente cliente1 = new Cliente("CLIENTE1","CLIENTE1","CLIENTE1","CLIENTE1","1234567890","CLIENTE1@GOOGLE.COM",licencia,tarjeta);
+        hashUsuarios.put(cliente1.getUsername(), cliente1);
+        Cliente cliente2 = new Cliente("CLIENTE2","CLIENTE2","CLIENTE2","CLIENTE2","1234567890","CLIENTE1@GOOGLE.COM",licencia,tarjeta);
+        hashUsuarios.put(cliente2.getUsername(), cliente2);
+    }
     
     /**
      * metodo privado para inicar la app
@@ -214,10 +264,10 @@ public class AppReservas {
         try {
             String workingDir = System.getProperty("user.dir");
             String filePath = workingDir + File.separator + "data" + File.separator;
-            File file = new File(filePath+"licencia.png");
+            File file = new File(filePath+"alicencia.png");
             imagenLicencia = javax.imageio.ImageIO.read(file);
         } catch (IOException e) {
-            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como licencia con extensión .png!!!");
+            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como 'alicencia' con extensión .png!!!");
         }
         System.out.println("\nPor favor ingrese los datos de su tarjeta:");
         Integer numeroDeTarjeta = Integer.parseInt(input("Por favor ingrese el número de su tarjeta"));

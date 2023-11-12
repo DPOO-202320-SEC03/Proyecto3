@@ -26,7 +26,7 @@ public class VentanaPrincipal extends JFrame{
     private PanelInicial panelInicial;
 
     private JPanel panelimagen;
-    private int pagina = 19;
+    private int pagina = 0;
     
 
     public VentanaPrincipal() {

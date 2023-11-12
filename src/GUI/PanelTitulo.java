@@ -1,4 +1,4 @@
-package Layaout;
+package GUI;
 
 import java.awt.Dimension;
 import java.awt.Font;
