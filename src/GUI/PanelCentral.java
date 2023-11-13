@@ -1,11 +1,16 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -1110,6 +1115,63 @@ public class PanelCentral extends JPanel {
 
         } else if (pagina == 1114) {
             //TODO: PONTO  aca tienes que hacer lo que hace que muestre la grafica no olvides que en vp estan todos los hash es solo hacer vp.hash
+
+            //FALTA PEDIRLE EL ANOOOOO AL USUARIOOOOO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            HashMap<String, Integer> hashReservasPorYear = new HashMap<>();
+            LocalDate start = LocalDate.ofYearDay(Integer.parseInt("2002"), 1);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+            //crea un hashmap para representar todos los dias del año con 0 reservas
+            for (int i = 0; i < start.lengthOfYear(); i++) 
+            {
+                LocalDate date = start.plusDays(i);
+                hashReservasPorYear.put(date.format(formatter), 0);
+            }
+
+            //itera hashReservas y cuenta las reservas por dia. Luego las pone dentro del hash nuevo hashReservasPorYear
+            for (Map.Entry<String, Reserva> entry : vp.hashReservas.entrySet() ) 
+            {
+                String date = entry.getKey();
+                LocalDate reservationDate = LocalDate.parse(date, formatter);  
+                
+                // Chequea si la reserva esta dentro del año
+                if (reservationDate.getYear() == Integer.parseInt("2002")) 
+                {
+                    // Si esta dentro del año incrementa la cuenta para la fecha en hashReservasPorYear
+                    hashReservasPorYear.put(date, hashReservasPorYear.get(date) + 1); 
+                } 
+            }
+            //ordena el hashmap de reservas por dia en orden cronologico
+            Map<String, Integer> sortedHashReservasPorYear = new TreeMap<>(hashReservasPorYear);
+
+            BorderLayout borderLayout = new BorderLayout();
+
+            JPanel panel = new JPanel(new GridLayout(3, 1));
+
+            //borderLayout.add(panel, BorderLayout.WEST);
+
+           JLabel lbAno = generadorLabelInput("Año: ");
+           panel.add(lbAno);
+           JTextField txtAno = new JTextField();
+           panel.add(txtAno);
+           JButton btnEnviar = new JButton("Enviar");
+           panel.add(btnEnviar);
+           btnEnviar.addActionListener(e -> {
+               String texto = txtAno.getText();
+               System.out.println(texto);
+           });
+
+            // Crea el histograma
+            Histogram histogramaReservas = new Histogram(sortedHashReservasPorYear);
+
+            // Agrega al panel el histograma
+            //borderLayout.add(histogramaReservas, BorderLayout.EAST);
+
+            // Repaint el panel con el histograma 
+            this.revalidate();
+            this.repaint();
+
         } else if (pagina == 12) {
             setLayout(new GridLayout(7,2));
 
