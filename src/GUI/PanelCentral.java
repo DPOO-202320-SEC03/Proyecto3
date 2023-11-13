@@ -1109,7 +1109,7 @@ public class PanelCentral extends JPanel {
             add(btnEliminarUsuario);
 
         } else if (pagina == 1114) {
-            //TODO: PONTO aca tienes que hacer lo que hace que muestre la grafica no olvides que en vp estan todos los hash es solo hacer vp.hash
+            //TODO: PONTO  aca tienes que hacer lo que hace que muestre la grafica no olvides que en vp estan todos los hash es solo hacer vp.hash
         } else if (pagina == 12) {
             setLayout(new GridLayout(7,2));
 
