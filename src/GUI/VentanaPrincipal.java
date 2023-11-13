@@ -1,12 +1,6 @@
 package GUI;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import Inventario.Catalogo;
-import Inventario.Sede;
-
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,11 +9,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.awt.BorderLayout;
 
-import Layaout.PanelDatos;
-import Layaout.PanelInicial;
-import Layaout.PanelTitulo;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import Inventario.Catalogo;
+import Inventario.Sede;
 import Reservas.Reserva;
 import SistemaLogin.Administrador;
 import SistemaLogin.AdministradorLocal;
@@ -28,11 +23,14 @@ import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
 import SistemaLogin.Usuario;
 
-public class VentanaPrincipal extends JFrame {
-    private Catalogo catalogo;
-    private HashMap<String, Usuario> hashUsuarios;
-    private HashMap<String, Sede> hashSedes;
-    private HashMap<String, Reserva> hashReservas;
+public class VentanaPrincipal extends JFrame{
+
+    private Usuario usuarioActual;
+
+    public Catalogo catalogo;
+    public HashMap<String, Usuario> hashUsuarios;
+    public HashMap<String, Sede> hashSedes;
+    public HashMap<String, Reserva> hashReservas;
 
     /**
      * metodo privado usado para cargar toda la informacion del sistema
@@ -89,6 +87,7 @@ public class VentanaPrincipal extends JFrame {
             System.out.println("Error al cargar la información!!!");
             e.printStackTrace();
         }
+        System.out.println("Se ha cargado la información!!!");
     }
 
     /**
@@ -122,8 +121,12 @@ public class VentanaPrincipal extends JFrame {
             System.out.println("Error al guardar la información!!!");
             e.printStackTrace();
         }
+        System.out.println("Se ha guardado la información!!!");
     }
 
+    /** 
+     * metodo privado para cargar informacion de ejemplo
+     */
     private void cargarInformacionEjemplo(Administrador admin) {
 
         // Operaciones Admin
@@ -173,54 +176,46 @@ public class VentanaPrincipal extends JFrame {
         hashUsuarios.put(cliente2.getUsername(), cliente2);
     }
 
+    private static PanelNorte panelNorte;
+    private static PanelCentral panelCentral;
 
-
-    private PanelInicial panelInicial;
-
-    private int pagina = 0;
+    private static int pagina = 0;
     
     public VentanaPrincipal() {
-        super("Rentas X"); 
+        setTitle("Rentas X"); 
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        cambiarLayout();
+        setLayout(new BorderLayout());
+        cargarInformacion();
+        cambiarPagina(pagina);
         setVisible(true);
-    } 
+    }
 
-    public void cambiar_pagina(int pagina){
-        this.pagina = pagina;
-        cambiarLayout();
+    public void cambiarPagina(int paginaNueva) {
+        guardarInformacion();
+        getContentPane().removeAll();
+        pagina = paginaNueva;
+        panelNorte = new PanelNorte(this, paginaNueva);
+        add(panelNorte, BorderLayout.NORTH);
+        panelCentral = new PanelCentral(this, paginaNueva);
+        add(panelCentral, BorderLayout.CENTER);
+        System.out.println("Se ha cambiado a la pagina: " + paginaNueva);
         revalidate();
         repaint();
     }
 
-    private void cambiarLayout() {
-        getContentPane().removeAll();
-        if (pagina == 0){
-            setLayout(new GridLayout(1, 1));
-            panelInicial = new PanelInicial(this);
-            if (panelInicial.getComponentCount() > 0) {
-                add(panelInicial);
-            } else {
-                System.out.println("Error al crear el PanelInicial");
-            }
-        }
-        else if (pagina != 0) {
-            //setLayout(new BorderLayout());
-            //panelNorte = new PanelTitulo(this, pagina);
-            //add(panelNorte, BorderLayout.NORTH);
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
 
-            //JPanel panelResto = new JPanel(new BorderLayout());
-            //PanelDatos panelDatos = new PanelDatos(this, pagina);
-            //panelResto.add(panelDatos, BorderLayout.CENTER);
-
-            //add(panelResto, BorderLayout.WEST);
-        }
+    public void setUsuarioActual(Usuario usuarioActual) {
+        this.usuarioActual = usuarioActual;
     }
 
     public static void main(String[] args) {
-        VentanaPrincipal ventana = new VentanaPrincipal();
+        VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
     }
+
 }
