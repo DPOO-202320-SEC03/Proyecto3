@@ -29,8 +29,9 @@ public class Empleado extends Usuario {
         ReservaNormal reserva = (ReservaNormal) hashReservas.get(Integer.toString(id));
         String placa = reserva.getPlaca();
         String rangoAlquiler = reserva.getRangoAlquiler();
+        String sedeRecoger = reserva.getSedeRecoger();
         if (placa.equals("NA")) {
-            placa = catalogo.getHashCategorias().get(reserva.getCategoriaVehiculo()).getPlacaVehiculoParaReserva(rangoAlquiler);
+            placa = catalogo.getHashCategorias().get(reserva.getCategoriaVehiculo()).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
             while (placa.equals("na")) {
                 int rangoCategoriaNueva = catalogo.getHashCategorias().get(reserva.getCategoriaVehiculo()).getRangoCategoria() + 1;
                 String categoriaNueva = "na";
@@ -40,7 +41,7 @@ public class Empleado extends Usuario {
                     }
                 }
                 if (!(categoriaNueva.equals("na"))) {
-                    placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler);
+                    placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
                 } else {
                     placa = "NA";
                 }
@@ -86,6 +87,7 @@ public class Empleado extends Usuario {
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setUsuarioClienteAlquiler("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setFechaDevolucion("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setFechaDisponibilidad(devolucion);
+                categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(nombreSede);
                 ((Cliente)hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Vehiculo entregado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
             }
@@ -103,6 +105,7 @@ public class Empleado extends Usuario {
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setUsuarioClienteAlquiler("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesAlquiler().setFechaDevolucion("na");
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setFechaDisponibilidad(fechaEstimadaRegreso);
+                categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(nombreSede);
                 ((Cliente)hashUsuarios.get(usernameClienteAlquiler)).setTieneReserva(false);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Vehiculo entregado por " + usernameClienteAlquiler + " en la sede " + this.nombreSede);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(devolucion, "Necesita mantenimiento, descripción: " + descripcionMantenimiento);
@@ -110,13 +113,14 @@ public class Empleado extends Usuario {
                 for (Reserva reserva : categoria.getValue().getHashVehiculos().get(placa).getReservas()) {
                     Integer indexReserva = categoria.getValue().getHashVehiculos().get(placa).getReservas().indexOf(reserva);
                     long diferenciaFinalRInicioM = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[1]+"-"+devolucion);
+                    String sedeRecoger = ((ReservaNormal) reserva).getSedeRecoger();
                     if (diferenciaFinalRInicioM < 0) {
                         long diferenciaFinalMInicioR = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[0]+"-"+devolucion);
                         long diferenciaInicioRFinalM = ReservaNormal.rangoFecha(reserva.getRangoAlquiler().split("-")[0]+"-"+fechaEstimadaRegreso);
                         if (diferenciaFinalMInicioR > 0) {
-                            placaNueva = ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getNuevaPlacaParaReserva(catalogo, hashUsuarios, usernameClienteAlquiler);
+                            placaNueva = ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getNuevaPlacaParaReserva(catalogo, hashUsuarios, usernameClienteAlquiler, sedeRecoger);
                         } else if (diferenciaInicioRFinalM > 0) {
-                            placaNueva = ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getNuevaPlacaParaReserva(catalogo, hashUsuarios, usernameClienteAlquiler);
+                            placaNueva = ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getNuevaPlacaParaReserva(catalogo, hashUsuarios, usernameClienteAlquiler, sedeRecoger);
                         }
                         if (placaNueva.equals("NA")) {
                             rta = "- Se elimino la reserva del usuario " + ((ReservaNormal) categoria.getValue().getHashVehiculos().get(placa).getReservas().get(indexReserva)).getUsuarioAlquiler() +" dado el cruze en fechas por mantenimiento y que no hay mas vehiculos disponibles.\n";
