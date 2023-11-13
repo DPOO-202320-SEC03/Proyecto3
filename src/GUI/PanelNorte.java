@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -82,8 +81,10 @@ public class PanelNorte extends JPanel {
         } else if (pagina == 1113) {
             titulo("ELIMINAR USUARIO");
             volver_pagina_anterior(11);
-        }
-        else if (pagina == 12) {
+        } else if (pagina == 1114) {
+            titulo("GRAFICA DE RESERVAS");
+            volver_pagina_anterior(11);
+        } else if (pagina == 12) {
             titulo("MENU ADMIN LOCAL");
             volver_pagina_anterior(1);
         } else if (pagina == 13) {

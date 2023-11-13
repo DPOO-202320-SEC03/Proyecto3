@@ -629,7 +629,8 @@ public class AppReservas {
                     String idReserva = input("Ingrese el id de la reserva que desea consultar");
                 // se busca la ID y si existe se muestran los detalles
                     if (hashReservas.containsKey(idReserva)) {
-                        admin.resumenReserva(hashReservas, idReserva, catalogo);
+                        String resumenReserva = admin.resumenReserva(hashReservas, idReserva, catalogo);
+                        System.out.println("Reserva consultada exitosamente!!!\n\n" + resumenReserva);
                     } 
                 // mensaje de error por si no se encuentra la reserva
                     else {

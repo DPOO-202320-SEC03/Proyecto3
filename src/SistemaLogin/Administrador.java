@@ -147,7 +147,7 @@ public class Administrador extends Usuario {
 
     // Funciones para las reservas
 
-    public void resumenReserva(HashMap<String, Reserva> hashReservas, String idReserva, Catalogo catalogo) {
-        System.out.println(hashReservas.get(idReserva).getResumen(catalogo, catalogo.getTarifasGlobales()));
+    public String resumenReserva(HashMap<String, Reserva> hashReservas, String idReserva, Catalogo catalogo) {
+        return(hashReservas.get(idReserva).getResumen(catalogo, catalogo.getTarifasGlobales()));
     }
 }

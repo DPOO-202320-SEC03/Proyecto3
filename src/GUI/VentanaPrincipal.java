@@ -25,8 +25,7 @@ import SistemaLogin.Usuario;
 
 public class VentanaPrincipal extends JFrame{
 
-    private Usuario usuarioActual;
-
+    public Usuario usu;
     public Catalogo catalogo;
     public HashMap<String, Usuario> hashUsuarios;
     public HashMap<String, Sede> hashSedes;
@@ -207,11 +206,11 @@ public class VentanaPrincipal extends JFrame{
     }
 
     public Usuario getUsuarioActual() {
-        return usuarioActual;
+        return usu;
     }
 
     public void setUsuarioActual(Usuario usuarioActual) {
-        this.usuarioActual = usuarioActual;
+        this.usu = usuarioActual;
     }
 
     public static void main(String[] args) {
