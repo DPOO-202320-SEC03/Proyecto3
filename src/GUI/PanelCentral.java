@@ -116,7 +116,7 @@ public class PanelCentral extends JPanel {
                 }
             });
             add(btnIniciarSesion);
-        } else if (pagina == 2){
+        } else if (pagina == 2) {
             setLayout(new GridLayout(15,1));
 
             JLabel lbNombre = generadorLabelInput("Nombre: ");
@@ -246,6 +246,99 @@ public class PanelCentral extends JPanel {
                 }
             });
             add(btnRegistrarse);
+        } else if (pagina == 11) {
+            setLayout(new GridLayout(7,2));
+
+            JButton btnCrearSede = new JButton("Crear sede");
+            btnCrearSede.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearSede.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(111);
+            });
+            add(btnCrearSede);
+
+            JButton btnCrearCategoria = new JButton("Crear categoria");
+            btnCrearCategoria.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearCategoria.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(112);
+            });
+            add(btnCrearCategoria);
+
+            JButton btnEditarCategoria = new JButton("Editar tarifas por temporada");
+            btnEditarCategoria.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEditarCategoria.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(113);
+            });
+            add(btnEditarCategoria);
+
+            JButton btnCrearSeguro = new JButton("Crear seguro");
+            btnCrearSeguro.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearSeguro.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(114);
+            });
+            add(btnCrearSeguro);
+
+            JButton btnCrearTarifasGlobales = new JButton("Crear tarifas globales");
+            btnCrearTarifasGlobales.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearTarifasGlobales.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(115);
+            });
+            add(btnCrearTarifasGlobales);
+
+            JButton btnEditarTarifasGlobales = new JButton("Editar tarifas globales");
+            btnEditarTarifasGlobales.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEditarTarifasGlobales.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(116);
+            });
+            add(btnEditarTarifasGlobales);
+
+            JButton btnCrearVehiculo = new JButton("Crear vehiculo");
+            btnCrearVehiculo.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearVehiculo.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(117);
+            });
+            add(btnCrearVehiculo);
+
+            JButton btnEliminarVehiculo = new JButton("Eliminar vehiculo");
+            btnEliminarVehiculo.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEliminarVehiculo.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(118);
+            });
+            add(btnEliminarVehiculo);
+
+            JButton btnEstadoVehiculo = new JButton("Estado vehiculo");
+            btnEstadoVehiculo.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEstadoVehiculo.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(119);
+            });
+            add(btnEstadoVehiculo);
+
+            JButton btnTrasladarVehiculo = new JButton("Trasladar vehiculo");
+            btnTrasladarVehiculo.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnTrasladarVehiculo.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(1110);
+            });
+            add(btnTrasladarVehiculo);
+
+            JButton btnConsultarReservaPorID = new JButton("Consultar reserva por ID");
+            btnConsultarReservaPorID.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnConsultarReservaPorID.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(1111);
+            });
+            add(btnConsultarReservaPorID);
+
+            JButton btnCrearAdministradorLocal = new JButton("Crear administrador local");
+            btnCrearAdministradorLocal.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearAdministradorLocal.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(1112);
+            });
+            add(btnCrearAdministradorLocal);
+
+            JButton btnEliminarUsuario = new JButton("Eliminar usuario");
+            btnEliminarUsuario.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEliminarUsuario.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(1113);
+            });
+            add(btnEliminarUsuario);
         }
     }
 

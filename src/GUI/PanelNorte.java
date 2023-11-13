@@ -43,7 +43,47 @@ public class PanelNorte extends JPanel {
         } else if (pagina == 11) {
             titulo("MENU ADMIN");
             volver_pagina_anterior(1);
-        } else if (pagina == 12) {
+        } else if (pagina == 111) {
+            titulo("CREAR SEDE");
+            volver_pagina_anterior(11);
+        } else if (pagina == 112) {
+            titulo("CREAR CATEGORIA");
+            volver_pagina_anterior(11);
+        } else if (pagina == 113) {
+            titulo("EDITAR TARIFAS POR TEMPORADA");
+            volver_pagina_anterior(11);
+        } else if (pagina == 114) {
+            titulo("CREAR SEGURO");
+            volver_pagina_anterior(11);
+        } else if (pagina == 115) {
+            titulo("CREAR TARIFAS GLOBALES");
+            volver_pagina_anterior(11);
+        } else if (pagina == 116) {
+            titulo("EDITAR TARIFAS GLOBALES");
+            volver_pagina_anterior(11);
+        } else if (pagina == 117) {
+            titulo("CREAR VEHICULO");
+            volver_pagina_anterior(11);
+        } else if (pagina == 118) {
+            titulo("ELIMINAR VEHICULO");
+            volver_pagina_anterior(11);
+        } else if (pagina == 119) {
+            titulo("ESTADO VEHICULO");
+            volver_pagina_anterior(11);
+        } else if (pagina == 1110) {
+            titulo("TRASLADAR VEHICULO");
+            volver_pagina_anterior(11);
+        } else if (pagina == 1111) {
+            titulo("CONSULTAR RESERVA POR ID");
+            volver_pagina_anterior(11);
+        } else if (pagina == 1112) {
+            titulo("CREAR ADMINISTRADOR LOCAL");
+            volver_pagina_anterior(11);
+        } else if (pagina == 1113) {
+            titulo("ELIMINAR USUARIO");
+            volver_pagina_anterior(11);
+        }
+        else if (pagina == 12) {
             titulo("MENU ADMIN LOCAL");
             volver_pagina_anterior(1);
         } else if (pagina == 13) {
