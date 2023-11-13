@@ -425,7 +425,7 @@ public class PanelCentral extends JPanel {
                 String nombreCategoria = ((JTextField) lbNombreCategoria.getComponent(1)).getText();
                 String rangoCategoriaS = ((JTextField) lbRangoCategoria.getComponent(1)).getText();
                 Integer rangoCategoria = Integer.parseInt(rangoCategoriaS);
-                if (nombreCategoria.length() > 3 && rangoCategoria > 3 && rangoCategoria < 11) {
+                if (nombreCategoria.length() > 3 && rangoCategoria > 0 && rangoCategoria < 11) {
                     if (!(vp.catalogo.getHashCategorias().containsKey(nombreCategoria))) {
                         ((Administrador) vp.usu).crearCategoria(vp.catalogo, nombreCategoria, rangoCategoria);
                         ventanaPrincipal.cambiarPagina(11);
