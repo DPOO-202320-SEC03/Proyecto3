@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 public class PanelNorte extends JPanel {
 
-    VentanaPrincipal ventanaPrincilal;
+    private VentanaPrincipal ventanaPrincilal;
     
     public PanelNorte(VentanaPrincipal ventanaPrincipal, int pagina) {
 

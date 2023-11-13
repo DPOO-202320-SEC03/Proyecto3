@@ -29,7 +29,7 @@ import SistemaLogin.Empleado;
 import SistemaLogin.Usuario;
 
 public class PanelCentral extends JPanel {
-    VentanaPrincipal vp;
+    private VentanaPrincipal vp;
     public PanelCentral(VentanaPrincipal ventanaPrincipal, int pagina) {
         this.vp = ventanaPrincipal;
         if (pagina == 0) {
@@ -1630,7 +1630,7 @@ public class PanelCentral extends JPanel {
         }
     }
 
-    public JLabel generadorLabelInput(String texto) {
+    private JLabel generadorLabelInput(String texto) {
         JLabel label = new JLabel();
         label.setLayout(new GridLayout(1,2));
         JLabel labelTexto = new JLabel(texto);
@@ -1643,7 +1643,7 @@ public class PanelCentral extends JPanel {
         return label;
     }
 
-    public JLabel generadorLabelTarifasAntiguas(String texto) {
+    private JLabel generadorLabelTarifasAntiguas(String texto) {
         JLabel label = new JLabel(texto);
         label.setFont(new Font("Dialog", Font.PLAIN, 20));
         label.setHorizontalAlignment(JLabel.CENTER);
