@@ -8,8 +8,12 @@ import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -475,7 +479,7 @@ public class PanelCentral extends JPanel {
                 Integer tarifaTemporadaAlta = Integer.parseInt(tarifaTemporadaAltaS);
                 String tarifaTemporadaBajaS = ((JTextField) lbTarifaTemporadaBaja.getComponent(1)).getText();
                 Integer tarifaTemporadaBaja = Integer.parseInt(tarifaTemporadaBajaS);
-                if (nombreCategoria.length() > 3 && tarifaTemporadaAlta > 3 && tarifaTemporadaBaja > 3) {
+                if (nombreCategoria.length() > 3 && tarifaTemporadaAlta > 0 && tarifaTemporadaBaja > 0) {
                     if (vp.catalogo.getHashCategorias().containsKey(nombreCategoria)) {
                         ((Administrador) vp.usu).crearTarifaPorTemporada(vp.catalogo, nombreCategoria, tarifaTemporadaAlta, tarifaTemporadaBaja);
                         ventanaPrincipal.cambiarPagina(11);
@@ -1117,7 +1121,29 @@ public class PanelCentral extends JPanel {
             add(btnEliminarUsuario);
 
         } else if (pagina == 1114) {
-            //TODO: PONTO  aca tienes que hacer lo que hace que muestre la grafica no olvides que en vp estan todos los hash es solo hacer vp.hash
+            HashMap<String, Integer> hashReservasPorYear = new HashMap<>();
+            LocalDate start = LocalDate.ofYearDay(Integer.parseInt("2002"), 1);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+            for (int i = 0; i < start.lengthOfYear(); i++) 
+            {
+                LocalDate date = start.plusDays(i);
+                hashReservasPorYear.put(date.format(formatter), 0);
+            }
+
+            for (Map.Entry<String, Reserva> entry : vp.hashReservas.entrySet() ) 
+            {
+                String date = entry.getKey();
+                LocalDate reservationDate = LocalDate.parse(date, formatter);
+
+                if (reservationDate.getYear() == Integer.parseInt("2002")) 
+                {
+                    hashReservasPorYear.put(date, hashReservasPorYear.get(date) + 1); 
+                } 
+            }
+            Map<String, Integer> sortedHashReservasPorYear = new TreeMap<>(hashReservasPorYear);
+
+
         } else if (pagina == 12) {
             setLayout(new GridLayout(7,2));
 
