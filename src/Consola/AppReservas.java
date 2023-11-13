@@ -779,10 +779,10 @@ public class AppReservas {
                         try {
                             String workingDir = System.getProperty("user.dir");
                             String filePath = workingDir + File.separator + "data" + File.separator;
-                            File file = new File(filePath+"licencia.jpg");
+                            File file = new File(filePath+"alicencia.jpg");
                             imagenLicencia = javax.imageio.ImageIO.read(file);
                         } catch (IOException e) {
-                            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como licencia con extensión .png!!!");
+                            System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como 'alicencia' con extensión .png!!!");
                         }
                         empleado.otrosConductoresAgregarLicencia(hashUsuarios, username, numeroDeLicencia, paisDeExpedicion, fechaDeVencimientoLicencia, imagenLicencia);
                         System.out.println("Licencia agregada exitosamente!!!");

@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Inventario.Categoria;
+import Inventario.Vehiculo;
 import Reservas.Reserva;
 import Reservas.ReservaNormal;
 import SistemaLogin.Administrador;
@@ -1109,9 +1111,520 @@ public class PanelCentral extends JPanel {
         } else if (pagina == 1114) {
             //TODO: PONTO aca tienes que hacer lo que hace que muestre la grafica no olvides que en vp estan todos los hash es solo hacer vp.hash
         } else if (pagina == 12) {
-            //
+            setLayout(new GridLayout(7,2));
+
+            JButton btnCrearEmpleadoLocal = new JButton("Crear empleado local");
+            btnCrearEmpleadoLocal.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearEmpleadoLocal.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(121);
+            });
+            add(btnCrearEmpleadoLocal);
+
+            JButton btnEliminarEmpleadoLocal = new JButton("Eliminar empleado local");
+            btnEliminarEmpleadoLocal.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEliminarEmpleadoLocal.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(122);
+            });
+            add(btnEliminarEmpleadoLocal);
+
+            for (int i = 0; i < 12; i++) {
+                add(new JLabel());
+            }
+
+        } else if (pagina == 121) {
+            setLayout(new GridLayout(7,1));
+
+            JLabel lbUsuario = generadorLabelInput("Usuario: ");
+            add(lbUsuario);
+
+            JLabel lbContrasena = generadorLabelInput("Contrasena: ");
+            add(lbContrasena);
+
+            JLabel lbNombre = generadorLabelInput("Nombre: ");
+            add(lbNombre);
+
+            JLabel lbApellido = generadorLabelInput("Apellido: ");
+            add(lbApellido);
+
+            JLabel lbCelular = generadorLabelInput("Celular: ");
+            add(lbCelular);
+
+            JLabel lbCorreo = generadorLabelInput("Correo: ");
+            add(lbCorreo);
+
+            JButton btnCrearEmpleadoLocal = new JButton("Crear empleado local");
+            btnCrearEmpleadoLocal.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnCrearEmpleadoLocal.addActionListener(e -> {
+                String usuario = ((JTextField) lbUsuario.getComponent(1)).getText();
+                String contrasena = ((JTextField) lbContrasena.getComponent(1)).getText();
+                String nombre = ((JTextField) lbNombre.getComponent(1)).getText();
+                String apellido = ((JTextField) lbApellido.getComponent(1)).getText();
+                String celular = ((JTextField) lbCelular.getComponent(1)).getText();
+                String correo = ((JTextField) lbCorreo.getComponent(1)).getText();
+                if (usuario.length() > 3 && contrasena.length() > 3 && nombre.length() > 3 && apellido.length() > 3 && celular.length() > 3 && correo.length() > 3) {
+                    if (!(vp.hashUsuarios.containsKey(usuario))) {
+                        ((AdministradorLocal) vp.usu).crearEmpleado(vp.hashUsuarios, usuario, contrasena, nombre, apellido, celular, correo);                     
+                        ventanaPrincipal.cambiarPagina(12);
+                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Empleado local creado con exito");
+                        dialogOK.setSize(300,30);
+                        dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogOK.setVisible(true);
+                        System.out.println("Empleado local creado con exito!!!");
+                    } else {
+                        ((JTextField) lbUsuario.getComponent(1)).setText("");
+                        ((JTextField) lbContrasena.getComponent(1)).setText("");
+                        ((JTextField) lbNombre.getComponent(1)).setText("");
+                        ((JTextField) lbApellido.getComponent(1)).setText("");
+                        ((JTextField) lbCelular.getComponent(1)).setText("");
+                        ((JTextField) lbCorreo.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario ya existe");
+                        dialogError.setSize(300,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("Usuario repetido!!!");
+                    }
+                } else {
+                    ((JTextField) lbUsuario.getComponent(1)).setText("");
+                    ((JTextField) lbContrasena.getComponent(1)).setText("");
+                    ((JTextField) lbNombre.getComponent(1)).setText("");
+                    ((JTextField) lbApellido.getComponent(1)).setText("");
+                    ((JTextField) lbCelular.getComponent(1)).setText("");
+                    ((JTextField) lbCorreo.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al crear empleado local");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al crear empleado local!!!");
+                }
+            });
+            add(btnCrearEmpleadoLocal);
+
+        } else if (pagina == 122) {
+            setLayout(new GridLayout(2,1));
+
+            JLabel lbUsuario = generadorLabelInput("Usuario: ");
+            add(lbUsuario);
+
+            JButton btnEliminarEmpleadoLocal = new JButton("Eliminar empleado local");
+            btnEliminarEmpleadoLocal.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnEliminarEmpleadoLocal.addActionListener(e -> {
+                String usuario = ((JTextField) lbUsuario.getComponent(1)).getText();
+                if (usuario.length() > 3 && !(usuario.equals(vp.usu.getUsername()))) {
+                    if (vp.hashUsuarios.containsKey(usuario)) {
+                        boolean esta = false;
+                        for (Usuario usuarioF : vp.hashUsuarios.values()) {
+                            if (usuarioF.getUsername().equals(usuario) && usuarioF.getNivelDeAcceso() == 1) {
+                                esta = true;
+                            }
+                        }
+                        if (esta) {
+                            ((AdministradorLocal) vp.usu).eliminarEmpleado(vp.hashUsuarios, usuario);
+                            ventanaPrincipal.cambiarPagina(12);
+                            JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Empleado local eliminado con exito");
+                            dialogOK.setSize(300,30);
+                            dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+                            dialogOK.setVisible(true);
+                            System.out.println("Empleado local eliminado con exito!!!");
+                        } else {
+                            ((JTextField) lbUsuario.getComponent(1)).setText("");
+                            JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no es un empleado local");
+                            dialogError.setSize(300,30);
+                            dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                            dialogError.setVisible(true);
+                            System.out.println("El usuario no es un empleado local!!!");
+                        }
+                    } else {
+                        ((JTextField) lbUsuario.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no existe");
+                        dialogError.setSize(300,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("El usuario no existe!!!");
+                    }
+                } else {
+                    ((JTextField) lbUsuario.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al eliminar empleado local");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al eliminar empleado local!!!");
+                }
+            });
+            add(btnEliminarEmpleadoLocal);
+
         } else if (pagina == 13) {
-            //
+            setLayout(new GridLayout(7,2));
+
+            JButton btnAlquilarVehiculo = new JButton("Alquilar vehiculo");
+            btnAlquilarVehiculo.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnAlquilarVehiculo.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(131);
+            });
+            add(btnAlquilarVehiculo);
+
+            JButton btnAgregarLicenciaConductores = new JButton("Agregar licencia de otros conductores");
+            btnAgregarLicenciaConductores.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnAgregarLicenciaConductores.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(132);
+            });
+            add(btnAgregarLicenciaConductores);
+
+            JButton btnRecibirVehiculo = new JButton("Recibir vehiculo");
+            btnRecibirVehiculo.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnRecibirVehiculo.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(133);
+            });
+            add(btnRecibirVehiculo);
+
+            JButton btnListarVehiculoParaAlquiler = new JButton("Listar vehiculo para alquiler");
+            btnListarVehiculoParaAlquiler.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnListarVehiculoParaAlquiler.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(134);
+            });
+            add(btnListarVehiculoParaAlquiler);
+
+            for (int i = 0; i < 8; i++) {
+                add(new JLabel());
+            }
+
+        } else if (pagina == 131) {
+            setLayout(new GridLayout(2,1));
+
+            JLabel lbUsuario = generadorLabelInput("Usuario del cliente con reserva para alquiler: ");
+            add(lbUsuario);
+
+            JButton btnAlquilarVehiculo = new JButton("Alquilar vehiculo");
+            btnAlquilarVehiculo.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnAlquilarVehiculo.addActionListener(e -> {
+                String usuario = ((JTextField) lbUsuario.getComponent(1)).getText();
+                if (usuario.length() > 3) {
+                    if (vp.hashUsuarios.containsKey(usuario)) {
+                        boolean esta = false;
+                        for (Usuario usuarioF : vp.hashUsuarios.values()) {
+                            if (usuarioF.getUsername().equals(usuario) && usuarioF.getNivelDeAcceso() == 0) {
+                                esta = true;
+                            }
+                        }
+                        if (esta) {
+                            if (((Cliente) vp.hashUsuarios.get(usuario)).getTieneReserva()) {
+                                String placa = ((Empleado) vp.usu).alquilarVehiculo(vp.catalogo, vp.hashUsuarios, vp.hashReservas, usuario);
+                                if (placa.equals("No hay vehiculos disponibles en este momento para esta categoria. Crear una nueva reserva, se elimino la reserva antigua del usuario")) {
+                                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), placa);
+                                    dialogError.setSize(800,30);
+                                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                                    dialogError.setVisible(true);
+                                    System.out.println(placa);
+                                } else {
+                                    ventanaPrincipal.cambiarPagina(13);
+                                    JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Vehiculo: " + placa + " alquilado con exito");
+                                    dialogOK.setSize(750,700);
+                                    dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+
+                                    String resumenAlquiler = ((Cliente) vp.hashUsuarios.get(usuario)).getResumenReservaActual(vp.hashReservas, vp.catalogo);
+                                    dialogOK.setLayout(new GridLayout(1,1));
+                                    JTextArea textArea = new JTextArea(resumenAlquiler);
+                                    textArea.setEditable(false);
+                                    JScrollPane scrollPane = new JScrollPane(textArea);
+                                    dialogOK.add(scrollPane);
+
+                                    dialogOK.setVisible(true);
+                                    System.out.println("Vehiculo alquilado con exito!!!");
+                                }
+                            } else {
+                                ((JTextField) lbUsuario.getComponent(1)).setText("");
+                                JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no tiene una reserva para alquiler");
+                                dialogError.setSize(400,30);
+                                dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                                dialogError.setVisible(true);
+                                System.out.println("El usuario no tiene una reserva para alquiler!!!");
+                            }
+                        } else {
+                            ((JTextField) lbUsuario.getComponent(1)).setText("");
+                            JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no es un cliente");
+                            dialogError.setSize(300,30);
+                            dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                            dialogError.setVisible(true);
+                            System.out.println("El usuario no es un cliente!!!");
+                        }
+                    } else {
+                        ((JTextField) lbUsuario.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no existe");
+                        dialogError.setSize(300,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("El usuario no existe!!!");
+                    }
+                } else {
+                    ((JTextField) lbUsuario.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al alquilar vehiculo");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al alquilar vehiculo!!!");
+                }
+            });
+            add(btnAlquilarVehiculo);
+
+        } else if (pagina == 132) {
+            setLayout(new GridLayout(5,1));
+
+            JLabel lbUsuario = generadorLabelInput("Usuario del cliente: ");
+            add(lbUsuario);
+
+            JLabel lbNumeroDeLicencia = generadorLabelInput("Numero de licencia: ");
+            add(lbNumeroDeLicencia);
+
+            JLabel lbPaisDeExpedicion = generadorLabelInput("Pais de expedicion: ");
+            add(lbPaisDeExpedicion);
+
+            JLabel lbFechaDeVencimiento = generadorLabelInput("Fecha de vencimiento (MM/DD/AAAA): ");
+            add(lbFechaDeVencimiento);
+
+            JButton btnAgregarLicenciaConductores = new JButton("Agregar licencia de otros conductores");
+            btnAgregarLicenciaConductores.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnAgregarLicenciaConductores.addActionListener(e -> {
+                String usuario = ((JTextField) lbUsuario.getComponent(1)).getText();
+                String numeroDeLicenciaS = ((JTextField) lbNumeroDeLicencia.getComponent(1)).getText();
+                Integer numeroDeLicencia = Integer.parseInt(numeroDeLicenciaS);
+                String paisDeExpedicion = ((JTextField) lbPaisDeExpedicion.getComponent(1)).getText();
+                String fechaDeVencimiento = ((JTextField) lbFechaDeVencimiento.getComponent(1)).getText();
+
+                if (usuario.length() > 3) {
+                    if (vp.hashUsuarios.containsKey(usuario)) {
+                        boolean esta = false;
+                        for (Usuario usuarioF : vp.hashUsuarios.values()) {
+                            if (usuarioF.getUsername().equals(usuario) && usuarioF.getNivelDeAcceso() == 0) {
+                                esta = true;
+                            }
+                        }
+                        if (esta) {
+                            BufferedImage imagenLicencia = null;
+                            try {
+                                String workingDir = System.getProperty("user.dir");
+                                String filePath = workingDir + File.separator + "data" + File.separator;
+                                File file = new File(filePath+"alicencia.jpg");
+                                imagenLicencia = javax.imageio.ImageIO.read(file);
+                            } catch (IOException ex) {
+                                System.out.println("Error al intentar leer la imagen de licencia, asegurarse que esta en la carpeta data nombrada como 'alicencia' con extensión .png!!!");
+                            }
+                            ((Empleado) vp.usu).otrosConductoresAgregarLicencia(vp.hashUsuarios, usuario, numeroDeLicencia, paisDeExpedicion, fechaDeVencimiento, imagenLicencia);
+                            ventanaPrincipal.cambiarPagina(13);
+                            JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Licencia agregada con exito");
+                            dialogOK.setSize(300,30);
+                            dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+                            dialogOK.setVisible(true);
+                            System.out.println("Licencia agregada con exito!!!");
+
+                        } else {
+                            ((JTextField) lbUsuario.getComponent(1)).setText("");
+                            ((JTextField) lbNumeroDeLicencia.getComponent(1)).setText("");
+                            ((JTextField) lbPaisDeExpedicion.getComponent(1)).setText("");
+                            ((JTextField) lbFechaDeVencimiento.getComponent(1)).setText("");
+                            JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no es un cliente");
+                            dialogError.setSize(300,30);
+                            dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                            dialogError.setVisible(true);
+                            System.out.println("El usuario no es un cliente!!!");
+                        }
+                    } else {
+                        ((JTextField) lbUsuario.getComponent(1)).setText("");
+                        ((JTextField) lbNumeroDeLicencia.getComponent(1)).setText("");
+                        ((JTextField) lbPaisDeExpedicion.getComponent(1)).setText("");
+                        ((JTextField) lbFechaDeVencimiento.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no existe");
+                        dialogError.setSize(300,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("El usuario no existe!!!");
+                    }
+                } else {
+                    ((JTextField) lbUsuario.getComponent(1)).setText("");
+                    ((JTextField) lbNumeroDeLicencia.getComponent(1)).setText("");
+                    ((JTextField) lbPaisDeExpedicion.getComponent(1)).setText("");
+                    ((JTextField) lbFechaDeVencimiento.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al agregar licencia de otros conductores");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al agregar licencia de otros conductores!!!");
+                }
+            });
+            add(btnAgregarLicenciaConductores);
+
+        } else if (pagina == 133) {
+            setLayout(new GridLayout(5,1));
+            
+            JLabel lbUsuario = generadorLabelInput("Usuario del cliente: ");
+            add(lbUsuario);
+
+            JLabel lbMantenimiento = generadorLabelInput("Necesita mantenimiento (TRUE/FALSE): ");
+            add(lbMantenimiento);
+
+            JLabel lbFechaRegreso = generadorLabelInput("Fecha estimada de regreso del vehiculo (MM/DD/AAAA): ");
+            add(lbFechaRegreso);
+
+            JLabel lbDescripcionMantenimiento = generadorLabelInput("Descripcion del mantenimiento: ");
+            add(lbDescripcionMantenimiento);
+
+            JButton btnRecibirVehiculo = new JButton("Recibir vehiculo");
+            btnRecibirVehiculo.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnRecibirVehiculo.addActionListener(e -> {
+                String usuario = ((JTextField) lbUsuario.getComponent(1)).getText();
+                String mantenimientoS = ((JTextField) lbMantenimiento.getComponent(1)).getText();
+                Boolean mantenimiento = Boolean.parseBoolean(mantenimientoS.toLowerCase());
+                String fechaRegreso = ((JTextField) lbFechaRegreso.getComponent(1)).getText();
+                String descripcionMantenimiento = ((JTextField) lbDescripcionMantenimiento.getComponent(1)).getText();
+                if (usuario.length() > 3 && mantenimientoS.length() > 3) {
+                    if (vp.hashUsuarios.containsKey(usuario)) {
+                        boolean esta = false;
+                        String placaEnAlquiler = "";
+                        for (Usuario usuarioF : vp.hashUsuarios.values()) {
+                            if (usuarioF.getUsername().equals(usuario) && usuarioF.getNivelDeAcceso() == 0) {
+                                esta = true;
+                                Integer id = ((Cliente) usuarioF).getIdReserva();
+                                for (Map.Entry<String, Reserva> reserva : vp.hashReservas.entrySet()) {
+                                    if (reserva.getValue().getIdReserva() == id) {
+                                        placaEnAlquiler = reserva.getValue().getPlaca();
+                                    }
+                                }
+                            }
+                        }
+                        if (esta && !placaEnAlquiler.equals("")) {
+                            if (mantenimiento) {
+                                if (fechaRegreso.length() > 3 && descripcionMantenimiento.length() > 3) {
+                                    String rta = ((Empleado) vp.usu).recibirVehiculoConMantenimiento(vp.catalogo, placaEnAlquiler, usuario, fechaRegreso, descripcionMantenimiento, vp.hashUsuarios);
+                                    if (rta.equals("")) {
+                                        ventanaPrincipal.cambiarPagina(13);
+                                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "El vehículo " + placaEnAlquiler + " alquilado por " + usuario + " recibido exitosamente!!!");
+                                        dialogOK.setSize(500,30);
+                                        dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+                                        dialogOK.setVisible(true);
+                                        System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + usuario + " recibido exitosamente!!!");
+                                    } else {
+                                        ventanaPrincipal.cambiarPagina(13);
+                                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El vehículo " + placaEnAlquiler + " alquilado por " + usuario + " recibido exitosamente!!!");
+                                        dialogError.setSize(750,700);
+                                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+
+                                        dialogError.setLayout(new GridLayout(1,1));
+                                        JTextArea textArea = new JTextArea("Las siguientes reservas fueron editadas a causa del mantenimiento:\n\n"+rta);
+                                        textArea.setEditable(false);
+                                        JScrollPane scrollPane = new JScrollPane(textArea);
+                                        dialogError.add(scrollPane);
+
+                                        dialogError.setVisible(true);
+                                        System.out.println(rta);
+                                    }
+                                } else {
+                                    ((JTextField) lbUsuario.getComponent(1)).setText("");
+                                    ((JTextField) lbMantenimiento.getComponent(1)).setText("");
+                                    ((JTextField) lbFechaRegreso.getComponent(1)).setText("");
+                                    ((JTextField) lbDescripcionMantenimiento.getComponent(1)).setText("");
+                                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al recibir vehiculo");
+                                    dialogError.setSize(300,30);
+                                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                                    dialogError.setVisible(true);
+                                    System.out.println("Error al recibir vehiculo!!!");
+                                }
+                            } else {
+                                ((Empleado) vp.usu).recibirVehiculoSinMantenimiento(vp.catalogo, placaEnAlquiler, usuario, vp.hashUsuarios);
+                                ventanaPrincipal.cambiarPagina(13);
+                                JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "El vehículo " + placaEnAlquiler + " alquilado por " + usuario + " recibido exitosamente!!!");
+                                dialogOK.setSize(500,30);
+                                dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+                                dialogOK.setVisible(true);
+                                System.out.println("El vehículo " + placaEnAlquiler + " alquilado por " + usuario + " recibido exitosamente!!!");
+                            }
+                        } else {
+                            ((JTextField) lbUsuario.getComponent(1)).setText("");
+                            ((JTextField) lbMantenimiento.getComponent(1)).setText("");
+                            ((JTextField) lbFechaRegreso.getComponent(1)).setText("");
+                            ((JTextField) lbDescripcionMantenimiento.getComponent(1)).setText("");
+                            JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no es un cliente");
+                            dialogError.setSize(300,30);
+                            dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                            dialogError.setVisible(true);
+                            System.out.println("El usuario no es un cliente!!!");
+                        }
+                    } else {
+                        ((JTextField) lbUsuario.getComponent(1)).setText("");
+                        ((JTextField) lbMantenimiento.getComponent(1)).setText("");
+                        ((JTextField) lbFechaRegreso.getComponent(1)).setText("");
+                        ((JTextField) lbDescripcionMantenimiento.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no existe");
+                        dialogError.setSize(300,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("El usuario no existe!!!");
+                    }
+                } else {
+                    ((JTextField) lbUsuario.getComponent(1)).setText("");
+                    ((JTextField) lbMantenimiento.getComponent(1)).setText("");
+                    ((JTextField) lbFechaRegreso.getComponent(1)).setText("");
+                    ((JTextField) lbDescripcionMantenimiento.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al recibir vehiculo");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al recibir vehiculo!!!");
+                }
+            });
+            add(btnRecibirVehiculo);
+
+
+        } else if (pagina == 134) {
+            setLayout(new GridLayout(3,1));
+
+            JLabel lbPlaca = generadorLabelInput("Placa: ");
+            add(lbPlaca);
+
+            JLabel lbFechaActual = generadorLabelInput("Fecha actual (MM/DD/AAAA): ");
+            add(lbFechaActual);
+
+            JButton btnListarVehiculoParaAlquiler = new JButton("Listar vehiculo para alquiler");
+            btnListarVehiculoParaAlquiler.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnListarVehiculoParaAlquiler.addActionListener(e -> {
+                String placa = ((JTextField) lbPlaca.getComponent(1)).getText();
+                String fechaActual = ((JTextField) lbFechaActual.getComponent(1)).getText();
+                if (placa.length() > 3 && fechaActual.length() > 3) {
+                    Boolean esta = false;
+                    for (Map.Entry<String, Categoria> categoria : vp.catalogo.getHashCategorias().entrySet()) {
+                        if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
+                            Vehiculo vehiculo = categoria.getValue().getHashVehiculos().get(placa);
+                            if (!vehiculo.getEnAlquiler() && !vehiculo.getDetallesSede().getDisponibilidadParaAlquilar()) {
+                                esta = true;
+                            }
+                        }
+                    }
+                    if (esta) {
+                        ((Empleado) vp.usu).vehiculoListoParaAlquiler(vp.catalogo, placa, fechaActual);
+                        ventanaPrincipal.cambiarPagina(13);
+                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Vehiculo " + placa + " listo para alquiler");
+                        dialogOK.setSize(300,30);
+                        dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogOK.setVisible(true);
+                        System.out.println("Vehiculo " + placa + " listo para alquiler!!!");
+                    } else {
+                        ((JTextField) lbPlaca.getComponent(1)).setText("");
+                        ((JTextField) lbFechaActual.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El vehículo no existe o no esta en alquiler o mantenimiento");
+                        dialogError.setSize(500,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("El vehículo no existe o no esta en alquiler o mantenimiento!!!");
+                    }
+                } else {
+                    ((JTextField) lbPlaca.getComponent(1)).setText("");
+                    ((JTextField) lbFechaActual.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al listar vehiculo para alquiler");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al listar vehiculo para alquiler!!!");
+                }
+            });
+            add(btnListarVehiculoParaAlquiler);
+
         } else if (pagina == 14) {
             //
         }

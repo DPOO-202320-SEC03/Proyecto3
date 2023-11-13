@@ -135,7 +135,7 @@ public class Empleado extends Usuario {
            if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setDisponibilidadParaAlquilar(true); 
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setFechaDisponibilidad(fechaDisponibilidad);
-                categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaDisponibilidad, "Vehiculo disponible para alquiler");
+                categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaDisponibilidad, "Vehiculo disponible para alquiler, recibido en sede: " + nombreSede + ", por: " + this.username);
            }
         }
     }

@@ -87,9 +87,27 @@ public class PanelNorte extends JPanel {
         } else if (pagina == 12) {
             titulo("MENU ADMIN LOCAL");
             volver_pagina_anterior(1);
+        } else if (pagina == 121) {
+            titulo("CREAR EMPLEADO LOCAL");
+            volver_pagina_anterior(12);
+        } else if (pagina == 122) {
+            titulo("ELIMINAR EMPLEADO LOCAL");
+            volver_pagina_anterior(12);
         } else if (pagina == 13) {
             titulo("MENU EMPLEADO");
             volver_pagina_anterior(1);
+        } else if (pagina == 131) {
+            titulo("ALQUILAR VEHICULO");
+            volver_pagina_anterior(13);
+        } else if (pagina == 132) {
+            titulo("AGREGAR LICENCIA DE OTROS CONDUCTORES");
+            volver_pagina_anterior(13);
+        } else if (pagina == 133) {
+            titulo("RECIBIR VEHICULO");
+            volver_pagina_anterior(13);
+        } else if (pagina == 134) {
+            titulo("LISTAR VEHICULO PARA ALQUILER");
+            volver_pagina_anterior(13);
         } else if (pagina == 14) {
             titulo("MENU CLIENTE");
             volver_pagina_anterior(1);
