@@ -37,6 +37,10 @@ import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
 import SistemaLogin.Empleado;
 import SistemaLogin.Usuario;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class PanelCentral extends JPanel {
     private VentanaPrincipal vp;
@@ -1164,14 +1168,32 @@ public class PanelCentral extends JPanel {
                             }
                         }
                         
+                        
+
+                        // hacer la grafica
+                        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+                        for (Map.Entry<Integer, Integer> entry : dayOccurrences.entrySet()) {
+                            dataset.setValue(entry.getValue(), "Reservas", Integer.toString(entry.getKey()));
+                        }
+
+                        JFreeChart chart = ChartFactory.createLineChart(
+                            "Reservas por día en " + anioDeseadoS,
+                            "Día del año",
+                            "Cantidad de reservas",
+                            dataset
+                        );
+
+                        ChartPanel chartPanel = new ChartPanel(chart);
+
                         JDialog dialogReservasPorYear = new JDialog((JFrame) getTopLevelAncestor(), "Reservas por año");
                         dialogReservasPorYear.setSize(750,700);
                         dialogReservasPorYear.setLocationRelativeTo(getTopLevelAncestor());
                         dialogReservasPorYear.setLayout(new GridLayout(1,1));
-                        
-                        // TODO: hacer la grafica
-                        dialogReservasPorYear.add(new JLabel(dayOccurrences.toString()));
+                        dialogReservasPorYear.add(chartPanel);
+                        dialogReservasPorYear.setVisible(true);
 
+                        // ...
                         dialogReservasPorYear.setVisible(true);
                         System.out.println("Reservas por año consultadas exitosamente!!!");
                         ((JTextField) lbAnioDeseado.getComponent(1)).setText("");
