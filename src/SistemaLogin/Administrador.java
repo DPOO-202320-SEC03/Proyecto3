@@ -9,6 +9,8 @@ import Inventario.Vehiculo;
 import Reservas.Reserva;
 import Reservas.ReservaEspecial;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Administrador extends Usuario {
@@ -150,4 +152,6 @@ public class Administrador extends Usuario {
     public String resumenReserva(HashMap<String, Reserva> hashReservas, String idReserva, Catalogo catalogo) {
         return(hashReservas.get(idReserva).getResumen(catalogo, catalogo.getTarifasGlobales()));
     }
+
+    
 }
