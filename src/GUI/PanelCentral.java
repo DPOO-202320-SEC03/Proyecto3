@@ -1,10 +1,6 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.time.LocalDate;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -1153,8 +1146,6 @@ public class PanelCentral extends JPanel {
                             }
                         }
 
-                        System.out.println(fechasFiltradas);
-
                         for (String dateRange : fechasFiltradas) {
                             String[] dates = dateRange.split("-");
                             LocalDate startDate = LocalDate.parse(dates[0], formatter);
@@ -1170,13 +1161,15 @@ public class PanelCentral extends JPanel {
                                 }
                             }
                         }
-
                         
                         JDialog dialogReservasPorYear = new JDialog((JFrame) getTopLevelAncestor(), "Reservas por año");
                         dialogReservasPorYear.setSize(750,700);
                         dialogReservasPorYear.setLocationRelativeTo(getTopLevelAncestor());
                         dialogReservasPorYear.setLayout(new GridLayout(1,1));
-                        // Añadir el panel
+                        
+                        // TODO: hacer la grafica
+                        //dialogReservasPorYear.add(new JLabel(dayOccurrences.toString()));
+
                         dialogReservasPorYear.setVisible(true);
                         System.out.println("Reservas por año consultadas exitosamente!!!");
                         ((JTextField) lbAnioDeseado.getComponent(1)).setText("");
