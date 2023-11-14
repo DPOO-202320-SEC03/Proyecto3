@@ -7,7 +7,10 @@ import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -1116,7 +1119,81 @@ public class PanelCentral extends JPanel {
             add(btnEliminarUsuario);
 
         } else if (pagina == 1114) {
-            //TODO: PONTO  aca tienes que hacer lo que hace que muestre la grafica no olvides que en vp estan todos los hash es solo hacer vp.hash
+            setLayout(new GridLayout(2,1));
+
+            JLabel lbAnioDeseado = generadorLabelInput("Año que desea analizar: ");
+            add(lbAnioDeseado);
+
+            JButton btnAnalizarAnio = new JButton("Analizar año");
+            btnAnalizarAnio.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnAnalizarAnio.addActionListener(e -> {
+                String anioDeseadoS = ((JTextField) lbAnioDeseado.getComponent(1)).getText();
+                Integer anioDeseado = Integer.parseInt(anioDeseadoS);
+                if (anioDeseadoS.length() > 3) {
+                    if (vp.hashReservas.size() > 0) {
+                        HashMap<Integer, Integer> dayOccurrences = new HashMap<>();
+                        ArrayList<String> fechasFiltradas = new ArrayList<>();
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+                        for (Map.Entry<String, Reserva> reserva : vp.hashReservas.entrySet()) {
+                            String[] fecha = reserva.getValue().getRangoAlquiler().split("-");
+                            LocalDate startDate = LocalDate.parse(fecha[0], formatter);
+                            LocalDate endDate = LocalDate.parse(fecha[1], formatter);
+
+                            // Check if the date range intersects with the desired year
+                            if ((startDate.getYear() == anioDeseado || endDate.getYear() == anioDeseado) ||
+                                (startDate.getYear() < anioDeseado && endDate.getYear() > anioDeseado)) {
+                                fechasFiltradas.add(reserva.getValue().getRangoAlquiler());
+                            }
+                        }
+
+                        for (String dateRange : fechasFiltradas) {
+                            String[] dates = dateRange.split("-");
+                            LocalDate startDate = LocalDate.parse(dates[0], formatter);
+                            LocalDate endDate = LocalDate.parse(dates[1], formatter);
+
+                            while (!startDate.isAfter(endDate)) {
+                                int dayOfYear = startDate.getDayOfYear();
+                                dayOccurrences.put(dayOfYear, dayOccurrences.getOrDefault(dayOfYear, 0) + 1);
+                                startDate = startDate.plusDays(1);
+
+                                if (startDate.getYear() != anioDeseado && !startDate.isBefore(endDate)) {
+                                    startDate = LocalDate.parse(dates[0], formatter);
+                                }
+                            }
+                        }
+                        
+                        JDialog dialogReservasPorYear = new JDialog((JFrame) getTopLevelAncestor(), "Reservas por año");
+                        dialogReservasPorYear.setSize(750,700);
+                        dialogReservasPorYear.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogReservasPorYear.setLayout(new GridLayout(1,1));
+                        
+                        // TODO: hacer la grafica
+                        dialogReservasPorYear.add(new JLabel(dayOccurrences.toString()));
+
+                        dialogReservasPorYear.setVisible(true);
+                        System.out.println("Reservas por año consultadas exitosamente!!!");
+                        ((JTextField) lbAnioDeseado.getComponent(1)).setText("");
+                        ventanaPrincipal.cambiarPagina(11);
+                    } else {
+                        ((JTextField) lbAnioDeseado.getComponent(1)).setText("");
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "No hay reservas registradas");
+                        dialogError.setSize(300,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println("No hay reservas registradas!!!");
+                    }
+                } else {
+                    ((JTextField) lbAnioDeseado.getComponent(1)).setText("");
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al consultar reservas por año");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al consultar reservas por año!!!");
+                }
+            });
+            add(btnAnalizarAnio);
         } else if (pagina == 12) {
             setLayout(new GridLayout(7,2));
 
