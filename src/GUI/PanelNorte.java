@@ -111,6 +111,15 @@ public class PanelNorte extends JPanel {
         } else if (pagina == 14) {
             titulo("MENU CLIENTE");
             volver_pagina_anterior(1);
+        } else if (pagina == 141) {
+            titulo("CREAR RESERVA");
+            volver_pagina_anterior(14);
+        } else if (pagina == 142) {
+            titulo("EDITAR RESERVA");
+            volver_pagina_anterior(14);
+        } else if (pagina == 143) {
+            titulo("RESUMEN RESERVA ACTUAL");
+            volver_pagina_anterior(14);
         }
     }
 

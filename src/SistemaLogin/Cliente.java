@@ -1,10 +1,11 @@
 package SistemaLogin;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import Inventario.Catalogo;
 import Reservas.Reserva;
 import Reservas.ReservaNormal;
-
-import java.util.*;
 
 public class Cliente extends Usuario {
 
@@ -33,6 +34,7 @@ public class Cliente extends Usuario {
             return "No hay vehiculos disponibles en este momento para esta categoria";
         } else {
             hashReservas.put(Integer.toString(reservaCliente.getIdReserva()), reservaCliente);
+            catalogo.getHashCategorias().get(reservaCliente.getCategoriaVehiculo()).getHashVehiculos().get(reservaCliente.getPlaca()).addReserva(reservaCliente);
             this.idReserva = reservaCliente.getIdReserva();
             this.tieneReserva = true;
             return reservaCliente.getResumen(catalogo, catalogo.getTarifasGlobales());
@@ -40,7 +42,7 @@ public class Cliente extends Usuario {
     }
 
     public String alterarReserva(HashMap<String, Reserva> hashReservas, int idReserva, String nuevaSedeEntregar, String nuevaFechaEntregar, String nuevaHoraRangoEntregar, int otrosConductores, Catalogo catalogo) {
-        String placaNueva = ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(catalogo, nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores);
+        String placaNueva = ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).editarReserva(catalogo, nuevaSedeEntregar, nuevaFechaEntregar, nuevaHoraRangoEntregar, otrosConductores, ((ReservaNormal) hashReservas.get(Integer.toString(idReserva))).getSedeRecoger());
         if (placaNueva.equals("na")) {
             return "No hay vehiculos disponibles en este momento para esta categoria, no se pudo editar la reserva";
         } else {

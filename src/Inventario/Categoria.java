@@ -60,7 +60,7 @@ public class Categoria implements Serializable {
      * metodo publico usado para saber el numero de placa de un vehiculo
      * @return el numero de placa del vehiculo
      */
-    public String getPlacaVehiculoParaReserva(String rangoAlquiler) {
+    public String getPlacaVehiculoParaReserva(String rangoAlquiler, String sedeRecoger) {
         String placa = "na";
         Boolean encontrado = false;
         String inicioAlquiler = rangoAlquiler.split("-")[0];
@@ -81,7 +81,7 @@ public class Categoria implements Serializable {
                         }
                     }
                 }
-                if (validoParaAlquiler) {
+                if (validoParaAlquiler && vehiculo.getValue().getDetallesSede().getSedeUbicacion().equals(sedeRecoger)) {
                     placa = vehiculo.getKey();
                     encontrado = true;
                 }

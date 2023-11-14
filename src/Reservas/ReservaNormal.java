@@ -40,7 +40,7 @@ public class ReservaNormal extends Reserva {
         this.otrosConductores = otrosConductores;
         this.nombresSeguros = nombresSeguros;
         this.rangoAlquiler = fechaRecoger + "-" + fechaEntregar;
-        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler);
+        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
         while (placa.equals("na")) {
             int rangoCategoriaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getRangoCategoria() + 1;
             String categoriaNueva = "na";
@@ -50,7 +50,7 @@ public class ReservaNormal extends Reserva {
                 }
             }
             if (!(categoriaNueva.equals("na"))) {
-                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler);
+                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
             } else {
                 placa = "NA";
             }
@@ -58,8 +58,8 @@ public class ReservaNormal extends Reserva {
         super.placa = placa;
     }
 
-    public String getNuevaPlacaParaReserva(Catalogo catalogo, HashMap<String, Usuario> hashUsuarios, String usernameClienteAlquiler) {
-        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler);
+    public String getNuevaPlacaParaReserva(Catalogo catalogo, HashMap<String, Usuario> hashUsuarios, String usernameClienteAlquiler, String sedeRecoger) {
+        String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
         while (placa.equals("na")) {
             int rangoCategoriaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getRangoCategoria() + 1;
             String categoriaNueva = "na";
@@ -69,7 +69,7 @@ public class ReservaNormal extends Reserva {
                 }
             }
             if (!(categoriaNueva.equals("na"))) {
-                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler);
+                placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
             } else {
                 placa = "NA";
             }
@@ -81,11 +81,11 @@ public class ReservaNormal extends Reserva {
         return super.placa;
     }
 
-    public String editarReserva(Catalogo catalogo, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores) {
+    public String editarReserva(Catalogo catalogo, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores, String sedeRecoger) {
         String rangoAlquilerNuevo = fechaRecoger + "-" + fechaEntregar;
         // encuentra y elimina el rango viejo del vehiculo
         catalogo.getHashCategorias().get(categoriaVehiculo).getHashVehiculos().get(super.placa).getReservas().remove(this);
-        String placaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquilerNuevo);
+        String placaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquilerNuevo, sedeRecoger);
 
         if (!placaNueva.equals("na")) {
             this.sedeEntregar = sedeEntregar;
@@ -212,6 +212,10 @@ public class ReservaNormal extends Reserva {
         }
     
     return resultado;
+    }
+
+    public String getSedeRecoger() {
+        return this.sedeRecoger;
     }
 
 

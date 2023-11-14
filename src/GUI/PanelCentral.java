@@ -1,18 +1,16 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,8 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import Inventario.Categoria;
+import Inventario.Seguro;
 import Inventario.Vehiculo;
 import Reservas.Reserva;
 import Reservas.ReservaNormal;
@@ -702,7 +702,7 @@ public class PanelCentral extends JPanel {
                 String nombreSedeActual = ((JTextField) lbNombreSedeActual.getComponent(1)).getText();
                 String nombreCategoria = ((JTextField) lbNombreCategoria.getComponent(1)).getText();
                 String fechaDisponibilidad = ((JTextField) lbFechaDisponibilidad.getComponent(1)).getText();
-                if (placa.length() > 3 && marca.length() > 3 && modelo.length() > 3 && color.length() > 3 && tipoDeTransmision.length() > 3 && tipoDeDireccion.length() > 3 && tipoDeCombustible.length() > 3 && numeroDePasajeros.length() > 3 && nombreSedeActual.length() > 3 && nombreCategoria.length() > 3 && fechaDisponibilidad.length() > 3) {
+                if (placa.length() > 3 && marca.length() > 3 && modelo.length() > 3 && color.length() > 3 && tipoDeTransmision.length() > 3 && tipoDeDireccion.length() > 3 && tipoDeCombustible.length() > 3 && numeroDePasajeros.length() > 0 && nombreSedeActual.length() > 3 && nombreCategoria.length() > 3 && fechaDisponibilidad.length() > 3) {
                     if (vp.catalogo.getHashCategorias().containsKey(nombreCategoria) && vp.hashSedes.containsKey(nombreSedeActual)) {
                         ((Administrador) vp.usu).crearVehiculo(vp.catalogo, placa, marca, modelo, color, tipoDeTransmision, tipoDeDireccion, tipoDeCombustible, numeroDePasajeros, nombreSedeActual, nombreCategoria, fechaDisponibilidad);
                         ventanaPrincipal.cambiarPagina(11);
@@ -1522,10 +1522,10 @@ public class PanelCentral extends JPanel {
             JLabel lbMantenimiento = generadorLabelInput("Necesita mantenimiento (TRUE/FALSE): ");
             add(lbMantenimiento);
 
-            JLabel lbFechaRegreso = generadorLabelInput("Fecha estimada de regreso del vehiculo (MM/DD/AAAA): ");
+            JLabel lbFechaRegreso = generadorLabelInput("Si necesita, fecha estimada de regreso ((MM/DD/AAAA)/NA): ");
             add(lbFechaRegreso);
 
-            JLabel lbDescripcionMantenimiento = generadorLabelInput("Descripcion del mantenimiento: ");
+            JLabel lbDescripcionMantenimiento = generadorLabelInput("Si necesita, descripcion del mantenimiento (.../NA): ");
             add(lbDescripcionMantenimiento);
 
             JButton btnRecibirVehiculo = new JButton("Recibir vehiculo");
@@ -1688,7 +1688,423 @@ public class PanelCentral extends JPanel {
             add(btnListarVehiculoParaAlquiler);
 
         } else if (pagina == 14) {
-            //
+            setLayout(new GridLayout(7,2));
+
+            JButton btnCrearReserva = new JButton("Crear reserva");
+            btnCrearReserva.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnCrearReserva.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(141);
+            });
+            add(btnCrearReserva);
+
+            JButton btnEditarReserva = new JButton("Editar reserva");
+            btnEditarReserva.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnEditarReserva.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(142);
+            });
+            add(btnEditarReserva);
+
+            JButton btnObtenerResumenReservaActual = new JButton("Obtener resumen de reserva actual");
+            btnObtenerResumenReservaActual.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnObtenerResumenReservaActual.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(143);
+            });
+            add(btnObtenerResumenReservaActual);
+
+            for (int i = 0; i < 11; i++) {
+                add(new JLabel());
+            }
+        } else if (pagina == 141) {
+            setLayout(new BorderLayout());
+            
+            // El panel este de seguros:
+            JPanel panelEste = new JPanel();
+            ArrayList<String> segurosSeleccionados = new ArrayList<String>();
+            segurosSeleccionados.add(" ");
+            ArrayList<String> listaSegurosNombre = new ArrayList<String>();
+            ArrayList<String> listaSegurosDescripcion = new ArrayList<String>();
+            ArrayList<String> listaSegurosPrecio = new ArrayList<String>();
+            for (Map.Entry<String, Seguro> seguro : vp.catalogo.getHashSeguros().entrySet()) {
+                listaSegurosNombre.add(seguro.getValue().getNombreSeguro());
+                listaSegurosDescripcion.add(seguro.getValue().getDescripcionSeguro());
+                listaSegurosPrecio.add(String.valueOf(seguro.getValue().getTarifaExtra()));
+            }
+
+            Integer numeroDeSeguros = listaSegurosNombre.size();
+
+            panelEste.setLayout(new GridLayout(numeroDeSeguros+1,1));
+
+            JLabel lbTituloSeguros = new JLabel("Seleccionar seguros");
+            lbTituloSeguros.setFont(new Font("Dialog", Font.PLAIN, 22));
+            lbTituloSeguros.setHorizontalAlignment(JLabel.CENTER);
+            lbTituloSeguros.setOpaque(true);
+            lbTituloSeguros.setBackground(Color.LIGHT_GRAY);
+
+            panelEste.add(lbTituloSeguros);
+
+            JPanel panelTituloTabla = new JPanel();
+            panelTituloTabla.setLayout(new GridLayout(1,3));
+
+            JLabel lbTituloNombre = new JLabel("Nombre");
+            lbTituloNombre.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTituloNombre.setHorizontalAlignment(JLabel.CENTER);
+            lbTituloNombre.setOpaque(true);
+            lbTituloNombre.setBackground(Color.WHITE);
+            lbTituloNombre.setBorder(new LineBorder(Color.BLACK));
+            panelTituloTabla.add(lbTituloNombre);
+
+            JLabel lbTituloDescripcion = new JLabel("Descripcion");
+            lbTituloDescripcion.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTituloDescripcion.setHorizontalAlignment(JLabel.CENTER);
+            lbTituloDescripcion.setOpaque(true);
+            lbTituloDescripcion.setBackground(Color.WHITE);
+            lbTituloDescripcion.setBorder(new LineBorder(Color.BLACK));
+            panelTituloTabla.add(lbTituloDescripcion);
+
+            JLabel lbTituloPrecio = new JLabel("Precio/Dia");
+            lbTituloPrecio.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTituloPrecio.setHorizontalAlignment(JLabel.CENTER);
+            lbTituloPrecio.setOpaque(true);
+            lbTituloPrecio.setBackground(Color.WHITE);
+            lbTituloPrecio.setBorder(new LineBorder(Color.BLACK));
+            panelTituloTabla.add(lbTituloPrecio);
+
+            panelEste.add(panelTituloTabla);
+
+            for (int i = 1; i < numeroDeSeguros; i++) {
+
+                JPanel panelSeguro = new JPanel();
+                panelSeguro.setLayout(new GridLayout(1,3));
+
+                JPanel panelNombre = new JPanel();
+                JCheckBox checkBoxNombre = new JCheckBox(listaSegurosNombre.get(i));
+                checkBoxNombre.setFont(new Font("Dialog", Font.PLAIN, 18));
+                checkBoxNombre.addActionListener(e -> {
+                    JCheckBox source = (JCheckBox) e.getSource();
+                    String item = source.getText();
+
+                    if (source.isSelected()) {
+                        segurosSeleccionados.add(item);
+                    } else {
+                        segurosSeleccionados.remove(item);
+                    }
+
+                    System.out.println(segurosSeleccionados);
+                });
+                panelNombre.add(checkBoxNombre);
+                panelNombre.setOpaque(true);
+                panelNombre.setBackground(Color.WHITE);
+                panelNombre.setBorder(new LineBorder(Color.BLACK));
+                panelSeguro.add(panelNombre);
+
+                JTextArea textAreaDescripcion = new JTextArea(listaSegurosDescripcion.get(i));
+                textAreaDescripcion.setFont(new Font("Dialog", Font.PLAIN, 18));
+                textAreaDescripcion.setEditable(false);
+                textAreaDescripcion.setBackground(Color.WHITE);
+                textAreaDescripcion.setBorder(new LineBorder(Color.BLACK));
+                JScrollPane scrollPaneDescripcion = new JScrollPane(textAreaDescripcion);
+                panelSeguro.add(scrollPaneDescripcion);
+
+                JLabel lbPrecio = new JLabel(listaSegurosPrecio.get(i));
+                lbPrecio.setFont(new Font("Dialog", Font.PLAIN, 18));
+                lbPrecio.setHorizontalAlignment(JLabel.CENTER);
+                lbPrecio.setVerticalAlignment(JLabel.TOP);
+                lbPrecio.setOpaque(true);
+                lbPrecio.setBackground(Color.WHITE);
+                lbPrecio.setBorder(new LineBorder(Color.BLACK));
+                panelSeguro.add(lbPrecio);
+
+                panelEste.add(panelSeguro);
+            }
+
+            add(panelEste, BorderLayout.EAST);
+
+            // El panel central demas cosas
+
+            JPanel panelCentral = new JPanel();
+            panelCentral.setLayout(new GridLayout(9,1));
+
+            JLabel lbCategoria = new JLabel();
+            lbCategoria.setLayout(new GridLayout(1,2));
+            JLabel labelTextoCategoria = new JLabel("Categoria: ");
+            labelTextoCategoria.setFont(new Font("Dialog", Font.PLAIN, 20));
+            labelTextoCategoria.setHorizontalAlignment(JLabel.CENTER);
+            lbCategoria.add(labelTextoCategoria);
+
+            JComboBox<String> comboBoxCategoria = new JComboBox<>();
+            comboBoxCategoria.setFont(new Font("Dialog", Font.PLAIN, 20));
+            for (String key : vp.catalogo.getHashCategorias().keySet()) {
+                comboBoxCategoria.addItem(key);
+            }
+            comboBoxCategoria.setSelectedItem(null);
+            comboBoxCategoria.addActionListener(e -> {
+                String categoriaSeleccionada = (String) comboBoxCategoria.getSelectedItem();
+                System.out.println(categoriaSeleccionada);
+            });
+            lbCategoria.add(comboBoxCategoria);
+            panelCentral.add(lbCategoria);
+
+            JLabel lbSedeRecoger = new JLabel();
+            lbSedeRecoger.setLayout(new GridLayout(1,2));
+            JLabel lbTextoSedeRecoger = new JLabel("Sede a recoger: ");
+            lbTextoSedeRecoger.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTextoSedeRecoger.setHorizontalAlignment(JLabel.CENTER);
+            lbSedeRecoger.add(lbTextoSedeRecoger);
+
+            JComboBox<String> comboBoxSedeRecoger = new JComboBox<>();
+            comboBoxSedeRecoger.setFont(new Font("Dialog", Font.PLAIN, 20));
+            for (String key : vp.hashSedes.keySet()) {
+                comboBoxSedeRecoger.addItem(key);
+            }
+            comboBoxSedeRecoger.setSelectedItem(null);
+            comboBoxSedeRecoger.addActionListener(e -> {
+                String sedeRecogerSelecionada = (String) comboBoxSedeRecoger.getSelectedItem();
+                System.out.println("Sede a recoger: " + sedeRecogerSelecionada);
+            });
+
+            lbSedeRecoger.add(comboBoxSedeRecoger);
+            panelCentral.add(lbSedeRecoger);
+
+            JLabel lbSedeEntregar = new JLabel();
+            lbSedeEntregar.setLayout(new GridLayout(1,2));
+            JLabel lbTextoSedeEntregar = new JLabel("Sede a entregar: ");
+            lbTextoSedeEntregar.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTextoSedeEntregar.setHorizontalAlignment(JLabel.CENTER);
+            lbSedeEntregar.add(lbTextoSedeEntregar);
+
+            JComboBox<String> comboBoxSedeEntregar = new JComboBox<>();
+            comboBoxSedeEntregar.setFont(new Font("Dialog", Font.PLAIN, 20));
+            for (String key : vp.hashSedes.keySet()) {
+                comboBoxSedeEntregar.addItem(key);
+            }
+            comboBoxSedeEntregar.setSelectedItem(null);
+            comboBoxSedeEntregar.addActionListener(e -> {
+                String sedeEntregarSelecionada = (String) comboBoxSedeEntregar.getSelectedItem();
+                System.out.println("Sede de entrega: " + sedeEntregarSelecionada);
+            });
+
+            lbSedeEntregar.add(comboBoxSedeEntregar);
+            panelCentral.add(lbSedeEntregar);
+
+            JLabel lbFechaRecoger = generadorLabelInput("Fecha a recoger (MM/DD/AAAA): ");
+            panelCentral.add(lbFechaRecoger);
+
+            JLabel lbHoraRecoger = generadorLabelInput("Hora a recoger (HH:MM): ");
+            panelCentral.add(lbHoraRecoger);
+
+            JLabel lbFechaEntregar = generadorLabelInput("Fecha a entregar (MM/DD/AAAA): ");
+            panelCentral.add(lbFechaEntregar);
+
+            JLabel lbHoraEntregar = generadorLabelInput("Hora a entregar (HH:MM): ");
+            panelCentral.add(lbHoraEntregar);
+
+            JLabel lbOtrosConductores = generadorLabelInput("Conductores extra (0-3): ");
+            panelCentral.add(lbOtrosConductores);
+
+            JButton btnCrearReserva = new JButton("Crear reserva");
+            btnCrearReserva.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnCrearReserva.addActionListener(e -> {
+                String categoria = (String) comboBoxCategoria.getSelectedItem();
+                String sedeRecoger = (String) comboBoxSedeRecoger.getSelectedItem();
+                String sedeEntregar = (String) comboBoxSedeEntregar.getSelectedItem();
+                String fechaRecoger = ((JTextField) lbFechaRecoger.getComponent(1)).getText();
+                String horaRecoger = ((JTextField) lbHoraRecoger.getComponent(1)).getText();
+                String fechaEntregar = ((JTextField) lbFechaEntregar.getComponent(1)).getText();
+                String horaEntregar = ((JTextField) lbHoraEntregar.getComponent(1)).getText();
+                String otrosConductoresS = ((JTextField) lbOtrosConductores.getComponent(1)).getText();
+                int otrosConductores = Integer.parseInt(otrosConductoresS);
+                if (categoria == null || sedeRecoger == null || sedeEntregar == null || fechaRecoger.length() < 3 || horaRecoger.length() < 3 || fechaEntregar.length() < 3 || horaEntregar.length() < 3 || otrosConductores > 3) {
+                    comboBoxCategoria.setSelectedItem(null);
+                    comboBoxSedeRecoger.setSelectedItem(null);
+                    comboBoxSedeEntregar.setSelectedItem(null);
+                    ((JTextField) lbFechaRecoger.getComponent(1)).setText("");
+                    ((JTextField) lbHoraRecoger.getComponent(1)).setText("");
+                    ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
+
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al crear reserva");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al crear reserva!!!");
+                } else if (((Cliente) vp.usu).getTieneReserva()) {
+                    ventanaPrincipal.cambiarPagina(14);
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario ya tiene una reserva");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("El usuario ya tiene una reserva!!!");
+                } else if (((Cliente) vp.usu).getTieneTarjetaBloqueada()) {
+                    comboBoxCategoria.setSelectedItem(null);
+                    comboBoxSedeRecoger.setSelectedItem(null);
+                    comboBoxSedeEntregar.setSelectedItem(null);
+                    ((JTextField) lbFechaRecoger.getComponent(1)).setText("");
+                    ((JTextField) lbHoraRecoger.getComponent(1)).setText("");
+                    ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
+
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario tiene la tarjeta bloqueada");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("El usuario tiene la tarjeta bloqueada!!!");
+                } else {
+                    String resultado = ((Cliente) vp.usu).reservarVehiculo(vp.hashReservas, vp.catalogo, categoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, segurosSeleccionados);
+                    if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria") || resultado == null || resultado.equals("")) {
+                        comboBoxCategoria.setSelectedItem(null);
+                        comboBoxSedeRecoger.setSelectedItem(null);
+                        comboBoxSedeEntregar.setSelectedItem(null);
+                        ((JTextField) lbFechaRecoger.getComponent(1)).setText("");
+                        ((JTextField) lbHoraRecoger.getComponent(1)).setText("");
+                        ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
+                        ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
+                        ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
+
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), resultado);
+                        dialogError.setSize(700,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println(resultado);
+                    } else {
+                        ventanaPrincipal.cambiarPagina(14);
+                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Reserva creada con exito");
+                        dialogOK.setSize(750,700);
+                        dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+
+                        dialogOK.setLayout(new GridLayout(1,1));
+                        JTextArea textArea = new JTextArea("\nDetalles de la reserva a continuación: \n\n"+resultado);
+                        textArea.setEditable(false);
+                        JScrollPane scrollPane = new JScrollPane(textArea);
+                        dialogOK.add(scrollPane);
+
+                        dialogOK.setVisible(true);
+                        System.out.println(resultado);
+                    }
+                }
+            });
+            panelCentral.add(btnCrearReserva);
+
+            add(panelCentral, BorderLayout.CENTER);
+        } else if (pagina == 142) {
+            setLayout(new GridLayout(5,1));
+
+            JLabel lbSedeEntregar = new JLabel();
+            lbSedeEntregar.setLayout(new GridLayout(1,2));
+            JLabel lbTextoSedeEntregar = new JLabel("Sede a entregar: ");
+            lbTextoSedeEntregar.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTextoSedeEntregar.setHorizontalAlignment(JLabel.CENTER);
+            lbSedeEntregar.add(lbTextoSedeEntregar);
+
+            JComboBox<String> comboBoxSedeEntregar = new JComboBox<>();
+            comboBoxSedeEntregar.setFont(new Font("Dialog", Font.PLAIN, 20));
+            for (String key : vp.hashSedes.keySet()) {
+                comboBoxSedeEntregar.addItem(key);
+            }
+            comboBoxSedeEntregar.setSelectedItem(null);
+            comboBoxSedeEntregar.addActionListener(e -> {
+                String sedeEntregarSelecionada = (String) comboBoxSedeEntregar.getSelectedItem();
+                System.out.println("Sede de entrega: " + sedeEntregarSelecionada);
+            });
+
+            lbSedeEntregar.add(comboBoxSedeEntregar);
+            add(lbSedeEntregar);
+
+            JLabel lbFechaEntregar = generadorLabelInput("Fecha a entregar (MM/DD/AAAA): ");
+            add(lbFechaEntregar);
+
+            JLabel lbHoraEntregar = generadorLabelInput("Hora a entregar (HH:MM): ");
+            add(lbHoraEntregar);
+
+            JLabel lbOtrosConductores = generadorLabelInput("Conductores extra (0-3): ");
+            add(lbOtrosConductores);
+
+            JButton btnEditarReserva = new JButton("Editar reserva");
+            btnEditarReserva.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnEditarReserva.addActionListener(e -> {
+                String sedeEntregar = (String) comboBoxSedeEntregar.getSelectedItem();
+                String fechaEntregar = ((JTextField) lbFechaEntregar.getComponent(1)).getText();
+                String horaEntregar = ((JTextField) lbHoraEntregar.getComponent(1)).getText();
+                String otrosConductoresS = ((JTextField) lbOtrosConductores.getComponent(1)).getText();
+                int otrosConductores = Integer.parseInt(otrosConductoresS);
+
+                if (sedeEntregar == null || fechaEntregar.length() < 3 || horaEntregar.length() < 3 || otrosConductores > 3) {
+                    comboBoxSedeEntregar.setSelectedItem(null);
+                    ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
+
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al editar reserva");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al editar reserva!!!");
+                } else if (!((Cliente) vp.usu).getTieneReserva()) {
+                    ventanaPrincipal.cambiarPagina(14);
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no tiene una reserva");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("El usuario no tiene una reserva!!!");
+                } else if (((Cliente) vp.usu).getTieneTarjetaBloqueada()) {
+                    comboBoxSedeEntregar.setSelectedItem(null);
+                    ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
+                    ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
+
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario tiene la tarjeta bloqueada");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("El usuario tiene la tarjeta bloqueada!!!");
+                } else {
+                    String resultado = ((Cliente) vp.usu).alterarReserva(vp.hashReservas, ((Cliente) vp.usu).getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, vp.catalogo);
+                    if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria") || resultado == null || resultado.equals("")) {
+                        comboBoxSedeEntregar.setSelectedItem(null);
+                        ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
+                        ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
+                        ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
+
+                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), resultado);
+                        dialogError.setSize(700,30);
+                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                        dialogError.setVisible(true);
+                        System.out.println(resultado);
+                    } else {
+                        ventanaPrincipal.cambiarPagina(14);
+                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Reserva editada con exito");
+                        dialogOK.setSize(750,700);
+                        dialogOK.setLocationRelativeTo(getTopLevelAncestor());
+
+                        dialogOK.setLayout(new GridLayout(1,1));
+                        JTextArea textArea = new JTextArea("\nDetalles de la reserva a continuación: \n\n"+resultado);
+                        textArea.setEditable(false);
+                        JScrollPane scrollPane = new JScrollPane(textArea);
+                        dialogOK.add(scrollPane);
+
+                        dialogOK.setVisible(true);
+                        System.out.println(resultado);
+                    }
+                }
+            });
+            add(btnEditarReserva);
+
+
+        } else if (pagina == 143) {
+            setLayout(new GridLayout(1,1));
+
+            String reservaActual = ((Cliente) vp.usu).getResumenReservaActual(vp.hashReservas, vp.catalogo);
+
+            JTextArea resumenReservaActual = new JTextArea(reservaActual);
+            resumenReservaActual.setFont(new Font("Dialog", Font.PLAIN, 20));
+            resumenReservaActual.setEditable(false);
+            resumenReservaActual.setBackground(Color.WHITE);
+            resumenReservaActual.setBorder(new LineBorder(Color.BLACK));
+            
+            JScrollPane scrollPane = new JScrollPane(resumenReservaActual);
+            add(scrollPane);
+
         }
     }
 

@@ -76,6 +76,7 @@ public class VentanaPrincipal extends JFrame{
                 String correo = "ADMIN@GOOGLE.COM";
                 Administrador admin = new Administrador(username, password, nombres, apellidos, celular, correo);
                 hashUsuarios.put(admin.getUsername(), admin);
+                admin.crearSeguro(catalogo, 0, " ", " ");
                 System.out.println("Su usuario y contraseña de administrador son: ADMIN/ADMIN");
 
                 // Carga una informacion de prueba, se puede quitar de comentario para probar de una forma mas rápida.
