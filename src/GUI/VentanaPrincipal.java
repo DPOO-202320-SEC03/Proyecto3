@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import Inventario.Catalogo;
 import Inventario.Sede;
