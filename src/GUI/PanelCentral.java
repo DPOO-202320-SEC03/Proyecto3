@@ -1168,7 +1168,7 @@ public class PanelCentral extends JPanel {
                         dialogReservasPorYear.setLayout(new GridLayout(1,1));
                         
                         // TODO: hacer la grafica
-                        //dialogReservasPorYear.add(new JLabel(dayOccurrences.toString()));
+                        dialogReservasPorYear.add(new JLabel(dayOccurrences.toString()));
 
                         dialogReservasPorYear.setVisible(true);
                         System.out.println("Reservas por año consultadas exitosamente!!!");
