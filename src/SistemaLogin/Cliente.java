@@ -29,7 +29,7 @@ public class Cliente extends Usuario {
     }
 
     public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores, ArrayList<String> nombresSeguros) {
-        ReservaNormal reservaCliente = new ReservaNormal(catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaRangoEntregar, super.username, otrosConductores, nombresSeguros);
+        ReservaNormal reservaCliente = new ReservaNormal(catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaRangoEntregar, super.username, otrosConductores, nombresSeguros, hashReservas);
         if (reservaCliente.getPlaca().equals("NA")) {
             return "No hay vehiculos disponibles en este momento para esta categoria";
         } else {

@@ -91,7 +91,7 @@ public class Administrador extends Usuario {
         for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
             if (categoria.getValue().getHashVehiculos().containsKey(placa)) {
                 String sedeOrigen = categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().getSedeUbicacion();
-                ReservaEspecial reservaTraslado = new ReservaEspecial(sedeOrigen, sedeDestino, fechaRecoger, horaRecoger, fechaEntrega, placa);
+                ReservaEspecial reservaTraslado = new ReservaEspecial(sedeOrigen, sedeDestino, fechaRecoger, horaRecoger, fechaEntrega, placa, hashReservas);
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setSedeUbicacion(sedeDestino);
                 categoria.getValue().getHashVehiculos().get(placa).getHistorialVehiculo().addEvent(fechaRecoger, "Vehiculo trasladado a " + sedeDestino);
                 categoria.getValue().getHashVehiculos().get(placa).getDetallesSede().setDisponibilidadParaAlquilar(false);

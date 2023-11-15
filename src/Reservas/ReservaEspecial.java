@@ -1,5 +1,7 @@
 package Reservas;
 
+import java.util.HashMap;
+
 import Inventario.Catalogo;
 
 public class ReservaEspecial extends Reserva {
@@ -11,8 +13,8 @@ public class ReservaEspecial extends Reserva {
     private String fechaEntrega;
     private String rangoAlquiler;
 
-    public ReservaEspecial(String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega, String placa) {
-        super.idReserva = ++Reserva.totalDeReservas;
+    public ReservaEspecial(String sedeOrigen, String sedeDestino, String fechaRecoger, String horaRecoger, String fechaEntrega, String placa, HashMap<String, Reserva> hashReservas) {
+        super.idReserva = hashReservas.size() + 1;
         this.sedeOrigen = sedeOrigen;
         this.sedeDestino = sedeDestino;
         this.fechaRecoger = fechaRecoger;

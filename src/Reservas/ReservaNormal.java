@@ -27,8 +27,8 @@ public class ReservaNormal extends Reserva {
     private ArrayList<String> nombresSeguros;
     private String rangoAlquiler;
 
-    public ReservaNormal(Catalogo catalogo, String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros) {
-        super.idReserva = ++Reserva.totalDeReservas;
+    public ReservaNormal(Catalogo catalogo, String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros, HashMap<String, Reserva> hashReservas) {
+        super.idReserva = hashReservas.size() + 1;
         this.categoriaVehiculo = categoriaVehiculo;
         this.sedeRecoger = sedeRecoger;
         this.fechaRecoger = fechaRecoger;

@@ -171,8 +171,10 @@ public class VentanaPrincipal extends JFrame{
         DatosClienteTarjeta tarjeta = new DatosClienteTarjeta(0,"N.A.","N.A.","N.A.",000);
         Cliente cliente1 = new Cliente("CLIENTE1","CLIENTE1","CLIENTE1","CLIENTE1","1234567890","CLIENTE1@GOOGLE.COM",licencia,tarjeta);
         hashUsuarios.put(cliente1.getUsername(), cliente1);
-        Cliente cliente2 = new Cliente("CLIENTE2","CLIENTE2","CLIENTE2","CLIENTE2","1234567890","CLIENTE1@GOOGLE.COM",licencia,tarjeta);
+        Cliente cliente2 = new Cliente("CLIENTE2","CLIENTE2","CLIENTE2","CLIENTE2","1234567890","CLIENTE2@GOOGLE.COM",licencia,tarjeta);
         hashUsuarios.put(cliente2.getUsername(), cliente2);
+        Cliente cliente3 = new Cliente("CLIENTE3","CLIENTE3","CLIENTE3","CLIENTE3","1234567890","CLIENTE3@GOOGLE.COM",licencia,tarjeta);
+        hashUsuarios.put(cliente3.getUsername(), cliente3);
     }
 
     private static PanelNorte panelNorte;

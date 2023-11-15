@@ -40,6 +40,9 @@ import SistemaLogin.Usuario;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class PanelCentral extends JPanel {
@@ -362,7 +365,7 @@ public class PanelCentral extends JPanel {
             });
             add(btnEliminarUsuario);
 
-            JButton btnGraficaDeReservas = new JButton("Grafica de reservas");
+            JButton btnGraficaDeReservas = new JButton("Grafica de vehiculos en alquiler por año");
             btnGraficaDeReservas.setFont(new Font("Dialog", Font.PLAIN, 16));
             btnGraficaDeReservas.addActionListener(e -> {
                 ventanaPrincipal.cambiarPagina(1114);
@@ -1152,6 +1155,8 @@ public class PanelCentral extends JPanel {
                             }
                         }
 
+                        System.out.println(fechasFiltradas);
+
                         for (String dateRange : fechasFiltradas) {
                             String[] dates = dateRange.split("-");
                             LocalDate startDate = LocalDate.parse(dates[0], formatter);
@@ -1159,12 +1164,14 @@ public class PanelCentral extends JPanel {
 
                             while (!startDate.isAfter(endDate)) {
                                 int dayOfYear = startDate.getDayOfYear();
-                                dayOccurrences.put(dayOfYear, dayOccurrences.getOrDefault(dayOfYear, 0) + 1);
-                                startDate = startDate.plusDays(1);
-
-                                if (startDate.getYear() != anioDeseado && !startDate.isBefore(endDate)) {
-                                    startDate = LocalDate.parse(dates[0], formatter);
+                                if (startDate.getYear() == anioDeseado) {
+                                    if (dayOccurrences.containsKey(dayOfYear)) {
+                                        dayOccurrences.put(dayOfYear, dayOccurrences.get(dayOfYear) + 1);
+                                    } else {
+                                        dayOccurrences.put(dayOfYear, 1);
+                                    }
                                 }
+                                startDate = startDate.plusDays(1);
                             }
                         }
                         
@@ -1174,20 +1181,24 @@ public class PanelCentral extends JPanel {
                         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
                         for (Map.Entry<Integer, Integer> entry : dayOccurrences.entrySet()) {
-                            dataset.setValue(entry.getValue(), "Reservas", Integer.toString(entry.getKey()));
+                            dataset.setValue(entry.getValue(), "Vehiculos", Integer.toString(entry.getKey()));
                         }
 
                         JFreeChart chart = ChartFactory.createLineChart(
-                            "Reservas por día en " + anioDeseadoS,
+                            "Vehiculos en alquiler por día en " + anioDeseadoS,
                             "Día del año",
-                            "Cantidad de reservas",
+                            "Cantidad de vehiculos en alquiler",
                             dataset
                         );
 
+                        CategoryPlot plot = (CategoryPlot) chart.getPlot();
+                        CategoryAxis domainAxis = plot.getDomainAxis();
+                        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+
                         ChartPanel chartPanel = new ChartPanel(chart);
 
-                        JDialog dialogReservasPorYear = new JDialog((JFrame) getTopLevelAncestor(), "Reservas por año");
-                        dialogReservasPorYear.setSize(750,700);
+                        JDialog dialogReservasPorYear = new JDialog((JFrame) getTopLevelAncestor(), "Vehiculos en alquiler en un año");
+                        dialogReservasPorYear.setSize(1100,700);
                         dialogReservasPorYear.setLocationRelativeTo(getTopLevelAncestor());
                         dialogReservasPorYear.setLayout(new GridLayout(1,1));
                         dialogReservasPorYear.add(chartPanel);

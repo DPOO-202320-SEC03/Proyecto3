@@ -6,7 +6,6 @@ import Inventario.Catalogo;
 
 public class Reserva implements Serializable {
 
-    public static int totalDeReservas = 0;
     protected int idReserva;
     protected String placa;
 

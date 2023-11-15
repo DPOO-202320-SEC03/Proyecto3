@@ -82,7 +82,7 @@ public class PanelNorte extends JPanel {
             titulo("ELIMINAR USUARIO");
             volver_pagina_anterior(11);
         } else if (pagina == 1114) {
-            titulo("GRAFICA DE RESERVAS");
+            titulo("GRAFICA DE VEHICULOS EN ALQUILER POR AÑO");
             volver_pagina_anterior(11);
         } else if (pagina == 12) {
             titulo("MENU ADMIN LOCAL");
