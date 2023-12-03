@@ -108,6 +108,13 @@ public class PanelNorte extends JPanel {
         } else if (pagina == 134) {
             titulo("LISTAR VEHICULO PARA ALQUILER");
             volver_pagina_anterior(13);
+        } else if (pagina == 135) {
+            titulo("SELECCIONAR PASARELA DE PAGO");
+            volver_pagina_anterior(13);
+        } else if (pagina == 136) {
+            String nombrePasarela =  ventanaPrincipal.pasarela.getClass().getName().substring(6).toUpperCase();
+            titulo("INFORMACION PASARELA DE PAGO " + nombrePasarela);
+            volver_pagina_anterior(135);
         } else if (pagina == 14) {
             titulo("MENU CLIENTE");
             volver_pagina_anterior(1);

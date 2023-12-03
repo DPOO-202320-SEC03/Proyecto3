@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import javax.swing.border.LineBorder;
 import Inventario.Categoria;
 import Inventario.Seguro;
 import Inventario.Vehiculo;
+import Pagos.Pasarela;
 import Reservas.Reserva;
 import Reservas.ReservaNormal;
 import SistemaLogin.Administrador;
@@ -1400,7 +1402,14 @@ public class PanelCentral extends JPanel {
             });
             add(btnListarVehiculoParaAlquiler);
 
-            for (int i = 0; i < 8; i++) {
+            JButton btnPagoConTarjeta = new JButton("Pago con tarjeta");
+            btnPagoConTarjeta.setFont(new Font("Dialog", Font.PLAIN, 16));
+            btnPagoConTarjeta.addActionListener(e -> {
+                ventanaPrincipal.cambiarPagina(135);
+            });
+            add(btnPagoConTarjeta);
+
+            for (int i = 0; i < 7; i++) {
                 add(new JLabel());
             }
 
@@ -1742,6 +1751,94 @@ public class PanelCentral extends JPanel {
             });
             add(btnListarVehiculoParaAlquiler);
 
+        } else if (pagina == 135) {
+            setLayout(new GridLayout(2,1));
+            JLabel lbPasarela = new JLabel();
+            lbPasarela.setLayout(new GridLayout(1,2));
+
+            JLabel lbTipoDePasarela = new JLabel("Tipo de pasarela: ");
+            lbTipoDePasarela.setFont(new Font("Dialog", Font.PLAIN, 24));
+            lbTipoDePasarela.setHorizontalAlignment(JLabel.CENTER);
+            lbTipoDePasarela.setOpaque(true);
+            lbTipoDePasarela.setBackground(Color.WHITE);
+            lbTipoDePasarela.setBorder(new LineBorder(Color.BLACK));
+            lbPasarela.add(lbTipoDePasarela);
+
+            JComboBox<String> comboBoxTipoDePasarela = new JComboBox<String>();
+            comboBoxTipoDePasarela.setFont(new Font("Dialog", Font.PLAIN, 24));
+            
+            for (String pasarela: vp.listaPasarelas) {
+                comboBoxTipoDePasarela.addItem(pasarela);
+            }
+
+            comboBoxTipoDePasarela.setSelectedItem(null);
+
+            lbPasarela.add(comboBoxTipoDePasarela);
+
+            add(lbPasarela);
+
+            JButton btnProcederConElPago = new JButton("Proceder con el pago");
+            btnProcederConElPago.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnProcederConElPago.addActionListener(e -> {
+                try {
+                    String tipoDePasarela = comboBoxTipoDePasarela.getSelectedItem().toString();
+                    Class<?> clase = Class.forName("Pagos."+tipoDePasarela);
+                    Object pasarelaNueva = clase.getDeclaredConstructor().newInstance();
+                    if (Pasarela.class.isAssignableFrom(clase)) {
+                        vp.pasarela = (Pasarela) pasarelaNueva;
+                    } else {
+                        // Error dialog message here
+                        JDialog errorDialog = new JDialog((JFrame) getTopLevelAncestor(), "La clase no extiende de Pasarelas.");
+                        errorDialog.setSize(300,30);
+                        errorDialog.setLocationRelativeTo(getTopLevelAncestor());
+                        errorDialog.setVisible(true);
+                        comboBoxTipoDePasarela.setSelectedItem(null);
+                    }
+                } catch (ClassNotFoundException ex) {
+                    JDialog errorDialog = new JDialog((JFrame) getTopLevelAncestor(), "No existe la clase.");
+                    errorDialog.setSize(300,30);
+                    errorDialog.setLocationRelativeTo(getTopLevelAncestor());
+                    errorDialog.setVisible(true);
+                    comboBoxTipoDePasarela.setSelectedItem(null);
+                } catch (Exception ex) {
+                    JDialog errorDialog = new JDialog((JFrame) getTopLevelAncestor(), "Hubo otro error construyendo la pasarela");
+                    errorDialog.setSize(300,30);
+                    errorDialog.setLocationRelativeTo(getTopLevelAncestor());
+                    errorDialog.setVisible(true);
+                    comboBoxTipoDePasarela.setSelectedItem(null);
+                    ex.printStackTrace();
+                }
+                ventanaPrincipal.cambiarPagina(136);
+            });
+            add(btnProcederConElPago);
+        } else if (pagina == 136) {
+            Pasarela pasarela = vp.pasarela;
+            String[] datosGUI = pasarela.datosParaGUI.split(";");
+            JLabel[] labels = new JLabel[datosGUI.length];
+            setLayout(new GridLayout(datosGUI.length+1,1));
+            for (int i = 0; i < datosGUI.length; i++) {
+                String titulo = datosGUI[i];
+                JLabel lbTitulo = generadorLabelInput(titulo);
+                add(lbTitulo);
+                labels[i] = lbTitulo;
+            }
+
+            JButton btnProcederConElPago = new JButton("Proceder con el pago");
+            btnProcederConElPago.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnProcederConElPago.addActionListener(e -> {
+                String[] datos = new String[datosGUI.length];
+                for (int i = 0; i < datosGUI.length; i++) {
+                    datos[i] = ((JTextField) labels[i].getComponent(1)).getText();
+                }
+                System.out.println(Arrays.toString(datos));
+                String rta = pasarela.agregarTraza(vp.pasarela.getClass().getName().substring(6).toUpperCase(), datos);
+                JDialog resultado = new JDialog((JFrame) getTopLevelAncestor(), "Resultado del pago: " + rta);
+                resultado.setSize(400,30);
+                resultado.setLocationRelativeTo(getTopLevelAncestor());
+                resultado.setVisible(true);
+                ventanaPrincipal.cambiarPagina(13);
+            });
+            add(btnProcederConElPago);
         } else if (pagina == 14) {
             setLayout(new GridLayout(7,2));
 

@@ -8,12 +8,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
 
 import Inventario.Catalogo;
 import Inventario.Sede;
+import Pagos.Pasarela;
 import Reservas.Reserva;
 import SistemaLogin.Administrador;
 import SistemaLogin.AdministradorLocal;
@@ -29,14 +31,16 @@ public class VentanaPrincipal extends JFrame{
     public HashMap<String, Usuario> hashUsuarios;
     public HashMap<String, Sede> hashSedes;
     public HashMap<String, Reserva> hashReservas;
+    public Pasarela pasarela;
+    public ArrayList<String> listaPasarelas;
 
     /**
      * metodo privado usado para cargar toda la informacion del sistema
      */
     private void cargarInformacion() {
+        String workingDir = System.getProperty("user.dir");
+        String filePath = workingDir + File.separator + "data" + File.separator;
         try {
-            String workingDir = System.getProperty("user.dir");
-            String filePath = workingDir + File.separator + "data" + File.separator;
             File archivoCatalogo = new File(filePath+"catalogo");
             File archivoUsuarios = new File(filePath+"usuarios");
             File archivoSedes = new File(filePath+"sedes");
@@ -56,6 +60,9 @@ public class VentanaPrincipal extends JFrame{
                     ObjectInputStream oisR = new ObjectInputStream(new FileInputStream(archivoReservas));
                     this.hashReservas = (HashMap<String, Reserva>) oisR.readObject();
                     oisR.close();
+                    pasarela = new Pasarela();
+                    String pathPasarelas = filePath+"pagos"+ File.separator +"pasarelas.txt";
+                    this.listaPasarelas = pasarela.cargarPasarelas(pathPasarelas);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -80,6 +87,12 @@ public class VentanaPrincipal extends JFrame{
 
                 // Carga una informacion de prueba, se puede quitar de comentario para probar de una forma mas rápida.
                 cargarInformacionEjemplo(admin);
+
+                // Se crean los archivos para las pasarelas de pago
+                pasarela = new Pasarela();
+                String pathPasarelas = filePath+"pagos"+ File.separator +"pasarelas.txt";
+                this.listaPasarelas = pasarela.cargarPasarelas(pathPasarelas);
+
                 System.out.println("Se ha cargado la información de prueba!!!");
             }
         } catch (Exception e) {
