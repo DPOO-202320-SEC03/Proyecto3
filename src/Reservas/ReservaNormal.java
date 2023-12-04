@@ -41,16 +41,28 @@ public class ReservaNormal extends Reserva {
         this.nombresSeguros = nombresSeguros;
         this.rangoAlquiler = fechaRecoger + "-" + fechaEntregar;
         String placa = catalogo.getHashCategorias().get(categoriaVehiculo).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
-        while (placa.equals("na")) {
+        // TESTEO OK
+        System.out.println("placa: " + placa);
+        if (placa.equals("na")) {
             int rangoCategoriaNueva = catalogo.getHashCategorias().get(categoriaVehiculo).getRangoCategoria() + 1;
             String categoriaNueva = "na";
+            // TESTEO OK
+            System.out.println("rango categoria nueva: " + rangoCategoriaNueva);
             for (Map.Entry<String, Categoria> categoria : catalogo.getHashCategorias().entrySet()) {
+                // TESTEO OK
+                System.out.println("rango categoria: " + categoria.getValue().getRangoCategoria());
+                System.out.println("categoria: " + categoria.getKey());
                 if (categoria.getValue().getRangoCategoria() == rangoCategoriaNueva) {
                     categoriaNueva = categoria.getKey();
+                    this.categoriaVehiculo = categoriaNueva;
+                    // TESTEO OK
+                    System.out.println("categoria nueva: " + categoriaNueva);
                 }
             }
             if (!(categoriaNueva.equals("na"))) {
                 placa = catalogo.getHashCategorias().get(categoriaNueva).getPlacaVehiculoParaReserva(rangoAlquiler, sedeRecoger);
+                // TESTEO OK
+                System.out.println("placa nueva: " + placa);
             } else {
                 placa = "NA";
             }

@@ -1950,7 +1950,10 @@ public class PanelCentral extends JPanel {
                 panelSeguro.add(panelNombre);
 
                 JTextArea textAreaDescripcion = new JTextArea(listaSegurosDescripcion.get(i));
-                textAreaDescripcion.setFont(new Font("Dialog", Font.PLAIN, 18));
+                textAreaDescripcion.setLineWrap(true);
+                textAreaDescripcion.setWrapStyleWord(true); 
+                textAreaDescripcion.setColumns(15);
+                textAreaDescripcion.setFont(new Font("Dialog", Font.PLAIN, 14));
                 textAreaDescripcion.setEditable(false);
                 textAreaDescripcion.setBackground(Color.WHITE);
                 textAreaDescripcion.setBorder(new LineBorder(Color.BLACK));

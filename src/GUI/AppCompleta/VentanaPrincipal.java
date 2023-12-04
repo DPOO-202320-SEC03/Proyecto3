@@ -153,9 +153,9 @@ public class VentanaPrincipal extends JFrame{
         admin.crearTarifaPorTemporada(catalogo, "CATEGORIA1", 100, 20);
         admin.crearTarifaPorTemporada(catalogo, "CATEGORIA2", 200, 40);
         admin.crearTarifaPorTemporada(catalogo, "CATEGORIA3", 300, 60);
-        admin.crearSeguro(catalogo, 50, "SEGURO1", "SEGURO1");
-        admin.crearSeguro(catalogo, 100, "SEGURO2", "SEGURO2");
-        admin.crearSeguro(catalogo, 150, "SEGURO3", "SEGURO3");
+        admin.crearSeguro(catalogo, 50, "SEGURO1", "SEGURO1 es un seguro que esta hecho como ejemplo para guiar al usuario en como quedaria el seguro que el administrador desee crear para los clientes. Puede tener una longitud grande, pues se inserta con un scrollbar que le permite al usuario ver el resto del texto.");
+        admin.crearSeguro(catalogo, 100, "SEGURO2", "SEGURO2 es un seguro que esta hecho como ejemplo para guiar al usuario en como quedaria el seguro que el administrador desee crear para los clientes. Puede tener una longitud grande, pues se inserta con un scrollbar que le permite al usuario ver el resto del texto.");
+        admin.crearSeguro(catalogo, 150, "SEGURO3", "SEGURO3 es un seguro que esta hecho como ejemplo para guiar al usuario en como quedaria el seguro que el administrador desee crear para los clientes. Puede tener una longitud grande, pues se inserta con un scrollbar que le permite al usuario ver el resto del texto.");
         admin.crearTarifasGlobales(catalogo, 1000, 500, "01/01-01/31");
         admin.crearVehiculo(catalogo, "AAA-001", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE1", "CATEGORIA1", "01/01/2020");
         admin.crearVehiculo(catalogo, "AAA-002", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "N.A.", "5", "SEDE1", "CATEGORIA2", "01/01/2020");

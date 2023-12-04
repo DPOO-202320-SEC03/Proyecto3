@@ -46,10 +46,7 @@ public class PanelNorteCliente extends JPanel {
             titulo("CREAR RESERVA");
             volver_pagina_anterior(14);
         } else if (pagina == 142) {
-            titulo("EDITAR RESERVA");
-            volver_pagina_anterior(14);
-        } else if (pagina == 143) {
-            titulo("RESUMEN RESERVA ACTUAL");
+            titulo("CONSULTAR DISPONIBILIDAD");
             volver_pagina_anterior(14);
         }
     }

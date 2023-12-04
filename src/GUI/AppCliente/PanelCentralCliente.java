@@ -257,21 +257,14 @@ public class PanelCentralCliente extends JPanel {
             });
             add(btnCrearReserva);
 
-            JButton btnEditarReserva = new JButton("Editar reserva");
+            JButton btnEditarReserva = new JButton("Consultar disponibilidad");
             btnEditarReserva.setFont(new Font("Dialog", Font.PLAIN, 16));
             btnEditarReserva.addActionListener(e -> {
                 ventanaPrincipal.cambiarPagina(142);
             });
             add(btnEditarReserva);
 
-            JButton btnObtenerResumenReservaActual = new JButton("Obtener resumen de reserva actual");
-            btnObtenerResumenReservaActual.setFont(new Font("Dialog", Font.PLAIN, 16));
-            btnObtenerResumenReservaActual.addActionListener(e -> {
-                ventanaPrincipal.cambiarPagina(143);
-            });
-            add(btnObtenerResumenReservaActual);
-
-            for (int i = 0; i < 11; i++) {
+            for (int i = 0; i < 12; i++) {
                 add(new JLabel());
             }
         } else if (pagina == 141) {
@@ -358,7 +351,12 @@ public class PanelCentralCliente extends JPanel {
                 panelSeguro.add(panelNombre);
 
                 JTextArea textAreaDescripcion = new JTextArea(listaSegurosDescripcion.get(i));
-                textAreaDescripcion.setFont(new Font("Dialog", Font.PLAIN, 18));
+
+                textAreaDescripcion.setLineWrap(true);
+                textAreaDescripcion.setWrapStyleWord(true); 
+                textAreaDescripcion.setColumns(15);
+
+                textAreaDescripcion.setFont(new Font("Dialog", Font.PLAIN, 14));
                 textAreaDescripcion.setEditable(false);
                 textAreaDescripcion.setBackground(Color.WHITE);
                 textAreaDescripcion.setBorder(new LineBorder(Color.BLACK));
@@ -548,122 +546,6 @@ public class PanelCentralCliente extends JPanel {
 
             add(panelCentral, BorderLayout.CENTER);
         } else if (pagina == 142) {
-            setLayout(new GridLayout(5,1));
-
-            JLabel lbSedeEntregar = new JLabel();
-            lbSedeEntregar.setLayout(new GridLayout(1,2));
-            JLabel lbTextoSedeEntregar = new JLabel("Sede a entregar: ");
-            lbTextoSedeEntregar.setFont(new Font("Dialog", Font.PLAIN, 20));
-            lbTextoSedeEntregar.setHorizontalAlignment(JLabel.CENTER);
-            lbSedeEntregar.add(lbTextoSedeEntregar);
-
-            JComboBox<String> comboBoxSedeEntregar = new JComboBox<>();
-            comboBoxSedeEntregar.setFont(new Font("Dialog", Font.PLAIN, 20));
-            for (String key : vp.hashSedes.keySet()) {
-                comboBoxSedeEntregar.addItem(key);
-            }
-            comboBoxSedeEntregar.setSelectedItem(null);
-            comboBoxSedeEntregar.addActionListener(e -> {
-                String sedeEntregarSelecionada = (String) comboBoxSedeEntregar.getSelectedItem();
-                System.out.println("Sede de entrega: " + sedeEntregarSelecionada);
-            });
-
-            lbSedeEntregar.add(comboBoxSedeEntregar);
-            add(lbSedeEntregar);
-
-            JLabel lbFechaEntregar = generadorLabelInput("Fecha a entregar (MM/DD/AAAA): ");
-            add(lbFechaEntregar);
-
-            JLabel lbHoraEntregar = generadorLabelInput("Hora a entregar (HH:MM): ");
-            add(lbHoraEntregar);
-
-            JLabel lbOtrosConductores = generadorLabelInput("Conductores extra (0-3): ");
-            add(lbOtrosConductores);
-
-            JButton btnEditarReserva = new JButton("Editar reserva");
-            btnEditarReserva.setFont(new Font("Dialog", Font.PLAIN, 24));
-            btnEditarReserva.addActionListener(e -> {
-                String sedeEntregar = (String) comboBoxSedeEntregar.getSelectedItem();
-                String fechaEntregar = ((JTextField) lbFechaEntregar.getComponent(1)).getText();
-                String horaEntregar = ((JTextField) lbHoraEntregar.getComponent(1)).getText();
-                String otrosConductoresS = ((JTextField) lbOtrosConductores.getComponent(1)).getText();
-                int otrosConductores = Integer.parseInt(otrosConductoresS);
-
-                if (sedeEntregar == null || fechaEntregar.length() < 3 || horaEntregar.length() < 3 || otrosConductores > 3) {
-                    comboBoxSedeEntregar.setSelectedItem(null);
-                    ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
-                    ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
-                    ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
-
-                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al editar reserva");
-                    dialogError.setSize(300,30);
-                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
-                    dialogError.setVisible(true);
-                    System.out.println("Error al editar reserva!!!");
-                } else if (!((Cliente) vp.usu).getTieneReserva()) {
-                    ventanaPrincipal.cambiarPagina(14);
-                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario no tiene una reserva");
-                    dialogError.setSize(300,30);
-                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
-                    dialogError.setVisible(true);
-                    System.out.println("El usuario no tiene una reserva!!!");
-                } else if (((Cliente) vp.usu).getTieneTarjetaBloqueada()) {
-                    comboBoxSedeEntregar.setSelectedItem(null);
-                    ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
-                    ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
-                    ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
-
-                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "El usuario tiene la tarjeta bloqueada");
-                    dialogError.setSize(300,30);
-                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
-                    dialogError.setVisible(true);
-                    System.out.println("El usuario tiene la tarjeta bloqueada!!!");
-                } else {
-                    String resultado = ((Cliente) vp.usu).alterarReserva(vp.hashReservas, ((Cliente) vp.usu).getIdReserva(), sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, vp.catalogo);
-                    if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria") || resultado == null || resultado.equals("")) {
-                        comboBoxSedeEntregar.setSelectedItem(null);
-                        ((JTextField) lbFechaEntregar.getComponent(1)).setText("");
-                        ((JTextField) lbHoraEntregar.getComponent(1)).setText("");
-                        ((JTextField) lbOtrosConductores.getComponent(1)).setText("");
-
-                        JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), resultado);
-                        dialogError.setSize(700,30);
-                        dialogError.setLocationRelativeTo(getTopLevelAncestor());
-                        dialogError.setVisible(true);
-                        System.out.println(resultado);
-                    } else {
-                        ventanaPrincipal.cambiarPagina(14);
-                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Reserva editada con exito");
-                        dialogOK.setSize(750,700);
-                        dialogOK.setLocationRelativeTo(getTopLevelAncestor());
-
-                        dialogOK.setLayout(new GridLayout(1,1));
-                        JTextArea textArea = new JTextArea("\nDetalles de la reserva a continuación: \n\n"+resultado);
-                        textArea.setEditable(false);
-                        JScrollPane scrollPane = new JScrollPane(textArea);
-                        dialogOK.add(scrollPane);
-
-                        dialogOK.setVisible(true);
-                        System.out.println(resultado);
-                    }
-                }
-            });
-            add(btnEditarReserva);
-
-
-        } else if (pagina == 143) {
-            setLayout(new GridLayout(1,1));
-
-            String reservaActual = ((Cliente) vp.usu).getResumenReservaActual(vp.hashReservas, vp.catalogo);
-
-            JTextArea resumenReservaActual = new JTextArea(reservaActual);
-            resumenReservaActual.setFont(new Font("Dialog", Font.PLAIN, 20));
-            resumenReservaActual.setEditable(false);
-            resumenReservaActual.setBackground(Color.WHITE);
-            resumenReservaActual.setBorder(new LineBorder(Color.BLACK));
-            
-            JScrollPane scrollPane = new JScrollPane(resumenReservaActual);
-            add(scrollPane);
 
         }
     }
