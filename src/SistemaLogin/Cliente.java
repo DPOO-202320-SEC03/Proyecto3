@@ -28,8 +28,11 @@ public class Cliente extends Usuario {
         super.nivelDeAcceso = nivelDeAcceso;
     }
 
-    public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores, ArrayList<String> nombresSeguros) {
+    public String reservarVehiculo(HashMap<String, Reserva> hashReservas, Catalogo catalogo, String nombreCategoria, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, int otrosConductores, ArrayList<String> nombresSeguros, boolean estaEnNuevaApp) {
         ReservaNormal reservaCliente = new ReservaNormal(catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaRangoEntregar, super.username, otrosConductores, nombresSeguros, hashReservas);
+        if (estaEnNuevaApp) {
+            reservaCliente.setDescuentoNuevaApp(0.9);
+        }
         if (reservaCliente.getPlaca().equals("NA")) {
             return "No hay vehiculos disponibles en este momento para esta categoria";
         } else {

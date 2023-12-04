@@ -509,7 +509,7 @@ public class PanelCentralCliente extends JPanel {
                     dialogError.setVisible(true);
                     System.out.println("El usuario tiene la tarjeta bloqueada!!!");
                 } else {
-                    String resultado = ((Cliente) vp.usu).reservarVehiculo(vp.hashReservas, vp.catalogo, categoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, segurosSeleccionados);
+                    String resultado = ((Cliente) vp.usu).reservarVehiculo(vp.hashReservas, vp.catalogo, categoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, segurosSeleccionados, true);
                     if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria") || resultado == null || resultado.equals("")) {
                         comboBoxCategoria.setSelectedItem(null);
                         comboBoxSedeRecoger.setSelectedItem(null);
@@ -527,7 +527,7 @@ public class PanelCentralCliente extends JPanel {
                         System.out.println(resultado);
                     } else {
                         ventanaPrincipal.cambiarPagina(14);
-                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Reserva creada con exito");
+                        JDialog dialogOK = new JDialog((JFrame) getTopLevelAncestor(), "Reserva creada con exito (10% OFF Aplicado!!!)");
                         dialogOK.setSize(750,700);
                         dialogOK.setLocationRelativeTo(getTopLevelAncestor());
 
@@ -546,7 +546,39 @@ public class PanelCentralCliente extends JPanel {
 
             add(panelCentral, BorderLayout.CENTER);
         } else if (pagina == 142) {
+            setLayout(new GridLayout(4,1));
 
+            JLabel lbSedeConsultar = new JLabel();
+            lbSedeConsultar.setLayout(new GridLayout(1,2));
+            JLabel lbTextoSedeConsultar = new JLabel("Sede a consultar: ");
+            lbTextoSedeConsultar.setFont(new Font("Dialog", Font.PLAIN, 20));
+            lbTextoSedeConsultar.setHorizontalAlignment(JLabel.CENTER);
+            lbSedeConsultar.add(lbTextoSedeConsultar);
+
+            JComboBox<String> comboBoxSedeRecoger = new JComboBox<>();
+            comboBoxSedeRecoger.setFont(new Font("Dialog", Font.PLAIN, 20));
+            for (String key : vp.hashSedes.keySet()) {
+                comboBoxSedeRecoger.addItem(key);
+            }
+            comboBoxSedeRecoger.setSelectedItem(null);
+            comboBoxSedeRecoger.addActionListener(e -> {
+                String sedeRecogerSelecionada = (String) comboBoxSedeRecoger.getSelectedItem();
+                System.out.println("Sede a recoger: " + sedeRecogerSelecionada);
+            });
+
+            lbSedeConsultar.add(comboBoxSedeRecoger);
+            add(lbSedeConsultar);
+
+            JLabel lbFechaConsultarInicial = generadorLabelInput("Fecha a consultar inicial (MM/DD/AAAA): ");
+            add(lbFechaConsultarInicial);
+
+            JLabel lbFechaConsultarFinal = generadorLabelInput("Fecha a consultar final (MM/DD/AAAA): ");
+            add(lbFechaConsultarFinal);
+
+            JButton btnConsultarDisponibilidad = new JButton("Consultar disponibilidad");
+            btnConsultarDisponibilidad.setFont(new Font("Dialog", Font.PLAIN, 24));
+
+            add(btnConsultarDisponibilidad);
         }
     }
 

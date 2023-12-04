@@ -27,6 +27,8 @@ public class ReservaNormal extends Reserva {
     private ArrayList<String> nombresSeguros;
     private String rangoAlquiler;
 
+    private double descuentoNuevaApp = 1;
+
     public ReservaNormal(Catalogo catalogo, String categoriaVehiculo, String sedeRecoger, String fechaRecoger, String horaRecoger, String sedeEntregar, String fechaEntregar, String horaRangoEntregar, String usuarioConductorPrincipal, int otrosConductores, ArrayList<String> nombresSeguros, HashMap<String, Reserva> hashReservas) {
         super.idReserva = hashReservas.size() + 1;
         this.categoriaVehiculo = categoriaVehiculo;
@@ -195,8 +197,8 @@ public class ReservaNormal extends Reserva {
            		+"\nNúmero de conductores extra: " + String.valueOf(otrosConductores)
         		+"\nSeguros: " + seguros
                 +"\nDias en alquiler: " + String.valueOf(rangoFecha(fechaRecoger + "-" + fechaEntregar))
-                +"\nValor proyectado del alquiler " + String.valueOf(getValorProyectadoAlquiler(catalogo, tarifaGlobal))
-                +"\nValor total del alquiler " + String.valueOf(getValorAlquilerCompleto(catalogo, tarifaGlobal));
+                +"\nValor proyectado del alquiler " + String.valueOf(getValorProyectadoAlquiler(catalogo, tarifaGlobal)*descuentoNuevaApp)
+                +"\nValor total del alquiler " + String.valueOf(getValorAlquilerCompleto(catalogo, tarifaGlobal)*descuentoNuevaApp);
     }
 
     public static long rangoFecha(String rangoF)
@@ -249,6 +251,10 @@ public class ReservaNormal extends Reserva {
 
     public String getUsuarioAlquiler() {
         return this.usuarioConductorPrincipal;
+    }
+
+    public void setDescuentoNuevaApp(double descuentoNuevaApp) {
+        this.descuentoNuevaApp = descuentoNuevaApp;
     }
     
     @Override

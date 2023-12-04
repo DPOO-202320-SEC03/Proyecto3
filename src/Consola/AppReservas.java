@@ -948,7 +948,7 @@ public class AppReservas {
                                 }
                             }
                         }
-                        String resultado = cliente.reservarVehiculo(hashReservas, catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, listaSeguros);
+                        String resultado = cliente.reservarVehiculo(hashReservas, catalogo, nombreCategoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosCunductores, listaSeguros, false);
                         if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria"))
                             System.out.println(resultado);
                         else {

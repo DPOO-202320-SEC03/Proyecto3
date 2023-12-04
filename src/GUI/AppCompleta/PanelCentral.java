@@ -2106,7 +2106,7 @@ public class PanelCentral extends JPanel {
                     dialogError.setVisible(true);
                     System.out.println("El usuario tiene la tarjeta bloqueada!!!");
                 } else {
-                    String resultado = ((Cliente) vp.usu).reservarVehiculo(vp.hashReservas, vp.catalogo, categoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, segurosSeleccionados);
+                    String resultado = ((Cliente) vp.usu).reservarVehiculo(vp.hashReservas, vp.catalogo, categoria, sedeRecoger, fechaRecoger, horaRecoger, sedeEntregar, fechaEntregar, horaEntregar, otrosConductores, segurosSeleccionados, false);
                     if (resultado.equals("No hay vehiculos disponibles en este momento para esta categoria") || resultado == null || resultado.equals("")) {
                         comboBoxCategoria.setSelectedItem(null);
                         comboBoxSedeRecoger.setSelectedItem(null);
