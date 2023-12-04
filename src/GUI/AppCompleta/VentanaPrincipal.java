@@ -1,4 +1,4 @@
-package GUI;
+package GUI.AppCompleta;
 
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
