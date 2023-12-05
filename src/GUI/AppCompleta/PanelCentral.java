@@ -611,7 +611,7 @@ public class PanelCentral extends JPanel {
             add(btnCrearTarifasGlobales);
         } else if (pagina == 116) {
             JDialog dialogTarifasAntiguas = new JDialog((JFrame) getTopLevelAncestor(), "Tarifas antiguas");
-            dialogTarifasAntiguas.setSize(1100,700);
+            dialogTarifasAntiguas.setSize(1000,180);
             dialogTarifasAntiguas.setLocationRelativeTo(getTopLevelAncestor());
             dialogTarifasAntiguas.setLayout(new GridLayout(3,2));
 
