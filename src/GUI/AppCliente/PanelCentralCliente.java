@@ -6,8 +6,12 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,7 +25,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import Inventario.Categoria;
 import Inventario.Seguro;
+import Inventario.Vehiculo;
+import Reservas.Reserva;
 import SistemaLogin.Cliente;
 import SistemaLogin.DatosClienteLicencia;
 import SistemaLogin.DatosClienteTarjeta;
@@ -555,28 +562,110 @@ public class PanelCentralCliente extends JPanel {
             lbTextoSedeConsultar.setHorizontalAlignment(JLabel.CENTER);
             lbSedeConsultar.add(lbTextoSedeConsultar);
 
-            JComboBox<String> comboBoxSedeRecoger = new JComboBox<>();
-            comboBoxSedeRecoger.setFont(new Font("Dialog", Font.PLAIN, 20));
+            JComboBox<String> comboBoxSede = new JComboBox<>();
+            comboBoxSede.setFont(new Font("Dialog", Font.PLAIN, 20));
             for (String key : vp.hashSedes.keySet()) {
-                comboBoxSedeRecoger.addItem(key);
+                comboBoxSede.addItem(key);
             }
-            comboBoxSedeRecoger.setSelectedItem(null);
-            comboBoxSedeRecoger.addActionListener(e -> {
-                String sedeRecogerSelecionada = (String) comboBoxSedeRecoger.getSelectedItem();
-                System.out.println("Sede a recoger: " + sedeRecogerSelecionada);
+            comboBoxSede.setSelectedItem(null);
+            comboBoxSede.addActionListener(e -> {
+                String sedeConsultar = (String) comboBoxSede.getSelectedItem();
+                System.out.println("Sede a recoger: " + sedeConsultar);
             });
 
-            lbSedeConsultar.add(comboBoxSedeRecoger);
+            lbSedeConsultar.add(comboBoxSede);
             add(lbSedeConsultar);
 
-            JLabel lbFechaConsultarInicial = generadorLabelInput("Fecha a consultar inicial (MM/DD/AAAA): ");
+            JLabel lbFechaConsultarInicial = generadorLabelInput("Fecha inicial alquiler (MM/DD/AAAA): ");
             add(lbFechaConsultarInicial);
 
-            JLabel lbFechaConsultarFinal = generadorLabelInput("Fecha a consultar final (MM/DD/AAAA): ");
+            JLabel lbFechaConsultarFinal = generadorLabelInput("Fecha final alquiler (MM/DD/AAAA): ");
             add(lbFechaConsultarFinal);
 
             JButton btnConsultarDisponibilidad = new JButton("Consultar disponibilidad");
             btnConsultarDisponibilidad.setFont(new Font("Dialog", Font.PLAIN, 24));
+            btnConsultarDisponibilidad.addActionListener(e -> {
+                String sedeConsultar = (String) comboBoxSede.getSelectedItem();
+                String fechaConsultarInicial = ((JTextField) lbFechaConsultarInicial.getComponent(1)).getText();
+
+                Integer anioInicial = Integer.parseInt(fechaConsultarInicial.split("/")[2]);
+                Integer mesInicial = Integer.parseInt(fechaConsultarInicial.split("/")[0]);
+                Integer diaInicial = Integer.parseInt(fechaConsultarInicial.split("/")[1]);
+
+                String fechaConsultarFinal = ((JTextField) lbFechaConsultarFinal.getComponent(1)).getText();
+                Integer anioFinal = Integer.parseInt(fechaConsultarFinal.split("/")[2]);
+                Integer mesFinal = Integer.parseInt(fechaConsultarFinal.split("/")[0]);
+                Integer diaFinal = Integer.parseInt(fechaConsultarFinal.split("/")[1]);
+
+                if (sedeConsultar == null || fechaConsultarInicial.length() < 3 || fechaConsultarFinal.length() < 3) {
+                    comboBoxSede.setSelectedItem(null);
+                    ((JTextField) lbFechaConsultarInicial.getComponent(1)).setText("");
+                    ((JTextField) lbFechaConsultarFinal.getComponent(1)).setText("");
+
+                    JDialog dialogError = new JDialog((JFrame) getTopLevelAncestor(), "Error al consultar disponibilidad");
+                    dialogError.setSize(300,30);
+                    dialogError.setLocationRelativeTo(getTopLevelAncestor());
+                    dialogError.setVisible(true);
+                    System.out.println("Error al consultar disponibilidad!!!");
+                } else {
+                    // linea 1143 panel central para ej admin
+                    HashMap<String,Integer> hashCategoriasDisponibles = new HashMap<String,Integer>(); 
+                    HashMap<String, Categoria> hashCategorias = vp.catalogo.getHashCategorias();
+                    for (Map.Entry<String, Categoria> categoria : hashCategorias.entrySet()) {
+                        Integer totalDisponibles = 0;
+                        for (Entry<String, Vehiculo> vehiculo : categoria.getValue().getHashVehiculos().entrySet()) {
+                            boolean estaEnSede = vehiculo.getValue().getDetallesSede().getSedeUbicacion().equals(sedeConsultar);
+                            ArrayList<String> rangoReservas = new ArrayList<String>();
+                            for (Reserva reserva : categoria.getValue().getHashVehiculos().get(vehiculo.getKey()).getReservas()) {
+                                rangoReservas.add(reserva.getRangoAlquiler());
+                            }
+                            boolean estaDisponible = true;
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                            for (String rangoReserva: rangoReservas) {
+                                String[] fecha = rangoReserva.split("-");
+                                LocalDate startDate = LocalDate.parse(fecha[0], formatter);
+                                LocalDate endDate = LocalDate.parse(fecha[1], formatter);
+                                LocalDate fechaInicial = LocalDate.of(anioInicial, mesInicial, diaInicial);
+                                LocalDate fechaFinal = LocalDate.of(anioFinal, mesFinal, diaFinal);
+                                if (fechaInicial.isAfter(startDate) && fechaInicial.isBefore(endDate)) {
+                                    estaDisponible = false;
+                                } else if (fechaFinal.isAfter(startDate) && fechaFinal.isBefore(endDate)) {
+                                    estaDisponible = false;
+                                } else if (fechaInicial.isBefore(startDate) && fechaFinal.isAfter(endDate)) {
+                                    estaDisponible = false;
+                                } else if (fechaInicial.isEqual(startDate) || fechaInicial.isEqual(endDate)) {
+                                    estaDisponible = false;
+                                } else if (fechaFinal.isEqual(startDate) || fechaFinal.isEqual(endDate)) {
+                                    estaDisponible = false;
+                                }
+                            }
+                            if (estaEnSede && estaDisponible) {
+                                totalDisponibles++;
+                            }                         
+                        }
+                        hashCategoriasDisponibles.put(categoria.getKey(), totalDisponibles);
+                    }
+                    String resultado = "";
+                    for (Map.Entry<String, Integer> categoria : hashCategoriasDisponibles.entrySet()) {
+                        String formattedString = String.format("Categoria: %-20.20s | Número de vehículos disponibles: %d%n",categoria.getKey(), categoria.getValue());
+                        resultado += formattedString;
+                    }
+                    ventanaPrincipal.cambiarPagina(14);
+                    comboBoxSede.setSelectedItem(null);
+                    ((JTextField) lbFechaConsultarInicial.getComponent(1)).setText("");
+                    ((JTextField) lbFechaConsultarFinal.getComponent(1)).setText("");
+
+                    JDialog dialogResultado = new JDialog((JFrame) getTopLevelAncestor(), "Resultado de la consulta");
+                    dialogResultado.setSize(700,700);
+                    dialogResultado.setLocationRelativeTo(getTopLevelAncestor());
+                    JTextArea textArea = new JTextArea("Detalles de la consulta a continuación: \n\n"+resultado);
+                    textArea.setEditable(false);
+                    JScrollPane scrollPane = new JScrollPane(textArea);
+                    dialogResultado.add(scrollPane);
+                    dialogResultado.setVisible(true);
+                    System.out.println(resultado);
+                }
+            });
 
             add(btnConsultarDisponibilidad);
         }
