@@ -6,13 +6,16 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -46,6 +49,12 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 public class PanelCentral extends JPanel {
     private VentanaPrincipal vp;
@@ -1837,6 +1846,61 @@ public class PanelCentral extends JPanel {
                 resultado.setLocationRelativeTo(getTopLevelAncestor());
                 resultado.setVisible(true);
                 ventanaPrincipal.cambiarPagina(13);
+                
+                String nombreTitutlar = datos[0];
+                String costoAlquiler = datos[3];
+
+                try {
+
+                    PDDocument document = new PDDocument();
+                    PDPage page = new PDPage();
+                    document.addPage(page);
+        
+                    PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 18);
+                    contentStream.newLineAtOffset(25, 700);
+                    contentStream.showText("ReservasX");
+                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 14);
+                    contentStream.newLineAtOffset(0, -25);
+                    contentStream.showText("Factura");
+                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+                    contentStream.newLineAtOffset(0,-25);
+                    contentStream.showText("------Datos del cliente------");
+                    contentStream.newLineAtOffset(0, -15);
+                    contentStream.showText("Nombre: " + nombreTitutlar);
+                    contentStream.newLineAtOffset(0,-25);
+                    contentStream.showText("------Datos del Pago------");
+                    contentStream.newLineAtOffset(0, -15);
+                    contentStream.showText("Costo Alquiler: " + costoAlquiler);
+                    contentStream.endText();
+
+                    PDImageXObject pdImage = PDImageXObject.createFromFile("./src/GUI/imagenes/PEPE.jpeg", document);
+                    contentStream.drawImage(pdImage, 25, 45, 100, 100);
+
+                    contentStream.beginText();
+                    contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+                    contentStream.newLineAtOffset(25, 30); 
+                    contentStream.showText("Administrador: Pepe");
+                    contentStream.endText();
+        
+                    contentStream.close();
+        
+                    int invoiceNumber = readInvoiceNumber();
+                    String filename = "./Facturas/factura_" + invoiceNumber + ".pdf";
+                    document.save(filename);
+                    invoiceNumber++;
+                    writeInvoiceNumber(invoiceNumber);
+
+                    document.close();
+        
+                    System.out.println("Factura creada exitosamente.");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+
             });
             add(btnProcederConElPago);
         } else if (pagina == 14) {
@@ -2282,4 +2346,30 @@ public class PanelCentral extends JPanel {
         label.setHorizontalAlignment(JLabel.CENTER);
         return label;
     }
+
+    public static int readInvoiceNumber() {
+    try {
+        File file = new File("./Facturas/invoice_number.txt");
+        if (file.exists()) {
+            Scanner scanner = new Scanner(file);
+            int invoiceNumber = scanner.nextInt();
+            scanner.close();
+            return invoiceNumber;
+        }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+    return 1; // default invoice number if file doesn't exist
+    }
+
+    public static void writeInvoiceNumber(int invoiceNumber) {
+    try {
+        PrintWriter writer = new PrintWriter("./Facturas/invoice_number.txt");
+        writer.print(invoiceNumber);
+        writer.close();
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    }
+    }
+    
 }
